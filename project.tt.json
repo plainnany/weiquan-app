@@ -1,0 +1,9 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "weiquan-app-mall",
+  "appid": "testAppId",
+  "setting": {
+    "es6": false,
+    "minified": false
+  }
+}
