@@ -1,5 +1,12 @@
 <template>
-  <view class="index">
+  <view class="home-page">
+    <view class="home-info">
+      <Banner />
+      <Nav />
+      <view class="ad">一个活动图片</view>
+      <News />
+    </view>
+
     <text>测试接口数据 {{ msg }}</text>
   </view>
 </template>
@@ -7,8 +14,16 @@
 <script>
 import './index.less'
 import API from '@/service/api'
+import Banner from './banner.vue'
+import Nav from './nav.vue'
+import News from './news.vue'
 
 export default {
+  components: {
+    Banner,
+    Nav,
+    News,
+  },
   data() {
     return {
       msg: '',

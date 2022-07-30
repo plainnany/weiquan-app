@@ -1,14 +1,12 @@
 <template>
-  <view class="index">
-    <text>搜索页面</text>
+  <view class="home-product-list">
+    产品列表
   </view>
 </template>
 
 <script>
-import './index.less'
-
 export default {
-  name: 'search',
+  components: {},
   data() {
     return {
       msg: '',
