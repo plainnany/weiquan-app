@@ -1,19 +1,27 @@
 <template>
   <view class="banner">
-    <text>
-      一个大图？
-    </text>
+    <image :src="bannerBg" mode="" />
   </view>
 </template>
 
 <script>
-export default {}
+import bannerBg from '@/images/banner-bg.png'
+export default {
+  data() {
+    return {
+      bannerBg,
+    }
+  },
+}
 </script>
 
-<style>
+<style lang="less">
 .banner {
   width: 100%;
-  height: 400px;
-  background: orange;
+  height: 600px;
+  image {
+    width: 100%;
+    height: 600px;
+  }
 }
 </style>
