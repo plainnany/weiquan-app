@@ -1,11 +1,24 @@
 .electronic-page {
   padding: 20px 0;
   background-color: #fafcfd;
-  min-height: 100%;
+  min-height: 100vh;
   .electronic-date {
     background-color: #fff;
     padding: 36px 60px;
     border-bottom: 1px solid #e3e4e5;
+    display: flex;
+    justify-content: space-between;
+
+    &-seperator {
+      display: inline-block;
+      width: 1px;
+      background-color: #979797;
+      color: #fff;
+    }
+
+    .u-date {
+      width: 40%;
+    }
   }
 
   .electronic-list {
@@ -15,6 +28,7 @@
     font-weight: 400;
     color: #333333;
     line-height: 40px;
+    margin-bottom: 80px;
 
     &-row {
       display: flex;
@@ -25,6 +39,9 @@
     &-item {
       padding: 34px 16px;
       border-bottom: 1px solid #e3e4e5;
+      &:last-child {
+        border-bottom: none;
+      }
     }
 
     &-sum {
@@ -50,5 +67,15 @@
       border-radius: 2px;
       padding: 45px 50px;
     }
+  }
+
+  .electronic-total {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 32px 50px;
+    font-size: 35px;
+    background-color: #fff;
+    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
   }
 }

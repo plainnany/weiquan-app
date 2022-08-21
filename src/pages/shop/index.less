@@ -1,0 +1,168 @@
+.shop-page {
+  background: #f8f9fa;
+  min-height: 100vh;
+  padding: 20px 30px;
+
+  .shop-product-item {
+    background-color: #fff;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+  }
+
+  .shop-product {
+    &-wrapper {
+      margin-bottom: 90px;
+    }
+    &-image {
+      image {
+        width: 160px;
+        height: 160px;
+      }
+    }
+
+    &-detail {
+      flex: 1;
+      &-title {
+        font-size: 26px;
+        color: #333333;
+        line-height: 36px;
+        margin-bottom: 12px;
+      }
+
+      &-info {
+        font-size: 22px;
+        color: #999999;
+        line-height: 30px;
+      }
+
+      &-price {
+        font-size: 36px;
+        font-weight: 500;
+        color: #f55726;
+        line-height: 30px;
+        display: flex;
+      }
+
+      &-number {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        > text {
+          padding: 0 24px;
+        }
+      }
+    }
+
+    &-price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 9px;
+
+      button {
+        width: 44px;
+        height: 44px;
+        background: #f8f9fa;
+        border: 1px solid #f8f9fa;
+        border-radius: 22px;
+        text-align: center;
+        line-height: 40px;
+        padding: 0;
+      }
+    }
+
+    &-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      box-sizing: border-box;
+      width: 100%;
+      padding: 20px;
+      background-color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 24px;
+      box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+      button {
+        background: #ff630f;
+        border-radius: 35px;
+        font-size: 26px;
+        color: #ffffff;
+        line-height: 37px;
+        padding: 17px 50px;
+        margin-left: 30px;
+      }
+    }
+
+    &-total {
+      font-size: 32px;
+    }
+  }
+
+  // checkbox样式
+  checkbox .wx-checkbox-input {
+    box-sizing: border-box;
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+  }
+
+  /* 选中后的背景样式 */
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked {
+    box-sizing: border-box;
+    border: none;
+    background: #fa4a2d;
+  }
+
+  /* 选中后的勾子样式 */
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+    box-sizing: border-box;
+    width: 40rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 32rpx;
+    color: #fff;
+    background: transparent;
+    transform: translate(-50%, -50%) scale(1);
+    -webkit-transform: translate(-50%, -50%) scale(1);
+  }
+
+  .shop-empty {
+    text-align: center;
+    padding: 60px 0;
+    background-color: #fff;
+
+    &-title {
+      font-size: 32px;
+      font-weight: 500;
+      color: #333333;
+      line-height: 45px;
+    }
+
+    &-tip {
+      font-size: 28px;
+      color: #999999;
+      line-height: 40px;
+      margin-top: 9px;
+      margin-bottom: 30px;
+    }
+
+    &-btn {
+      button {
+        width: 178px;
+        border-radius: 35px;
+        border: 2px solid #ff630f;
+        font-size: 26px;
+        font-weight: 500;
+        color: #ff630f;
+        line-height: 37px;
+        padding: 16px 0;
+        background-color: #fff;
+      }
+    }
+  }
+}

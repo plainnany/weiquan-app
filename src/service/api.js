@@ -32,4 +32,58 @@ API.getDetail = () =>
     message: '这是一个接口返回的字符串',
   })
 
+API.getProduct = () =>
+  Promise.resolve({
+    data: [
+      {
+        imgUrl: '',
+        price: '450',
+        number: '12',
+        specifications: '950g',
+        title: '400ml 乳酸菌原味瓶装',
+        unit: '1箱',
+      },
+      {
+        imgUrl: '',
+        price: '450',
+        number: '12',
+        specifications: '950g',
+        title: '400ml 乳酸菌原味瓶装',
+        unit: '1箱',
+      },
+      {
+        imgUrl: '',
+        price: '12',
+        number: '1',
+        specifications: '950g',
+        title: '400ml 乳酸菌原味瓶装',
+        unit: '1箱',
+      },
+      {
+        imgUrl: '',
+        price: '12',
+        number: '1',
+        specifications: '950g',
+        title: '400ml 乳酸菌原味瓶装',
+        unit: '1箱',
+      },
+      {
+        imgUrl: '',
+        price: '12',
+        number: '1',
+        specifications: '950g',
+        title: '400ml 乳酸菌原味瓶装',
+        unit: '1箱',
+      },
+      {
+        imgUrl: '',
+        price: '12',
+        number: '1',
+        specifications: '950g',
+        title: '400ml 乳酸菌原味瓶装',
+        unit: '1箱',
+      },
+    ],
+  })
+
 export default API

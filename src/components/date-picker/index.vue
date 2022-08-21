@@ -8,19 +8,18 @@
       class="u-date-editor--x"
       :class="{
         'u-date-editor--x__disabled': disabled,
-        'u-date-x--border': border,
       }"
     >
       <view v-if="!isRange" class="u-date-x u-date-single" @tap="show">
         <view class="u-date__icon-logo">
-          <image class="u-date-editor--logo" :src="iconBase64" mode=""></image>
+          <image class="u-date-editor--logo" :src="dateIcon" mode=""></image>
         </view>
         <input class="u-date__input" type="text" v-model="singleVal" :placeholder="placeholder" :disabled="true" />
       </view>
       <view v-else class="u-date-x u-date-range" @tap="show">
-        <view class="u-date__icon-logo">
-          <image class="u-date-editor--logo" :src="iconBase64" mode=""></image>
-        </view>
+        <!-- <view class="u-date__icon-logo"> -->
+        <image class="u-date-editor--logo" :src="dateIcon" mode=""></image>
+        <!-- </view> -->
         <input
           class="u-date__input u-date-range__input"
           type="text"
@@ -153,6 +152,9 @@
 
 <script>
 import calendar from './calendar.vue'
+import dateIcon from '@/images/date.png'
+// import { getSystemInfoSync } from '@/utils'
+
 export default {
   name: 'uDatetimePicker',
   components: {
@@ -194,10 +196,6 @@ export default {
     rangeSeparator: {
       type: String,
       default: '-',
-    },
-    border: {
-      type: [Boolean],
-      default: true,
     },
     disabled: {
       type: [Boolean],
@@ -248,8 +246,7 @@ export default {
     visible: false,
     popup: false,
     popover: null,
-    iconBase64:
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAACVklEQVRoge2Zv2vTQRTAP4oWJQQskmolBAnSQVMcSxbp4ubmIEWETu0oIjg5iIOgpLNunfQfMHToUgpOVgfRqRAL4q8WRLQVq4sOdyHPL9/7evfNJReS+8DB433v7r37fl/eu9xBJBKUB0BLt+uDaOOQZb8SUNXyuKuRftg46NeXcBww6M8AC0ANOAycAyb1s7e6+SbNxi/gBfAQ2HadcA7YB/4MUPsKzLos4jzwewAcNy3mhMnx5I/9BiqUAD4DDWAXmAfqWt8Enlq+GBfSbEwAt4AicAxYBO7aTPaGzhu4KvTLQn/Hh9cpmGzcFvqmaXAyaxWE/MGTg93yXsgFUyfbOrJCJ2s8y+tRP21s0fmMTlmih8zT8WnN1GloCmJWaF0CpvrlSAb1/3fJXshNT470hZEIrZeoahqaU8BZ10Exa4XGtiCaKKL+EIHaMX8U81ZEP7ntrwi7n4CfWi7p+UCFdFdh7Rpaps9+mn93rjY2THut0QqtoVlIkpi1QjNyCzEdnl0W+idCXxb6VmKudaGfsbBhRbcHdEWhf5eYt0o6FVR6BjhqYcOKoQkt2y/SAB5rWVbpVeCilmUl3hb6JNeAI1p+ZWEjFzH9hsY2tEwHdHX9DGATWNLyceCeGL/YhY+58LWhy9o0uhJDKw3T4dlr4L6WZab5JvRBGJqs9UPI5R44lQfpx56pUzK0NlA3R6AK1Engu1+/nGhfK7R5bjtwGnXdFfpSJ6190Quz5grqQCC048lFXMhy2nQZWkUVsRowZv8OvLOPCvdHwE5APyKRSMQzfwE22DtT3T5PPwAAAABJRU5ErkJggg==',
+    dateIcon,
   }),
   computed: {
     reactStartTime() {
@@ -387,23 +384,24 @@ export default {
         return false
       }
     },
-    show(event) {
+    show() {
       if (this.disabled) {
         return
       }
-      // const systemInfo = this.getSystemInfoSync()
-      const systemInfo = {}
-      if (systemInfo.windowWidth <= 500) {
-        this.$refs.mobile.open()
-        return
-      }
-      this.popover = {
-        top: '10px',
-      }
+      this.$refs.mobile.open()
 
-      setTimeout(() => {
-        this.popup = !this.popup
-      }, 20)
+      // const systemInfo = getSystemInfoSync()
+      // if (systemInfo.windowWidth <= 500) {
+      //   this.$refs.mobile.open()
+      //   return
+      // }
+      // this.popover = {
+      //   top: '10px',
+      // }
+
+      // setTimeout(() => {
+      //   this.popup = !this.popup
+      // }, 20)
     },
     close() {
       setTimeout(() => {
@@ -600,17 +598,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 10px;
   border-radius: 4px;
   background-color: #fff;
   color: #666;
-  font-size: 14px;
-}
-
-.u-date-x--border {
-  box-sizing: border-box;
-  border-radius: 4px;
-  border: 1px solid #dcdfe6;
+  font-size: 28px;
 }
 
 .u-date-editor--x {
@@ -634,9 +625,9 @@ export default {
 .u-date__input {
   height: 40px;
   width: 100%;
-  padding: 0 8px;
+  padding: 0 28px;
   line-height: 40px;
-  font-size: 14px;
+  font-size: 28px;
 }
 
 .u-date-range__input {
@@ -686,9 +677,9 @@ export default {
 }
 
 .u-date-editor--logo {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
+  width: 32px;
+  height: 32px;
+  margin-top: 4px;
 }
 
 /* 添加时间 */
@@ -706,10 +697,9 @@ export default {
 }
 
 .popup-x-footer {
-  padding: 0 15px;
-  border-top-color: #f1f1f1;
-  border-top-style: solid;
-  border-top-width: 1px;
+  box-sizing: border-box;
+  padding: 15px;
+  border: 1px solid #f1f1f1;
   background-color: #fff;
   line-height: 40px;
   text-align: right;

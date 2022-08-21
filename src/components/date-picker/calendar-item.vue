@@ -2,29 +2,29 @@
   <view
     class="u-calendar-item__weeks-box"
     :class="{
-      'u-calendar-item--disable':weeks.disable,
-      'u-calendar-item--before-checked-x':weeks.beforeMultiple,
+      'u-calendar-item--disable': weeks.disable,
+      'u-calendar-item--before-checked-x': weeks.beforeMultiple,
       'u-calendar-item--multiple': weeks.multiple,
-      'u-calendar-item--after-checked-x':weeks.afterMultiple,
-		}"
+      'u-calendar-item--after-checked-x': weeks.afterMultiple,
+    }"
     @tap="choiceDate(weeks)"
   >
-		<view
+    <view
       class="u-calendar-item__weeks-box-item"
       :class="{
-				'u-calendar-item--isDay-text': weeks.isDay,
-				'u-calendar-item--checked':calendar.fullDate === weeks.fullDate && !weeks.isDay,
-				'u-calendar-item--checked-range-text': checkHover,
-				'u-calendar-item--before-checked':weeks.beforeMultiple,
-				'u-calendar-item--multiple': weeks.multiple,
-				'u-calendar-item--after-checked':weeks.afterMultiple,
-				'u-calendar-item--disable':weeks.disable,
+        'u-calendar-item--isDay-text': weeks.isDay,
+        'u-calendar-item--checked': calendar.fullDate === weeks.fullDate && !weeks.isDay,
+        'u-calendar-item--checked-range-text': checkHover,
+        'u-calendar-item--before-checked': weeks.beforeMultiple,
+        'u-calendar-item--multiple': weeks.multiple,
+        'u-calendar-item--after-checked': weeks.afterMultiple,
+        'u-calendar-item--disable': weeks.disable,
       }"
     >
-			<text v-if="selected&&weeks.extraInfo" class="u-calendar-item__weeks-box-circle"></text>
-			<text class="u-calendar-item__weeks-box-text">{{weeks.date}}</text>
-		</view>
-	</view>
+      <text v-if="selected && weeks.extraInfo" class="u-calendar-item__weeks-box-circle"></text>
+      <text class="u-calendar-item__weeks-box-text">{{ weeks.date }}</text>
+    </view>
+  </view>
 </template>
 
 <script>
@@ -32,30 +32,30 @@ export default {
   props: {
     weeks: {
       type: Object,
-      default () {
+      default() {
         return {}
-      }
+      },
     },
     calendar: {
       type: Object,
       default: () => {
         return {}
-      }
+      },
     },
     selected: {
       type: Array,
       default: () => {
         return []
-      }
+      },
     },
     lunar: {
       type: Boolean,
-      default: false
+      default: false,
     },
     checkHover: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
     choiceDate(weeks) {
@@ -97,7 +97,6 @@ export default {
   line-height: 88px;
 }
 
-
 .u-calendar-item__weeks-box-circle {
   position: absolute;
   top: 5px;
@@ -106,7 +105,6 @@ export default {
   height: 8px;
   border-radius: 8px;
   background-color: red;
-
 }
 
 .u-calendar-item__weeks-box .u-calendar-item--disable {
@@ -116,7 +114,7 @@ export default {
 }
 
 .u-calendar-item--isDay-text {
-  color: #fff !important;
+  color: #fa4a2d !important;
 }
 
 .u-calendar-item--isDay {
@@ -131,8 +129,8 @@ export default {
 }
 
 .u-calendar-item--checked {
-  background-color: #fd734d;
-  // border-radius: 50%;
+  background-color: #fa4a2d;
+  border-radius: 50%;
   box-sizing: border-box;
   border: 6px solid #f2f6fc;
   color: #fff;
@@ -144,23 +142,23 @@ export default {
 }
 
 .u-calendar-item--multiple {
-  background-color:  #f2f6fc;
+  background-color: #f2f6fc;
   // color: #fff;
   opacity: 0.8;
 }
 
 .u-calendar-item--multiple .u-calendar-item--before-checked {
-  background-color: #ff9047;
+  background-color: #fa4a2d;
   color: #fff;
-   border-radius: 50%;
+  border-radius: 50%;
   box-sizing: border-box;
   border: 6px solid #f2f6fc;
 }
 
 .u-calendar-item--multiple .u-calendar-item--after-checked {
-  background-color: #ff9047;;
+  background-color: #fa4a2d;
   color: #fff;
-   border-radius: 50%;
+  border-radius: 50%;
   box-sizing: border-box;
   border: 6px solid #f2f6fc;
 }

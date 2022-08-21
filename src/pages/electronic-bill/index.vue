@@ -1,8 +1,9 @@
 <template>
   <view class="electronic-page">
     <view class="electronic-date">
-      日期选择器
-      <!-- <DatePicker /> -->
+      <DatePicker @change="startDateChane" />
+      <text class="electronic-date-seperator">|</text>
+      <DatePicker @change="endDateChange" />
     </view>
     <view class="electronic-list">
       <view class="electronic-list-item" v-for="(bill, index) in billList" :key="index">
@@ -37,6 +38,11 @@
           <view>原始交货日: 2022-1-11</view>
         </view>
       </view>
+    </view>
+    <view class="electronic-total">
+      <text style="color: #f93a4a;">{{ 7 }}</text>
+      <text>个订单，</text>
+      <text style="color: red">480</text>元
     </view>
   </view>
 </template>
@@ -79,6 +85,12 @@ export default {
   methods: {
     handleMore(bill) {
       this.$set(bill, 'expand', !bill.expand)
+    },
+    startDateChane(date) {
+      console.log(date)
+    },
+    endDateChange(date) {
+      console.log(date)
     },
   },
 }
