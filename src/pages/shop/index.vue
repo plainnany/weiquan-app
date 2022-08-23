@@ -82,6 +82,7 @@ export default {
       product.number++
     },
     decreaseProduct(product) {
+      if (product.number < 0) return
       product.number--
     },
     change(product) {

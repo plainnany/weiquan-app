@@ -1,7 +1,6 @@
 <template>
   <view class="search-bar">
-    <image class="search-icon" :src="searchIcon" />
-    <!-- 这里不知道为啥focus之后，样式会发生错乱 -->
+    <image class="search-icon" :src="searchIcon" mode="" />
     <input type="text" @focus="focus" placeholder="喝出美好生活" placeholder-class="placeholder-style" />
   </view>
 </template>
@@ -27,22 +26,27 @@ export default {
 
 <style lang="less">
 .search-bar {
+  position: fixed;
+  top: 0;
+  right: 24px;
+  left: 24px;
+  box-sizing: border-box;
   border-radius: 40px;
   background: #edeff2;
-  margin: 0 34px;
   display: flex;
   align-items: center;
+  height: 70px;
+  padding: 21px 24px;
 
   .search-icon {
     width: 32px;
     height: 32px;
     margin-left: 30px;
+    margin-right: 20px;
   }
   input {
     flex: 1;
     box-sizing: border-box;
-    padding: 21px 24px;
-    height: 70px;
     color: #999;
   }
 

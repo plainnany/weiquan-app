@@ -86,4 +86,27 @@ API.getProduct = () =>
     ],
   })
 
+API.getCategory = () =>
+  Promise.resolve({
+    data: [
+      {
+        name: '牛乳',
+        list: [
+          {
+            imgUrl: '',
+            price: '12.8',
+            number: '1',
+            specifications: '950g',
+            title: '400ml 乳酸菌原味瓶装',
+            unit: '1箱',
+          },
+        ],
+      },
+      {
+        name: '苹果',
+        list: [],
+      },
+    ],
+  })
+
 export default API

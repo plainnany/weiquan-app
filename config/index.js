@@ -62,6 +62,7 @@ const config = {
         },
       },
     },
+    esnextModules: ['taro-ui-vue'],
   },
   rn: {
     appName: 'taroDemo',

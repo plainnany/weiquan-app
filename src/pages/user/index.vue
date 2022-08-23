@@ -20,7 +20,7 @@
         <text>
           为确保账号安全，请绑定账号
         </text>
-        <text class="user-bind-account">立即绑定</text>
+        <text class="user-bind-account" @tap="() => (visible = true)">立即绑定</text>
       </view>
     </view>
     <view class="user-card user-charge">
@@ -60,6 +60,12 @@
         </view>
       </view>
     </view>
+
+    <nan-modal :visible="visible" title="绑定账号" confirmText="确认" @cancel="onCancel" @confirm="onConfirm">
+      <view class="user-password">账户密码</view>
+      <input v-model="userAccount" placeholder="请输入账户" />
+      <input v-model="userPassword" placeholder="请输入密码" />
+    </nan-modal>
   </view>
 </template>
 
@@ -147,8 +153,18 @@ export default {
           path: 'b',
         },
       ],
+      visible: false,
+      userAccount: '',
+      userPassword: '',
     }
   },
-  methods: {},
+  methods: {
+    onCancel() {
+      this.visible = false
+    },
+    onConfirm() {
+      console.log(this.userAccount, this.userPassword)
+    },
+  },
 }
 </script>
