@@ -78,6 +78,7 @@ export default {
       console.log('添加购物车')
     },
     viewDetail(product) {
+      Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.id}` })
       console.log('查看详情')
     },
   },

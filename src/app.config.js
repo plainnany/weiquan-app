@@ -12,13 +12,14 @@ export default defineAppConfig({
     'pages/user-info/index', // 用户信息
     'pages/setting/index', // 切换用户
     'pages/deliver-rule/index', // 配送规则
+    'pages/product-detail/index', // 产品详情
   ],
   tabBar: {
     color: '#666666',
     selectedColor: '#FA4A2D',
     list: [
       {
-        pagePath: 'pages/search/index',
+        pagePath: 'pages/index/index',
         text: '首页',
         iconPath: './images/tab/home.png',
         selectedIconPath: './images/tab/home-active.png',

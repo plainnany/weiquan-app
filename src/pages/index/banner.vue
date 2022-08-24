@@ -1,15 +1,15 @@
 <template>
   <view class="banner">
-    <image :src="bannerBg" mode="" />
+    <!-- <image :src="bannerBg" mode="" /> -->
   </view>
 </template>
 
 <script>
-import bannerBg from '@/images/banner-bg.png'
+// import bannerBg from '@/images/banner-bg.png'
 export default {
   data() {
     return {
-      bannerBg,
+      // bannerBg,
     }
   },
 }
