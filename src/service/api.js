@@ -36,6 +36,7 @@ API.getProduct = () =>
   Promise.resolve({
     data: [
       {
+        id: 'p111',
         imgUrl: '',
         price: '450',
         number: '12',
@@ -93,6 +94,7 @@ API.getCategory = () =>
         name: '牛乳',
         list: [
           {
+            id: 'p111',
             imgUrl: '',
             price: '12.8',
             number: '1',
@@ -105,6 +107,70 @@ API.getCategory = () =>
       {
         name: '苹果',
         list: [],
+      },
+    ],
+  })
+
+API.getOrder = () =>
+  Promise.resolve({
+    data: [
+      {
+        orderNumber: '222049485859583929',
+        type: 'to-pay',
+        date: '2022年2月4号',
+        total: '2',
+        sum: '76.6',
+        productList: [
+          {
+            id: 1,
+            imageUrl: '',
+            price: '12.8',
+            number: '78',
+            specifications: '950g',
+            title: '400ml 乳酸菌原味瓶装',
+            unit: '1箱',
+            type: '正常单',
+          },
+        ],
+      },
+      {
+        orderNumber: '222049485859ss583929',
+        type: 'to-deliver',
+        date: '2022年2月4号',
+        total: '2',
+        sum: '76.6',
+        productList: [
+          {
+            id: 2,
+            imageUrl: '',
+            price: '12.8',
+            number: '78',
+            specifications: '950g',
+            title: '400ml 乳酸菌原味瓶装',
+            unit: '1箱',
+            type: '正常单',
+          },
+          {
+            id: 4,
+            imageUrl: '',
+            price: '12.8',
+            number: '78',
+            specifications: '950g',
+            title: '400ml 乳酸菌原味瓶装',
+            unit: '1箱',
+            type: '正常单',
+          },
+          {
+            id: 3,
+            imageUrl: '',
+            price: '12.8',
+            number: '78',
+            specifications: '950g',
+            title: '400ml 乳酸菌原味瓶装',
+            unit: '1箱',
+            type: '正常单',
+          },
+        ],
       },
     ],
   })

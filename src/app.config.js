@@ -13,6 +13,7 @@ export default defineAppConfig({
     'pages/setting/index', // 切换用户
     'pages/deliver-rule/index', // 配送规则
     'pages/product-detail/index', // 产品详情
+    'pages/order/index', // 订单
   ],
   tabBar: {
     color: '#666666',
