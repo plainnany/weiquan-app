@@ -1,0 +1,159 @@
+.order-detail {
+  background: #f8f9fa;
+  min-height: 100vh;
+  font-size: 24px;
+  padding-bottom: 100px;
+  &-type {
+    font-weight: 400;
+    color: #fefffe;
+    line-height: 33px;
+    text-align: center;
+    background: linear-gradient(306deg, #f7522c 0%, #f16b31 100%);
+    padding-top: 80px;
+    padding-bottom: 160px;
+
+    > view:first-child {
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
+  }
+
+  &-content {
+    padding: 0 30px;
+    margin-top: -80px;
+  }
+
+  &-nav {
+    image {
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  &-location {
+    image {
+      width: 48px;
+      height: 48px;
+      margin-right: 20px;
+    }
+
+    &-info {
+      font-size: 30px;
+      font-weight: 500;
+      color: #333333;
+      line-height: 44px;
+      > view:last-child {
+        font-size: 24px;
+        font-weight: 400;
+        color: #999999;
+        line-height: 33px;
+        margin-top: 12px;
+      }
+    }
+  }
+
+  &-price {
+    font-weight: 500;
+    line-height: 30px;
+    margin-bottom: 38px;
+
+    text {
+      font-size: 32px;
+    }
+  }
+
+  &-sum {
+    font-weight: 500;
+    line-height: 30px;
+    padding-bottom: 12px;
+
+    text {
+      font-size: 32px;
+    }
+  }
+
+  &-info {
+    > view {
+      margin-bottom: 10px;
+
+      &:nth-child(2) {
+        color: #999999;
+        line-height: 22px;
+      }
+    }
+  }
+
+  &-tag {
+    text {
+      padding: 0 10px;
+      border-radius: 2px;
+      color: #0091ff;
+      line-height: 32px;
+      border: 1px solid #26a1ff;
+    }
+  }
+
+  &-color-grey {
+    color: #666;
+  }
+
+  &-total {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #ececec;
+    .order-detail-sum {
+      color: #f55726;
+    }
+    text {
+      font-size: 32px;
+    }
+  }
+
+  &-image {
+    width: 130px;
+    height: 130px;
+    box-sizing: border-box;
+    background: #f8f9fa;
+    border-radius: 16px;
+    padding: 12px;
+    margin-right: 20px;
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &-item {
+    margin: 20px 0;
+  }
+
+  &-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: right;
+    padding: 22px 30px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border-top: 1px solid #ececec;
+    button {
+      padding: 12px 24px;
+      margin-left: 20px;
+      border-radius: 28px;
+      background-color: #fff;
+      font-size: 24px;
+      line-height: 32px;
+
+      &.primary {
+        color: #fa4a2d;
+        border: 1px solid #fa4a2d;
+        background-color: transparent;
+      }
+
+      &.plain {
+        color: #333;
+        border: 1px solid #999999;
+      }
+    }
+  }
+}

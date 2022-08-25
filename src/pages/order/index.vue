@@ -13,7 +13,7 @@
         </view>
       </view>
       <view class="order-result-list" v-else>
-        <view class="order-card" v-for="(order, index) in orderList" :key="index">
+        <view class="common-card" v-for="(order, index) in orderList" :key="index">
           <view class="order-result-title">
             <text>订单号 {{ order.orderNumber }}</text>
             <text class="order-result-type">{{ ORDER_TYPE[order.type] }}</text>

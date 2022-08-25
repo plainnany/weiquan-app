@@ -14,6 +14,7 @@ export default defineAppConfig({
     'pages/deliver-rule/index', // 配送规则
     'pages/product-detail/index', // 产品详情
     'pages/order/index', // 订单
+    'pages/order-detail/index', // 我的订单
   ],
   tabBar: {
     color: '#666666',
