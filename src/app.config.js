@@ -15,6 +15,8 @@ export default defineAppConfig({
     'pages/product-detail/index', // 产品详情
     'pages/order/index', // 订单
     'pages/order-detail/index', // 我的订单
+    'pages/confirm-order/index', // 订单确认
+    'pages/order-settle/index', // 订单结算
   ],
   tabBar: {
     color: '#666666',
