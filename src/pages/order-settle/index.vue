@@ -70,24 +70,9 @@ export default {
           icon: weipocketIcon,
         },
         {
-          name: '支付宝',
-          method: 'alipay',
-          icon: alipayIcon,
-        },
-        {
           method: 'weixin',
           name: '微信支付',
           icon: wechatIcon,
-        },
-        {
-          method: 'weixin-by',
-          name: '微信好友代付',
-          icon: wechatIcon,
-        },
-        {
-          name: '支付宝好友代付',
-          method: 'alipay-by',
-          icon: alipayIcon,
         },
       ],
     }

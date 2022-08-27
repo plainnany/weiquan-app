@@ -1,9 +1,9 @@
 <template>
   <view class="electronic-page">
     <view class="electronic-date">
-      <DatePicker @change="startDateChane" />
+      <picker mode="date" @change="startDateChane">{{ startDate || defaultDate }}</picker>
       <text class="electronic-date-seperator">|</text>
-      <DatePicker @change="endDateChange" />
+      <picker mode="date" @change="endDateChange" :start="startDate">{{ endDate || defaultDate }}</picker>
     </view>
     <view class="electronic-list">
       <view class="electronic-list-item" v-for="(bill, index) in billList" :key="index">
@@ -50,20 +50,29 @@
 <script>
 import { setTitle } from '@/utils'
 import './index.less'
-import DatePicker from '@/components/date-picker'
 
 export default {
   name: 'electronic-bill',
-  components: {
-    DatePicker,
-  },
+  components: {},
   mounted() {
     setTitle({
       title: '电子对账单',
     })
   },
+  computed: {
+    defaultDate() {
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const day = date.getDate()
+
+      return `${year}-${month}-${day}`
+    },
+  },
   data() {
     return {
+      startDate: '',
+      endDate: '',
       billList: [
         {
           date: '2022-8-20 周六',
@@ -86,11 +95,13 @@ export default {
     handleMore(bill) {
       this.$set(bill, 'expand', !bill.expand)
     },
-    startDateChane(date) {
-      console.log(date)
+    startDateChane(e) {
+      this.startDate = e.detail.value
+      console.log(e.detail.value)
     },
-    endDateChange(date) {
-      console.log(date)
+    endDateChange(e) {
+      this.endDate = e.detail.value
+      console.log(e.detail.value)
     },
   },
 }
