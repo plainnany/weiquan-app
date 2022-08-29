@@ -13,8 +13,8 @@
           {{ category.productClass }}
         </view>
       </view>
-      <view class="product-list">
-        <view>
+      <view class="product-list" :key="activeIndex">
+        <scroll-view :scroll-y="true" id="scroll-view" @scrolltolower="toLower">
           <view class="product-list-item" @tap="viewDetail(product)" v-for="(product, index) in productList" :key="index">
             <view class="product-list-image"><image :src="product.productImage" mode=""/></view>
             <view class="product-list-detail">
@@ -30,7 +30,7 @@
               </view>
             </view>
           </view>
-        </view>
+        </scroll-view>
       </view>
     </view>
   </view>
@@ -43,7 +43,6 @@ import API from '@/service/api'
 import SearchBar from '../index/searchBar.vue'
 import shopIcon from '@/images/shop.png'
 import NanModal from '@/components/modal'
-import { BASE_URL } from '@/const'
 
 export default {
   components: { SearchBar, NanModal },
@@ -58,6 +57,10 @@ export default {
       ],
       productList: [],
       shopIcon,
+      searchLoading: false,
+      searchComplete: false,
+      searchPageNum: 1,
+      // scrollTop: 0,
     }
   },
   mounted() {
@@ -74,16 +77,39 @@ export default {
       })
     },
     handleCategory(index) {
+      if (this.activeIndex === index) return
+
       this.activeIndex = index
-      this.getProductByCategory(index)
+      this.searchPageNum = 1
+      this.searchComplete = false
+      // scroll-view不知为何设置scrollTop无效，通过key来解决了
+      // this.scrollTop = 0
+      this.getProductByCategory()
     },
-    getProductByCategory(index) {
-      const method = index === 0 ? 'getSellGoods' : 'getProductByCategory'
-      const params = index === 0 ? { pageNo: 1, limit: 10 } : { pageNo: 1, limit: 10, ProductClassCode: this.categoryList[index].classCode }
-      this.$API[method](params).then(data => {
-        console.log(data)
-        this.productList = data || []
-      })
+    getProductByCategory(type) {
+      const method = this.activeIndex === 0 ? 'getSellGoods' : 'getProductByCategory'
+      const pageNo = this.searchPageNum
+      const params =
+        this.activeIndex === 0
+          ? { pageNo, limit: 10 }
+          : { pageNo, limit: 10, ProductClassCode: this.categoryList[this.activeIndex].classCode }
+      this.searchLoading = true
+      this.$API[method](params)
+        .then(data => {
+          if ((data || []).length === 0) {
+            this.searchComplete = true
+          }
+          if (type === 'loadMore') {
+            this.productList = this.productList.concat(data || [])
+          } else {
+            this.productList = data || []
+          }
+          this.searchLoading = false
+        })
+        .finally(() => {
+          console.log('finally')
+          this.searchLoading = false
+        })
     },
     addShop(product) {
       Taro.showToast({
@@ -93,6 +119,13 @@ export default {
     },
     viewDetail(product) {
       Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.productId}` })
+    },
+    toLower() {
+      if (this.searchLoading || this.searchComplete) {
+        return
+      }
+      this.searchPageNum++
+      this.getProductByCategory('loadMore')
     },
   },
 }
