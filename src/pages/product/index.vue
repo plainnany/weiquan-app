@@ -10,20 +10,15 @@
           :key="index"
           @tap="handleCategory(index)"
         >
-          {{ category.name }}
+          {{ category.productClass }}
         </view>
       </view>
       <view class="product-list">
-        <view v-if="categoryList[activeIndex]">
-          <view
-            class="product-list-item"
-            @tap="viewDetail(product)"
-            v-for="(product, index) in categoryList[activeIndex].list"
-            :key="index"
-          >
-            <view class="product-list-image"><image :src="product.imgUrl" mode=""/></view>
+        <view>
+          <view class="product-list-item" @tap="viewDetail(product)" v-for="(product, index) in productList" :key="index">
+            <view class="product-list-image"><image :src="product.productImage" mode=""/></view>
             <view class="product-list-detail">
-              <view class="product-list-title">{{ product.title }}</view>
+              <view class="product-list-title">{{ product.productName }}</view>
               <view class="product-list-info">规格: {{ product.specifications }} | 单位: {{ product.unit }}</view>
               <view style="display:flex; justify-content:space-between;align-items: center;">
                 <view class="product-list-price">
@@ -48,13 +43,20 @@ import API from '@/service/api'
 import SearchBar from '../index/searchBar.vue'
 import shopIcon from '@/images/shop.png'
 import NanModal from '@/components/modal'
+import { BASE_URL } from '@/const'
 
 export default {
   components: { SearchBar, NanModal },
   data() {
     return {
       activeIndex: 0,
-      categoryList: [],
+      categoryList: [
+        {
+          classCode: '500101',
+          productClass: '可定品项',
+        },
+      ],
+      productList: [],
       shopIcon,
     }
   },
@@ -63,23 +65,34 @@ export default {
   },
   methods: {
     getCategory() {
-      API.getCategory().then(res => {
-        this.categoryList = res.data
+      API.getCategory().then(data => {
+        this.categoryList = this.categoryList.concat(data)
+        const firstCategory = data[0]
+        if (firstCategory) {
+          this.getProductByCategory(0)
+        }
       })
     },
     handleCategory(index) {
       this.activeIndex = index
+      this.getProductByCategory(index)
+    },
+    getProductByCategory(index) {
+      const method = index === 0 ? 'getSellGoods' : 'getProductByCategory'
+      const params = index === 0 ? { pageNo: 1, limit: 10 } : { pageNo: 1, limit: 10, ProductClassCode: this.categoryList[index].classCode }
+      this.$API[method](params).then(data => {
+        console.log(data)
+        this.productList = data || []
+      })
     },
     addShop(product) {
       Taro.showToast({
         title: '添加成功',
         icon: 'success',
       })
-      console.log('添加购物车')
     },
     viewDetail(product) {
-      Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.id}` })
-      console.log('查看详情')
+      Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.productId}` })
     },
   },
 }

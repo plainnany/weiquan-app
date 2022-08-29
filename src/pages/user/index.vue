@@ -52,7 +52,7 @@
       </view>
     </view>
     <view class="user-action user-card">
-      <view class="action-item" v-for="(item, index) in items" :key="index">
+      <view class="action-item" v-for="(item, index) in items" :key="index" @tap="hanldeNav(item)">
         <image :src="item.icon" mode="" />
         <view class="action-item-text">{{ item.title }}</view>
         <view class="action-item-link">
@@ -62,9 +62,16 @@
     </view>
 
     <nan-modal :visible="visible" title="绑定账号" confirmText="确认" @cancel="onCancel" @confirm="onConfirm">
-      <view class="user-password">账户密码</view>
-      <input v-model="userAccount" placeholder="请输入账户" />
-      <input v-model="userPassword" placeholder="请输入密码" />
+      <view class="form-item">选择身份</view>
+      <view class="form-item-wrapper">
+        <picker mode="selector" :range="userTypes" @change="userTypeChange" range-key="label">
+          <text v-if="userTypes[userTypeIndex]">{{ userTypes[userTypeIndex].label }}</text>
+          <text v-else>请选择身份</text>
+        </picker>
+      </view>
+      <view class="form-item">账户密码</view>
+      <input v-model="userAccount" placeholder-style="color:#a89e9e" placeholder="请输入账户" />
+      <input v-model="userPassword" placeholder-style="color:#a89e9e" placeholder="请输入密码" />
     </nan-modal>
   </view>
 </template>
@@ -87,6 +94,7 @@ import orderImg from '@/images/user/order.png'
 import payImg from '@/images/user/pay.png'
 import settingImg from '@/images/user/setting.png'
 import './index.less'
+import Taro from '@tarojs/taro'
 
 export default {
   name: 'user',
@@ -116,11 +124,11 @@ export default {
         { icon: customServiceImg, title: '我的订单' },
       ],
       items: [
-        {
-          icon: orderImg,
-          title: '下单提醒',
-          path: 'a',
-        },
+        // {
+        //   icon: orderImg,
+        //   title: '下单提醒',
+        //   path: 'a',
+        // },
         {
           icon: complainImg,
           title: '查看客诉',
@@ -145,7 +153,7 @@ export default {
         {
           icon: settingImg,
           title: '设置',
-          path: 'b',
+          path: '/pages/setting/index',
         },
         {
           icon: helpImg,
@@ -156,6 +164,18 @@ export default {
       visible: false,
       userAccount: '',
       userPassword: '',
+      userTypes: [
+        {
+          label: '身份1',
+        },
+        {
+          label: '身份2',
+        },
+        {
+          label: '身份3',
+        },
+      ],
+      userTypeIndex: '',
     }
   },
   methods: {
@@ -164,6 +184,12 @@ export default {
     },
     onConfirm() {
       console.log(this.userAccount, this.userPassword)
+    },
+    userTypeChange(e) {
+      this.userTypeIndex = e.detail.value
+    },
+    hanldeNav(item) {
+      Taro.navigateTo({ url: item.path })
     },
   },
 }

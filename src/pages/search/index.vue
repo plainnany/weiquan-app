@@ -1,79 +1,128 @@
 <template>
   <view class="search-page">
     <view class="search-bar">
-      <image class="search-icon" :src="searchIcon" mode="" />
-      <input placeholder="喝出美好生活" />
+      <view class="search-wrap">
+        <icon class="search-icon" type="search" size="16" />
+        <input placeholder="喝出美好生活" :value="keyword" @confirm="onSearch" />
+      </view>
+      <image class="delete-icon" v-if="keyword" @tap="deleteKeyword" :src="deleteIcon" mode="" />
     </view>
     <view class="search-result">
-      <view class="search-result-empty" v-if="!productList.length">
+      <view class="search-result-empty" v-if="!productList.length && startSearch">
         <image :src="searchEmptyIcon" mode="" />
         <view class="search-result-empty-text">
           抱歉，没有找到商品哦
         </view>
       </view>
-      <view class="search-result-list" v-else>
-        <view class="product-list">
-          <view class="product-list-item" @tap="viewDetail(product)" v-for="(product, index) in productList" :key="index">
-            <view class="product-list-image"><image :src="product.imgUrl" mode=""/></view>
-            <view class="product-list-detail">
-              <view class="product-list-title">{{ product.title }}</view>
-              <view class="product-list-info">规格: {{ product.specifications }} | 单位: {{ product.unit }}</view>
-              <view style="display:flex; justify-content:space-between;align-items: center;">
-                <view class="product-list-price">
-                  <text style="color: #f55726">¥</text>
-                  <text style="color: #f55726; font-size: 22px;">{{ product.price }} </text>
-                  <text style="color: #999">/ 份</text>
-                </view>
-                <image @tap.stop="addShop(product)" :src="shopIcon" class="shop-icon" mode="" />
+      <scroll-view :scroll-y="true" v-else @scrolltolower="toLower">
+        <view class="product-list-item" @tap="viewDetail(product)" v-for="(product, index) in productList" :key="index">
+          <view class="product-list-image"><image :src="product.productImage" mode=""/></view>
+          <view class="product-list-detail">
+            <view class="product-list-title">{{ product.productName }}</view>
+            <view class="product-list-info">规格: {{ product.specifications }} | 单位: {{ product.productUnitRule }}</view>
+            <view style="display:flex; justify-content:space-between;align-items: center;">
+              <view class="product-list-price">
+                <text style="color: #f55726">¥</text>
+                <text style="color: #f55726; font-size: 22px;">{{ product.productUnitRule }} </text>
+                <text style="color: #999">/ 份</text>
               </view>
+              <image @tap.stop="addShop(product)" :src="shopIcon" class="shop-icon" mode="" />
             </view>
           </view>
         </view>
-      </view>
+      </scroll-view>
     </view>
   </view>
 </template>
 
 <script>
+import Taro from '@tarojs/taro'
 import './index.less'
 import { setTitle } from '@/utils'
-import searchIcon from '@/images/search.png'
 import searchEmptyIcon from '@/images/search-empty.png'
-import API from '@/service/api'
 import shopIcon from '@/images/shop.png'
+import deleteIcon from '@/images/delete.png'
 
 export default {
   name: 'search',
   data() {
     return {
-      searchIcon,
       searchEmptyIcon,
       shopIcon,
       productList: [],
+      startSearch: null,
+      deleteIcon,
+      keyword: '',
+      searchLoading: false,
+      searchPageNum: 1,
+      searchComplete: false,
     }
   },
   mounted() {
     setTitle({
       title: '搜索',
     })
-    this.getSearchResult()
+    this.searchProduct({ keyword: '', pageNo: 1 })
   },
   methods: {
-    getSearchResult() {
-      API.getProduct().then(res => {
-        this.productList = res.data || []
-      })
-    },
-
     addShop(product) {
-      Taro.showToast({
-        title: '添加成功',
-        icon: 'success',
-      })
-      console.log('添加购物车')
+      this.$API
+        .addToShopcar({
+          productId: product.productId,
+          amount: 1,
+        })
+        .then(data => {
+          Taro.showToast({
+            title: '已添加到购物车',
+            icon: 'success',
+          })
+        })
+        .catch(err => {
+          // 接口报错了
+          console.log('catch error', err)
+        })
     },
     viewDetail(product) {
-      console.log('查看详情')
+      Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.productId}` })
+    },
+    onSearch(e) {
+      const { value } = e.detail
+      this.keyword = value
+      this.searchProduct({ keyword: value, pageNo: 1 })
+    },
+    searchProduct(params) {
+      this.searchLoading = true
+      const { type, ...restParams } = params
+      this.$API
+        .searchProduct({
+          limit: 10,
+          ...restParams,
+        })
+        .then(data => {
+          if (type === 'loadMore') {
+            this.productList = this.productList.concat(data)
+          } else {
+            this.productList = data
+          }
+          if (data.length === 0) {
+            this.searchComplete = true
+          }
+        })
+        .finally(() => {
+          this.startSearch = true
+          this.searchLoading = false
+        })
+    },
+    deleteKeyword() {
+      this.searchProduct('')
+      this.keyword = ''
+    },
+    toLower() {
+      if (this.searchLoading || this.searchComplete) {
+        return
+      }
+      this.searchPageNum++
+      this.searchProduct({ pageNo: this.searchPageNum, keyword: this.keyword, type: 'loadMore' })
     },
   },
 }

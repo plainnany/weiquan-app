@@ -8,6 +8,54 @@ const requestAddressList = [
     url: '/portal/config/getSkin',
     type: 'post',
   },
+  {
+    describe: '获取微信授权的token', // 这个token是微信要用的，具体怎么使用需要看看微信
+    method: 'getToken',
+    url: '/api/applet/getToken.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取分类',
+    method: 'getCategory',
+    url: '/api/banner/product.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取指定分类下品项列表',
+    method: 'getProductByCategory',
+    url: '/api/product/loadProductByClassCode.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取指定分类下品项列表',
+    method: 'getSellGoods',
+    url: '/api/product/findSellGoods.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取产品详情',
+    method: 'getProductDetail',
+    url: '/api/product/findGoodsInfo.ns',
+    type: 'post',
+  },
+  {
+    describe: '充值记录',
+    method: 'rechargeRecord',
+    url: '/api/bill/rechargeRecord.ns',
+    type: 'post',
+  },
+  {
+    describe: '添加到购物车',
+    method: 'addToShopcar',
+    url: '/api/shopcar/addToShopcar.ns',
+    type: 'post',
+  },
+  {
+    describe: '搜索商品',
+    method: 'searchProduct',
+    url: '/api/product/searchProduct.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}
@@ -87,29 +135,29 @@ API.getProduct = () =>
     ],
   })
 
-API.getCategory = () =>
-  Promise.resolve({
-    data: [
-      {
-        name: '牛乳',
-        list: [
-          {
-            id: 'p111',
-            imgUrl: '',
-            price: '12.8',
-            number: '1',
-            specifications: '950g',
-            title: '400ml 乳酸菌原味瓶装',
-            unit: '1箱',
-          },
-        ],
-      },
-      {
-        name: '苹果',
-        list: [],
-      },
-    ],
-  })
+// API.getCategory = () =>
+//   Promise.resolve({
+//     data: [
+//       {
+//         name: '牛乳',
+//         list: [
+//           {
+//             id: 'p111',
+//             imgUrl: '',
+//             price: '12.8',
+//             number: '1',
+//             specifications: '950g',
+//             title: '400ml 乳酸菌原味瓶装',
+//             unit: '1箱',
+//           },
+//         ],
+//       },
+//       {
+//         name: '苹果',
+//         list: [],
+//       },
+//     ],
+//   })
 
 API.getOrder = () =>
   Promise.resolve({

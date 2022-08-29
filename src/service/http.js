@@ -1,4 +1,7 @@
 import Taro from '@tarojs/taro'
+import { BASE_URL } from '@/const'
+
+const tempToken = ''
 
 class HttpRequest {
   constructor() {}
@@ -28,13 +31,16 @@ class HttpRequest {
 
     return new Promise((resolve, reject) => {
       Taro.showLoading()
+      const token = Taro.getStorageSync('token') || tempToken
 
       Taro.request({
         method: method.toUpperCase(),
-        url: requestParams.requestFileUrl || requestUrl,
+        // url: requestParams.requestFileUrl || requestUrl,
+        url: `${BASE_URL}${requestUrl}`,
         data,
         header: {
-          'Content-Type': 'application/json',
+          'content-type': method === 'get' ? 'application/json' : 'application/x-www-form-urlencoded',
+          token,
           ...requestHeaders,
         },
       })
@@ -55,7 +61,11 @@ class HttpRequest {
   // 响应数据处理
   transformResponse(response) {
     let res = response.data
-    return res
+    if (res.returnCode === 200) {
+      return res.data
+    }
+
+    return Promise.reject(res)
   }
 }
 
