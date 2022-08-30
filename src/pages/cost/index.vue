@@ -7,9 +7,9 @@
       <view class="remain-money">
         <view class="remain-num">
           <text>¥</text>
-          <text>12333</text>
+          <text>{{ balance }}</text>
         </view>
-        <text class="remain-charge">充值</text>
+        <text class="remain-charge" @tap="handleCharge">充值</text>
       </view>
     </view>
     <view class="charge-record">
@@ -18,34 +18,38 @@
           {{ tab.name }}</view
         >
       </view>
-      <view class="charge-list">
-        <view class="charge-list-item" v-for="(item, index) in list" :key="index">
-          <view class="charge-list-item-title">
-            <text>现金充值</text>
-            <text class="charge-list-item-date">{{ item.date }}</text>
-          </view>
-          <view class="charge-list-item-content">
-            <view>
-              <view class="charge-list-item-remain">余额 {{ item.remain }}</view>
-              <view class="charge-list-item-order">改单退款 {{ item.orderNo }}</view>
+      <scroll-view :scroll-y="true" @scrolltolower="toLower">
+        <view class="charge-list">
+          <view class="charge-list-item" v-for="(item, index) in chargeList" :key="index">
+            <view class="charge-list-item-title">
+              <text>现金充值</text>
+              <text class="charge-list-item-date">{{ item.billDate }}</text>
             </view>
-            <view class="charge-list-item-number">{{ item.number }}</view>
+            <view class="charge-list-item-content">
+              <view>
+                <view class="charge-list-item-remain">余额 {{ item.accountBalance }}</view>
+                <view class="charge-list-item-order">改单退款 {{ item.orderNumber }}</view>
+              </view>
+              <view class="charge-list-item-number">{{ item.payAmount }}</view>
+            </view>
           </view>
         </view>
-      </view>
+      </scroll-view>
     </view>
   </view>
 </template>
 
 <script>
 import './index.less'
+import Taro from '@tarojs/taro'
 
 export default {
   name: 'cost',
   components: {},
   data() {
     return {
-      active: 'charge',
+      active: 'consume',
+      balance: '',
       tabs: [
         {
           name: '充值记录',
@@ -56,27 +60,56 @@ export default {
           key: 'consume',
         },
       ],
-      list: [
-        {
-          type: '现金充值',
-          remain: '100',
-          orderNo: '订单编号',
-          date: '2022-8-20',
-          number: '+12',
-        },
-        {
-          type: '现金充值',
-          remain: '100',
-          orderNo: '订单编号',
-          date: '2022-8-20',
-          number: '+12',
-        },
-      ],
+      chargeList: [],
+      loading: false,
+      complete: false,
+      pageNo: 1,
     }
+  },
+  mounted() {
+    this.getBillCost()
+    this.getChargeList()
   },
   methods: {
     clickTab({ key }) {
       this.active = key
+      this.complete = false
+      this.pageNo = 1
+      this.getChargeList()
+    },
+    getBillCost() {
+      this.$API.getBillCost().then(data => {
+        this.balance = data
+      })
+    },
+    handleCharge() {
+      Taro.navigateTo({ url: '/pages/charge/index' })
+    },
+    getChargeList(type) {
+      const method = this.active === 'charge' ? 'rechargeRecord' : 'consumptionRecord'
+      this.$API[method]({
+        pageNo: this.pageNo,
+        limit: 10,
+      }).then(data => {
+        data = data || []
+        if (type === 'loadMore') {
+          this.chargeList = this.chargeList.concat(data)
+        } else {
+          this.chargeList = data
+        }
+
+        if (data.length === 0) {
+          this.complete = true
+        }
+      })
+    },
+
+    toLower() {
+      if (this.loading || this.complete) {
+        return
+      }
+      this.pageNo++
+      this.getChargeList('loadMore')
     },
   },
 }

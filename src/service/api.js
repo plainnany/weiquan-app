@@ -56,6 +56,66 @@ const requestAddressList = [
     url: '/api/product/searchProduct.ns',
     type: 'post',
   },
+  {
+    describe: '获取购物车列表',
+    method: 'getShopcarList',
+    url: '/api/shopcar/showShopCar.ns',
+    type: 'post',
+  },
+  {
+    describe: '充值记录',
+    method: 'rechargeRecord',
+    url: '/api/bill/rechargeRecord.ns',
+    type: 'post',
+  },
+  {
+    describe: '消费记录',
+    method: 'consumptionRecord',
+    url: '/api/bill/consumptionRecord.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取余额',
+    method: 'getBillCost',
+    url: '/api/bill/balance.ns	',
+    type: 'post',
+  },
+  {
+    describe: '获取当前用户信息',
+    method: 'getUserInfo',
+    url: '/api/customer/userInfo.ns	',
+    type: 'post',
+  },
+  {
+    describe: '获取所有订单列表',
+    method: 'getAllOrder',
+    url: '/api/order/listAllOrder.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取待付款列表',
+    method: 'getPendingPayment',
+    url: '/api/order/pendingPayment.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取待发货列表',
+    method: 'getWaitDelivery',
+    url: '/api/order/waitDelivery.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取已完成列表',
+    method: 'getAlreadyCompleted',
+    url: '/api/order/alreadyCompleted.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取电子对账单',
+    method: 'getBillList',
+    url: '/api/bill/x.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}

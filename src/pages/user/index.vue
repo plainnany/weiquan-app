@@ -3,20 +3,20 @@
     <view class="user-info">
       <view class="user-info-wrapper">
         <view class="user-avatar">
-          <image :src="avatarImg" mode="" />
+          <image :src="userInfo.headPic" mode="" />
         </view>
         <view>
           <view class="user-name">
-            <text>{{ username }}</text>
-            <text class="change-user">切换账号</text>
+            <text>{{ userInfo.customerName }}</text>
+            <text class="change-user" @tap="handleNav({ path: '/pages/change-account/index' })">切换账号</text>
           </view>
           <view class="user-mobile">
-            <text>{{ mobile }} | </text>
+            <text>{{ userInfo.consigneeLink }} | </text>
             <text>现金用户</text>
           </view>
         </view>
       </view>
-      <view class="user-empty">
+      <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
         <text>
           为确保账号安全，请绑定账号
         </text>
@@ -24,14 +24,14 @@
       </view>
     </view>
     <view class="user-card user-charge">
-      <view v-for="(tab, index) in tabs" :key="index">
+      <view v-for="(tab, index) in tabs" :key="index" @tap="handleNav(tab)">
         <image :src="tab.icon" mode="" />
         <view>
           {{ tab.title }}
         </view>
       </view>
     </view>
-    <view class="user-order">
+    <view class="user-order" @tap="handleNav({ path: '/pages/order/index' })">
       <text>
         我的订单
       </text>
@@ -41,7 +41,7 @@
       </view>
     </view>
     <view class="order-all user-card">
-      <view v-for="(order, index) in orderList" :key="index">
+      <view v-for="(order, index) in orderList" :key="index" @tap="handleNav(order)">
         <view class="order-icon">
           <image :src="order.icon" mode="" />
           <!-- <text class="order-num">5</text> -->
@@ -52,7 +52,7 @@
       </view>
     </view>
     <view class="user-action user-card">
-      <view class="action-item" v-for="(item, index) in items" :key="index" @tap="hanldeNav(item)">
+      <view class="action-item" v-for="(item, index) in items" :key="index" @tap="handleNav(item)">
         <image :src="item.icon" mode="" />
         <view class="action-item-text">{{ item.title }}</view>
         <view class="action-item-link">
@@ -103,25 +103,21 @@ export default {
     return {
       msg: '',
       linkIcon: '',
-      userInfo: {
-        name: '',
-        mobile: '',
-      },
       backImg,
       avatarImg: '',
       username: '测试用户名称',
       mobile: '123****5678',
       tabs: [
-        { icon: chargeImg, title: '余额及充值' },
-        { icon: eletronicBillImg, title: '电子对账单' },
-        { icon: ruleImg, title: '配送规则' },
+        { icon: chargeImg, title: '余额及充值', path: '/pages/cost/index' },
+        { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
+        { icon: ruleImg, title: '配送规则', path: '/pages/deliver-rule/index' },
       ],
       orderList: [
-        { icon: payImg, title: '待付款' },
-        { icon: deleverImg, title: '查询修改' },
-        { icon: toReceiveImg, title: '待收货' },
-        { icon: commentsImg, title: '已完成' },
-        { icon: customServiceImg, title: '我的订单' },
+        { icon: payImg, title: '待付款', path: '/pages/order/index?type=to-pay' },
+        { icon: deleverImg, title: '查询修改', path: '/pages/order/index' },
+        { icon: toReceiveImg, title: '待收货', path: '/pages/order/index?type=to-receive' },
+        { icon: commentsImg, title: '已完成', path: '/pages/order/index?type=done' },
+        { icon: customServiceImg, title: '我的订单', path: '/pages/order/index' },
       ],
       items: [
         // {
@@ -136,7 +132,7 @@ export default {
         },
         {
           icon: checkImg,
-          title: '检查报告单',
+          title: '检验报告单',
           path: 'b',
         },
         {
@@ -148,7 +144,7 @@ export default {
         {
           icon: messageImg,
           title: '消息中心',
-          path: 'b',
+          path: '/pages/web-view/index?type=news',
         },
         {
           icon: settingImg,
@@ -158,7 +154,7 @@ export default {
         {
           icon: helpImg,
           title: '帮助中心',
-          path: 'b',
+          path: '/pages/web-view/index?type=help',
         },
       ],
       visible: false,
@@ -176,7 +172,18 @@ export default {
         },
       ],
       userTypeIndex: '',
+      hasGetUserInfo: false,
     }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo
+    },
+  },
+  mounted() {
+    this.$store.dispatch('getUserInfo').then(() => {
+      this.hasGetUserInfo = true
+    })
   },
   methods: {
     onCancel() {
@@ -188,7 +195,7 @@ export default {
     userTypeChange(e) {
       this.userTypeIndex = e.detail.value
     },
-    hanldeNav(item) {
+    handleNav(item) {
       Taro.navigateTo({ url: item.path })
     },
   },

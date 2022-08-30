@@ -1,19 +1,30 @@
 .shop-page {
-  background: #f8f9fa;
   min-height: 100vh;
-  padding: 20px 30px;
+  box-sizing: border-box;
 
-  .shop-product-item {
-    background-color: #fff;
-    padding: 30px;
+  &.empty {
     display: flex;
+    justify-content: center;
     align-items: center;
   }
 
   .shop-product {
     &-wrapper {
-      margin-bottom: 90px;
+      // margin-bottom: 90px;
+      padding: 20px 0;
+      background: #f8f9fa;
+      height: calc(100vh - 104px);
+      box-sizing: border-box;
     }
+
+    &-item {
+      background-color: #fff;
+      padding: 30px;
+      margin: 0 30px;
+      display: flex;
+      align-items: center;
+    }
+
     &-image {
       image {
         width: 160px;
@@ -37,11 +48,14 @@
       }
 
       &-price {
-        font-size: 36px;
         font-weight: 500;
         color: #f55726;
         line-height: 30px;
         display: flex;
+
+        > text {
+          font-size: 36px;
+        }
       }
 
       &-number {
@@ -99,6 +113,15 @@
     &-total {
       font-size: 32px;
     }
+  }
+
+  .product-action-btn {
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    background: #f8f9fa;
+    border-radius: 22px;
+    text-align: center;
   }
 
   // checkbox样式

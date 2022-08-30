@@ -6,43 +6,47 @@
       <picker mode="date" @change="endDateChange" :start="startDate">{{ endDate || defaultDate }}</picker>
     </view>
     <view class="electronic-list">
-      <view class="electronic-list-item" v-for="(bill, index) in billList" :key="index">
+      <view class="electronic-list-item" v-for="(bill, index) in billData.list" :key="index">
         <view class="electronic-list-row">
           <view class="electronic-list-date">
             <text class="electronic-list-icon"></text>
-            {{ bill.date }}
+            {{ bill.time }}
+            {{ bill.week }}
           </view>
-          <view class="electronic-list-sum">{{ bill.money }}</view>
+          <view class="electronic-list-sum">{{ bill.amount }}</view>
         </view>
         <view class="electronic-list-row">
           <view>
             <text class="electronic-list-icon active"></text>
-            {{ bill.product }}
-            {{ bill.volume }}
-            {{ bill.number }}
+            <!-- {{ bill.product }}
+            {{ bill.volume }} -->
+            {{ bill.num }}
           </view>
           <view class="electronic-list-action" @tap="handleMore(bill)">更多</view>
         </view>
-        <view class="electronic-list-extra" v-if="bill.expand">
-          <view class="electronic-list-row">
-            <view>
-              {{ bill.product }}
+        <view v-if="bill.expand">
+          <view class="electronic-list-extra" v-for="(item, subIndex) in bill.list" :key="subIndex">
+            <view class="electronic-list-row">
+              <view>
+                {{ item.productName }}
+              </view>
+              <view class="electronic-list-sum">{{ item.price }}</view>
             </view>
-            <view class="electronic-list-sum">{{ bill.money }}</view>
+            <view>规格: {{ item.productUnitConvertRule }}</view>
+            <view>单价: {{ item.productPrice }}</view>
+            <view>{{ typeMap[item.type] }}数量: {{ item.num }}</view>
+            <view>订单类型: {{ typeMap[item.type] }}单</view>
+            <view>原始发货单: {{ item.deliveryCode }}</view>
+            <view>原始交货日: {{ item.deliveryDate }}</view>
           </view>
-          <view>规格: 1盒</view>
-          <view>单价: 12/盒</view>
-          <view>退货数量: 4</view>
-          <view>订单类型: 退货单</view>
-          <view>原始发货单: 121222</view>
-          <view>原始交货日: 2022-1-11</view>
         </view>
       </view>
     </view>
     <view class="electronic-total">
-      <text style="color: #f93a4a;">{{ 7 }}</text>
+      <text style="color: #f93a4a;">{{ billData.num }}</text>
       <text>个订单，</text>
-      <text style="color: red">480</text>元
+      <text style="color: red">{{ billData.amount }}</text
+      >元
     </view>
   </view>
 </template>
@@ -73,35 +77,63 @@ export default {
     return {
       startDate: '',
       endDate: '',
+      billData: {
+        num: '',
+        amount: '',
+        list: [],
+      },
+      typeMap: {
+        '01': '领货',
+        '02': '退货',
+      },
       billList: [
         {
-          date: '2022-8-20 周六',
-          product: '味全冷藏牛乳',
-          volume: '950ml',
-          number: '1单',
-          money: '144.00元',
-        },
-        {
-          date: '2022-8-20 周六',
-          product: '味全冷藏牛乳',
-          volume: '950ml',
-          number: '1单',
-          money: '144.00元',
+          time: '时间',
+          week: '周几',
+          amount: '金额',
+          num: '数量',
+          list: [
+            {
+              productName: '品项名称',
+              productUnitConvertRule: '品项规格',
+              productPrice: '单价',
+              num: '数量',
+              price: '金额',
+              deliveryCode: '发货单号',
+              deliveryDate: '交货日期',
+              type: '01领货/02退货',
+            },
+          ],
         },
       ],
     }
   },
+  mounted() {
+    this.getBillList()
+  },
   methods: {
+    getBillList() {
+      this.$API
+        .getBillList({
+          start: this.startDate,
+          end: this.endDate,
+        })
+        .then(data => {
+          this.billData = data
+        })
+    },
     handleMore(bill) {
       this.$set(bill, 'expand', !bill.expand)
     },
     startDateChane(e) {
       this.startDate = e.detail.value
-      console.log(e.detail.value)
     },
     endDateChange(e) {
       this.endDate = e.detail.value
-      console.log(e.detail.value)
+
+      if (this.startDate && this.endDate) {
+        this.getBillList()
+      }
     },
   },
 }

@@ -7,7 +7,7 @@
       <view class="charge-money">
         <view class="charge-num">
           <text>¥</text>
-          <text>12333</text>
+          <text>{{ balance }}</text>
         </view>
         <text class="charge-btn">充值</text>
       </view>
@@ -45,7 +45,13 @@ export default {
     return {
       chargeNumber: '',
       wechatIcon,
+      balance: '',
     }
+  },
+  mounted() {
+    this.$API.getBillCost().then(data => {
+      this.balance = data
+    })
   },
   methods: {
     handleCharge() {

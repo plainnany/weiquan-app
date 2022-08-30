@@ -30,7 +30,9 @@ class HttpRequest {
     } else if (method === 'post') data = requestParams
 
     return new Promise((resolve, reject) => {
-      Taro.showLoading()
+      Taro.showLoading({
+        title: '加载中',
+      })
       const token = Taro.getStorageSync('token') || tempToken
 
       Taro.request({
@@ -40,7 +42,8 @@ class HttpRequest {
         data,
         header: {
           'content-type': method === 'get' ? 'application/json' : 'application/x-www-form-urlencoded',
-          token,
+          token: 'SCUc37Ic9tHReqjdvbnQKVUteLYotLCOi0hMQlhPGdqcIjUh/ZwmGaoZYVlsayUq',
+          platform: 'weixin',
           ...requestHeaders,
         },
       })
@@ -63,6 +66,17 @@ class HttpRequest {
     let res = response.data
     if (res.returnCode === 200) {
       return res.data
+    } else if (res.returnCode === 401) {
+      // 此处不太好使用弹窗绑定账号，可以给绑定账号单独做个页面，跳转过去
+      Taro.showToast({
+        title: '用户未登录，请先绑定用户',
+        icon: 'none',
+        success() {
+          setTimeout(() => {
+            Taro.navigateTo({ url: '/pages/bind-account/index' })
+          }, 2000)
+        },
+      })
     }
 
     return Promise.reject(res)

@@ -18,6 +18,8 @@ export default defineAppConfig({
     'pages/confirm-order/index', // 订单确认
     'pages/order-settle/index', // 订单结算
     'pages/comment/index', // 问题反馈
+    'pages/web-view/index', // 内嵌h5页面
+    'pages/bind-account/index', // 绑定账户
   ],
   tabBar: {
     color: '#666666',

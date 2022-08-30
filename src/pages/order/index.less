@@ -43,12 +43,19 @@
   }
 
   .order-result {
-    margin-top: 80px;
-    padding: 20px;
+    margin-top: 104px;
     box-sizing: border-box;
-    min-height: calc(100vh - 110px);
+    height: calc(100vh - 105px);
     position: relative;
     font-size: 24px;
+
+    &-list {
+      padding: 20px;
+    }
+
+    scroll-view {
+      height: 100%;
+    }
 
     &-title {
       display: flex;
@@ -150,6 +157,7 @@
 
     &-tag {
       text {
+        font-size: 20px;
         padding: 0 10px;
         border-radius: 2px;
         color: #0091ff;
