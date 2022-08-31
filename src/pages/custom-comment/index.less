@@ -1,0 +1,49 @@
+.custom-comment {
+  font-size: 26px;
+  color: #333;
+  .custom-tabs {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #ececec;
+  }
+
+  .custom-tab {
+    padding: 24px 8px;
+    margin: 0 80px;
+    font-weight: 500;
+    line-height: 37px;
+    background: #fff;
+    &.active {
+      color: #ffffff;
+      border-bottom: 1px solid #f7502c;
+      color: #f7502c;
+    }
+  }
+
+  .custom-record {
+    scroll-view {
+      height: calc(100vh - 90px);
+      box-sizing: border-box;
+    }
+    .custom-list {
+      &-item {
+        padding: 30px;
+        border-bottom: 1px solid #e7e7e7;
+        color: #666;
+
+        > view {
+          &:first-child {
+            margin-bottom: 16px;
+          }
+
+          text {
+            color: #333;
+          }
+
+          &:last-child {
+          }
+        }
+      }
+    }
+  }
+}

@@ -113,7 +113,25 @@ const requestAddressList = [
   {
     describe: '获取电子对账单',
     method: 'getBillList',
-    url: '/api/bill/x.ns',
+    url: '/api/v3/delivery/monthOrder.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取客诉列表',
+    method: 'getComplainList',
+    url: '/api/complain/loadComplainByUserId.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取质检报告',
+    method: 'getQualityReport',
+    url: '/api/customer/report.ns	',
+    type: 'post',
+  },
+  {
+    describe: '获取客诉品项列表',
+    method: 'getComplaintProductList',
+    url: '/api/product/complaintProductList.ns	',
     type: 'post',
   },
 ]

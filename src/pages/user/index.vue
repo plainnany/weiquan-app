@@ -128,12 +128,12 @@ export default {
         {
           icon: complainImg,
           title: '查看客诉',
-          path: 'b',
+          path: '/pages/custom-comment/index',
         },
         {
           icon: checkImg,
           title: '检验报告单',
-          path: 'b',
+          path: '/pages/quality-report/index',
         },
         {
           icon: manualImg,

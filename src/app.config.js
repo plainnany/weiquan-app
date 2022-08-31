@@ -20,6 +20,8 @@ export default defineAppConfig({
     'pages/comment/index', // 问题反馈
     'pages/web-view/index', // 内嵌h5页面
     'pages/bind-account/index', // 绑定账户
+    'pages/custom-comment/index', // 客诉列表
+    'pages/quality-report/index', // 质检报告
   ],
   tabBar: {
     color: '#666666',
