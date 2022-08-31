@@ -1,6 +1,6 @@
 <template>
   <view class="setting-page">
-    <view class="setting-card" v-for="(item, index) in list" :key="index">
+    <view class="setting-card" v-for="(item, index) in list" :key="index" @tap="handleNav(item)">
       <view style="display:flex; align-items: center">
         <image :src="item.icon" mode="" />
         <text>{{ item.text }}</text>
@@ -27,6 +27,7 @@ import noticeIcon from '@/images/setting/notice.png'
 import warningIcon from '@/images/setting/warning.png'
 import questionIcon from '@/images/setting/question.png'
 import { setTitle } from '@/utils'
+import Taro from '@tarojs/taro'
 
 export default {
   components: {},
@@ -43,7 +44,7 @@ export default {
           text: '问题反馈',
           icon: warningIcon,
           showBack: true,
-          path: '',
+          path: '/pages/custom-comment/index',
         },
         {
           text: '修改门店收货码',
@@ -79,6 +80,9 @@ export default {
   methods: {
     quit() {
       console.log('退出')
+    },
+    handleNav(item) {
+      Taro.navigateTo({ url: item.path })
     },
   },
 }

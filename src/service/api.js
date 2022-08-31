@@ -131,7 +131,31 @@ const requestAddressList = [
   {
     describe: '获取客诉品项列表',
     method: 'getComplaintProductList',
-    url: '/api/product/complaintProductList.ns	',
+    url: '/api/product/complaintProductList.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取客诉品项详情',
+    method: 'getComplaintDetail',
+    url: '/api/complain/loadComplainByCode.ns',
+    type: 'post',
+  },
+  {
+    describe: '充值',
+    method: 'recharge',
+    url: '/api/bill/recharge.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取客诉问题类型',
+    method: 'getComplainType',
+    url: '/api/v2/complain/complainType.ns',
+    type: 'post',
+  },
+  {
+    describe: '提交客诉',
+    method: 'submitComplain',
+    url: '/api/v2/complain/submit.ns',
     type: 'post',
   },
 ]

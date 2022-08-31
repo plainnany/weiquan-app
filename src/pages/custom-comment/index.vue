@@ -8,7 +8,7 @@
     <view class="custom-record">
       <scroll-view :scroll-y="true" @scrolltolower="toLower">
         <view class="custom-list">
-          <view class="custom-list-item" v-for="(item, index) in complainList" :key="index">
+          <view class="custom-list-item" v-for="(item, index) in complainList" :key="index" @tap="handleClick(item)">
             <view
               >客诉编号 <text>{{ item.complainCode }}</text></view
             >
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import Taro from '@tarojs/taro'
 import './index.less'
 import { setTitle } from '@/utils'
 
@@ -86,6 +87,9 @@ export default {
       }
       this.pageNo++
       this.getComplainList('loadMore')
+    },
+    handleClick(item) {
+      Taro.navigateTo({ url: `/pages/comment/index?code=${item.complainCode}` })
     },
   },
 }

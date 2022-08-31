@@ -4,8 +4,8 @@
       <view class="comment-page-item">
         <view class="comment-page-item-label">问题原因</view>
         <view class="input-wrapper">
-          <picker mode="selector" :range="questions" @change="questionChange" range-key="label">
-            <text v-if="questions[questionIndex]">{{ questions[questionIndex].label }}</text>
+          <picker mode="selector" :range="questions" @change="questionChange" range-key="dictname">
+            <text v-if="checkedQuestion">{{ checkedQuestion }}</text>
             <text v-else>请选择问题原因</text>
           </picker>
         </view>
@@ -13,8 +13,9 @@
       <view class="comment-page-item">
         <view class="comment-page-item-label">问题产品</view>
         <view class="input-wrapper">
-          <picker mode="selector" :range="questionProduct" range-key="label">
-            请选择问题产品
+          <picker mode="selector" :range="productList" @change="productChange" range-key="productName">
+            <text v-if="checkedProduct">{{ checkedProduct }}</text>
+            <text v-else>请选择问题产品</text>
           </picker>
         </view>
       </view>
@@ -30,18 +31,18 @@
           <view class="comment-page-image-item" v-for="(image, index) in questionImages" :key="index">
             <image :src="image" mode="" />
           </view>
-          <view class="comment-page-upload-image" @tap="uploadImage"> + </view>
+          <view class="comment-page-upload-image" @tap="uploadImage" v-if="canEdit"> + </view>
         </view>
       </view>
       <view class="comment-page-item">
         <view class="comment-page-item-label">问题说明</view>
         <view class="input-wrapper">
-          <textarea v-model="form.info" placeholder="请输入问题说明" />
+          <textarea v-model="form.description" placeholder="请输入问题说明" />
         </view>
       </view>
     </view>
-    <view class="comment-page-footer">
-      <nan-button type="primary" @tap="submit">提交评价</nan-button>
+    <view class="comment-page-footer" v-if="canEdit">
+      <nan-button type="primary" @tap="submit" :loading="btnLoading">提交评价</nan-button>
     </view>
   </view>
 </template>
@@ -59,49 +60,101 @@ export default {
     return {
       form: {
         question: '',
-        reason: '',
-        product: '',
         number: '',
-        info: '',
+        description: '',
+        dictid: '',
+        productCode: '',
       },
-      questions: [
-        {
-          label: '问题1',
-        },
-        {
-          label: '问题2',
-        },
-        {
-          label: '问题3',
-        },
-      ],
-      questionIndex: '',
-      questionProduct: [
-        {
-          label: '问题产品1',
-        },
-        {
-          label: '问题产品2',
-        },
-        {
-          label: '问题产品3',
-        },
-      ],
+      questions: [],
+      checkedQuestion: '',
+      productList: [],
+      checkedProduct: '',
       questionImages: [],
       locationIcon,
       backIcon,
+      detailData: {},
+      complainCode: '',
+      btnLoading: false,
     }
+  },
+  computed: {
+    canEdit() {
+      return !this.complainCode
+    },
+    btnDisabled() {
+      const { description, dictid, number, productCode } = this.form
+      if (!description || !dictid || !number || !productCode) {
+        return true
+      }
+      return false
+    },
+  },
+  created() {
+    this.$instance = Taro.getCurrentInstance()
   },
   mounted() {
     setTitle({ title: '评价' })
+    const { code } = this.$instance.router.params
+    if (code) {
+      this.complainCode = code
+      this.getComplaintDetail()
+    } else {
+      this.getProductList()
+      this.getComplainType()
+    }
   },
   methods: {
-    submit() {
-      console.log(this.form)
+    getComplaintDetail() {
+      this.$API
+        .getComplaintDetail({
+          complainCode: this.complainCode,
+        })
+        .then(data => {
+          data = data || {}
+          this.detailData = data
+          this.questions = [
+            {
+              label: data.dictname,
+              id: data.dictid,
+            },
+          ]
+          this.productList = [
+            {
+              productName: data.productName,
+              productCode: data.productCode,
+            },
+          ]
+          this.questionImages = data.imageUrl
+          this.checkedQuestion = data.dictname
+          this.checkedProduct = data.productName
+          this.form.description = data.complainDetail
+          this.form.number = data.num
+        })
+    },
+    getProductList() {
+      this.$API.getComplaintProductList().then(data => {
+        this.productList = data
+      })
+    },
+    getComplainType() {
+      this.$API
+        .getComplainType({
+          state: '01',
+        })
+        .then(data => {
+          data = data || []
+          this.questions = data
+        })
     },
     questionChange(e) {
-      this.questionIndex = e.detail.value
-      console.log(e.detail.value)
+      const { dictname, dictid } = this.questions[e.detail.value]
+      this.checkedQuestion = dictname
+      this.form.dictid = dictid
+    },
+    productChange(e) {
+      const { productName, productCode } = this.productList[e.detail.value]
+      this.checkedProduct = productName
+      this.form.productCode = productCode
     },
     uploadImage() {
       Taro.chooseImage({
@@ -121,7 +174,6 @@ export default {
         },
       })
     },
-
     handleUpload(tempFilePaths) {
       tempFilePaths.forEach(tempFilePath => {
         Taro.uploadFile({
@@ -141,6 +193,34 @@ export default {
           },
         })
       })
+    },
+    submit() {
+      const { description, dictid, number, productCode } = this.form
+      if (this.btnDisabled) {
+        Taro.showToast({
+          icon: 'error',
+          title: '请将内容填写完整',
+        })
+
+        return
+      }
+      this.btnLoading = true
+      this.$API
+        .submitComplain({
+          complainDetail: description,
+          imgUrl: this.questionImages,
+          dictid,
+          num: number,
+          productCode,
+        })
+        .then(data => {
+          if (data) {
+            Taro.navigateTo({ url: '/pages/custom-comment/index' })
+          }
+        })
+        .finally(() => {
+          this.btnLoading = false
+        })
     },
   },
 }
