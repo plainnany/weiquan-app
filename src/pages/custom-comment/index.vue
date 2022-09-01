@@ -5,6 +5,7 @@
         {{ tab.title }}</view
       >
     </view>
+    <view class="custom-add-btn" @tap="handleClick({})">+</view>
     <view class="custom-record">
       <scroll-view :scroll-y="true" @scrolltolower="toLower">
         <view class="custom-list">
@@ -89,7 +90,11 @@ export default {
       this.getComplainList('loadMore')
     },
     handleClick(item) {
-      Taro.navigateTo({ url: `/pages/comment/index?code=${item.complainCode}` })
+      if (item.complainCode) {
+        Taro.navigateTo({ url: `/pages/comment/index?code=${item.complainCode}` })
+      } else {
+        Taro.navigateTo({ url: `/pages/comment/index` })
+      }
     },
   },
 }
