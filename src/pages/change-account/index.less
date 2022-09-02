@@ -1,5 +1,5 @@
 .change-account {
-  background: #f8f9fa;
+  // background: #f8f9fa;
   min-height: 100vh;
   padding: 20px 30px;
   box-sizing: border-box;
@@ -12,14 +12,57 @@
     }
   }
 
+  .tag {
+    line-height: 30px;
+    border-radius: 4px;
+    padding: 0 14px;
+    color: #fff;
+    font-size: 24px;
+    margin-left: 24px;
+  }
+
+  .delete-btn {
+    background: #f03a3a;
+    padding: 22px 44px;
+    color: #fff;
+    position: absolute;
+    top: 36px;
+    right: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+  }
+
+  .manager {
+    background: linear-gradient(131deg, #fd8159 0%, #fa4a2d 100%);
+  }
+
+  .assistant {
+    background: linear-gradient(131deg, #59d0fd 0%, #fdb859 0%, #fa992d 100%);
+  }
+
   .user-list {
+    display: flex;
+    align-items: center;
+    padding: 36px;
+    position: relative;
+    transition: all ease 0.3s;
+  }
+
+  .add-user {
     padding: 36px;
     font-size: 30px;
     color: #333333;
     line-height: 30px;
     background-color: #fff;
-    display: flex;
-    align-items: center;
+  }
+
+  .user-list-wrapper {
+    font-size: 30px;
+    color: #333333;
+    line-height: 30px;
+    background-color: #fff;
+    position: relative;
     border-bottom: 1px solid #ececec;
 
     &:last-child {
@@ -34,6 +77,33 @@
         height: 30px;
       }
     }
+  }
+
+  .form-item {
+    font-size: 26px;
+    font-weight: 400;
+    color: #333333;
+    line-height: 37px;
+    margin: 20px 0;
+
+    &-wrapper {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 22px 34px;
+      line-height: 36px;
+      font-size: 26px;
+      color: #a89e9e;
+    }
+  }
+
+  input {
+    background-color: #ccc;
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 22px 34px;
+    line-height: 36px;
+    font-size: 26px;
+    margin-bottom: 16px;
   }
 
   .user-info {

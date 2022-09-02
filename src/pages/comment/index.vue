@@ -42,7 +42,7 @@
       </view>
     </view>
     <view class="comment-page-footer" v-if="canEdit">
-      <nan-button type="primary" @tap="submit" :loading="btnLoading">提交评价</nan-button>
+      <nan-button type="primary" @tap="submit" :disabled="btnDisabled" :loading="btnLoading">提交评价</nan-button>
     </view>
   </view>
 </template>
@@ -196,14 +196,6 @@ export default {
     },
     submit() {
       const { description, dictid, number, productCode } = this.form
-      if (this.btnDisabled) {
-        Taro.showToast({
-          icon: 'error',
-          title: '请将内容填写完整',
-        })
-
-        return
-      }
       this.btnLoading = true
       this.$API
         .submitComplain({

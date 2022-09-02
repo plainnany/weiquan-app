@@ -1,5 +1,12 @@
 <template>
-  <button :class="type" :disabled="disabled" :loading="loading" @tap="handleClick" v-bind="$attrs" class="nan-button">
+  <button
+    :class="[type, { 'is-disabled': disabled }]"
+    :disabled="disabled"
+    :loading="loading"
+    @tap="handleClick"
+    v-bind="$attrs"
+    class="nan-button"
+  >
     <slot></slot>
   </button>
 </template>

@@ -2,14 +2,14 @@
   <view class="bind-account">
     <view class="form-item">选择身份</view>
     <view class="form-item-wrapper">
-      <picker mode="selector" :range="userTypes" @change="userTypeChange" range-key="label">
-        <text v-if="userTypes[userTypeIndex]">{{ userTypes[userTypeIndex].label }}</text>
+      <picker mode="selector" :range="accountTypes" @change="accountTypeChange" range-key="label">
+        <text v-if="checkedAccountType">{{ checkedAccountType }}</text>
         <text v-else>请选择身份</text>
       </picker>
     </view>
     <view class="form-item">账户密码</view>
-    <input v-model="userAccount" placeholder-style="color:#a89e9e" placeholder="请输入账户" />
-    <input v-model="userPassword" placeholder-style="color:#a89e9e" placeholder="请输入密码" />
+    <input v-model="customerCode" placeholder-style="color:#a89e9e" placeholder="请输入账户" />
+    <input v-model="customerPassword" type="password" placeholder-style="color:#a89e9e" placeholder="请输入密码" />
     <view class="footer">
       <nan-button type="primary" @tap="bindAccount">确定</nan-button>
     </view>
@@ -19,36 +19,57 @@
 <script>
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
+import { AES } from 'crypto-js'
 
 export default {
   name: 'user',
   components: {},
   data() {
     return {
-      visible: false,
-      userAccount: '',
-      userPassword: '',
-      userTypes: [
+      customerCode: '',
+      customerPassword: '',
+      userType: '',
+      accountTypes: [
         {
-          label: '身份1',
+          label: '店长',
+          userType: '1',
         },
         {
-          label: '身份2',
-        },
-        {
-          label: '身份3',
+          label: '店员',
+          userType: '2',
         },
       ],
-      userTypeIndex: '',
+      checkedAccountType: '',
+      unionId: '',
     }
   },
   mounted() {
     setTitle({ title: '绑定账户' })
+    try {
+      const unionId = Taro.getStorageSync('unionId')
+      this.unionId = unionId
+    } catch (e) {}
   },
   methods: {
-    bindAccount() {},
-    userTypeChange(e) {
-      this.userTypeIndex = e.detail.value
+    bindAccount() {
+      const password = AES.encrypt(this.customerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
+
+      this.$API
+        .bindShop({
+          unionId: this.unionId,
+          customerCode: this.customerCode,
+          password,
+          userType: this.userType,
+        })
+        .then(data => {
+          if (data) {
+            Taro.navigateBack({ delta: 1 })
+          }
+        })
+    },
+    accountTypeChange(e) {
+      this.checkedAccountType = this.accountTypes[e.detail.value].label
+      this.userType = this.accountTypes[e.detail.value].userType
     },
   },
 }

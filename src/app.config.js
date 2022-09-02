@@ -22,6 +22,8 @@ export default defineAppConfig({
     'pages/bind-account/index', // 绑定账户
     'pages/custom-comment/index', // 客诉列表
     'pages/quality-report/index', // 质检报告
+    'pages/change-receive-code/index', // 修改门店收货码
+    'pages/change-password/index', // 修改登录密码
   ],
   tabBar: {
     color: '#666666',

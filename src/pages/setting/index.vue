@@ -34,11 +34,6 @@ export default {
   data() {
     return {
       backIcon,
-      fileIcon,
-      lockIcon,
-      noticeIcon,
-      warningIcon,
-      questionIcon,
       list: [
         {
           text: '问题反馈',
@@ -50,7 +45,7 @@ export default {
           text: '修改门店收货码',
           icon: lockIcon,
           showBack: true,
-          path: '',
+          path: '/pages/change-receive-code/index',
         },
         {
           text: '修改登录密码',
@@ -58,12 +53,12 @@ export default {
           showBack: true,
           path: '',
         },
-        {
-          text: '清除缓存',
-          icon: noticeIcon,
-          showInfo: true,
-          info: '23M',
-        },
+        // {
+        //   text: '清除缓存',
+        //   icon: noticeIcon,
+        //   showInfo: true,
+        //   info: '23M',
+        // },
         {
           text: '当前版本',
           icon: questionIcon,

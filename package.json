@@ -29,6 +29,7 @@
     "@tarojs/shared": "3.5.1",
     "@tarojs/taro": "3.5.1",
     "@tarojs/taro-h5": "3.5.1",
+    "crypto-js": "3.3.0",
     "throttle-debounce": "^5.0.0",
     "vue": "^2.5.0",
     "vue-template-compiler": "^2.5.0",

@@ -158,6 +158,48 @@ const requestAddressList = [
     url: '/api/v2/complain/submit.ns',
     type: 'post',
   },
+  {
+    describe: '修改门店收货码',
+    method: 'updateRecieveCode',
+    url: '/api/customer/updateRecieveCode.ns',
+    type: 'post',
+  },
+  {
+    describe: '修改门店收货码',
+    method: 'updateRecieveCode',
+    url: '/api/customer/updateRecieveCode.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取当前用户绑定门店列表',
+    method: 'getBindShopList',
+    url: '/api/applet/bindList.ns',
+    type: 'post',
+  },
+  {
+    describe: '使用门店',
+    method: 'useShop',
+    url: '/api/applet/useCustomer.ns',
+    type: 'post',
+  },
+  {
+    describe: '绑定门店',
+    method: 'bindShop',
+    url: '/api/applet/bind.ns',
+    type: 'post',
+  },
+  {
+    describe: '解绑门店',
+    method: 'unbindShop',
+    url: '/api/applet/unbind.ns',
+    type: 'post',
+  },
+  {
+    describe: '解绑门店',
+    method: 'getOpenId',
+    url: '/api/applet/getOpenId.ns',
+    type: 'get',
+  },
 ]
 
 const API = {}
@@ -176,153 +218,5 @@ requestAddressList.forEach(item => {
     return http[item.type](url || item.url, requestParams, requestOptions)
   }
 })
-
-API.getDetail = () =>
-  Promise.resolve({
-    message: '这是一个接口返回的字符串',
-  })
-
-API.getProduct = () =>
-  Promise.resolve({
-    data: [
-      {
-        id: 'p111',
-        imgUrl: '',
-        price: '450',
-        number: '12',
-        specifications: '950g',
-        title: '400ml 乳酸菌原味瓶装',
-        unit: '1箱',
-      },
-      {
-        imgUrl: '',
-        price: '450',
-        number: '12',
-        specifications: '950g',
-        title: '400ml 乳酸菌原味瓶装',
-        unit: '1箱',
-      },
-      {
-        imgUrl: '',
-        price: '12',
-        number: '1',
-        specifications: '950g',
-        title: '400ml 乳酸菌原味瓶装',
-        unit: '1箱',
-      },
-      {
-        imgUrl: '',
-        price: '12',
-        number: '1',
-        specifications: '950g',
-        title: '400ml 乳酸菌原味瓶装',
-        unit: '1箱',
-      },
-      {
-        imgUrl: '',
-        price: '12',
-        number: '1',
-        specifications: '950g',
-        title: '400ml 乳酸菌原味瓶装',
-        unit: '1箱',
-      },
-      {
-        imgUrl: '',
-        price: '12',
-        number: '1',
-        specifications: '950g',
-        title: '400ml 乳酸菌原味瓶装',
-        unit: '1箱',
-      },
-    ],
-  })
-
-// API.getCategory = () =>
-//   Promise.resolve({
-//     data: [
-//       {
-//         name: '牛乳',
-//         list: [
-//           {
-//             id: 'p111',
-//             imgUrl: '',
-//             price: '12.8',
-//             number: '1',
-//             specifications: '950g',
-//             title: '400ml 乳酸菌原味瓶装',
-//             unit: '1箱',
-//           },
-//         ],
-//       },
-//       {
-//         name: '苹果',
-//         list: [],
-//       },
-//     ],
-//   })
-
-API.getOrder = () =>
-  Promise.resolve({
-    data: [
-      {
-        orderNumber: '222049485859583929',
-        type: 'to-pay',
-        date: '2022年2月4号',
-        total: '2',
-        sum: '76.6',
-        productList: [
-          {
-            id: 1,
-            imageUrl: '',
-            price: '12.8',
-            number: '78',
-            specifications: '950g',
-            title: '400ml 乳酸菌原味瓶装',
-            unit: '1箱',
-            type: '正常单',
-          },
-        ],
-      },
-      {
-        orderNumber: '222049485859ss583929',
-        type: 'to-deliver',
-        date: '2022年2月4号',
-        total: '2',
-        sum: '76.6',
-        productList: [
-          {
-            id: 2,
-            imageUrl: '',
-            price: '12.8',
-            number: '78',
-            specifications: '950g',
-            title: '400ml 乳酸菌原味瓶装',
-            unit: '1箱',
-            type: '正常单',
-          },
-          {
-            id: 4,
-            imageUrl: '',
-            price: '12.8',
-            number: '78',
-            specifications: '950g',
-            title: '400ml 乳酸菌原味瓶装',
-            unit: '1箱',
-            type: '正常单',
-          },
-          {
-            id: 3,
-            imageUrl: '',
-            price: '12.8',
-            number: '78',
-            specifications: '950g',
-            title: '400ml 乳酸菌原味瓶装',
-            unit: '1箱',
-            type: '正常单',
-          },
-        ],
-      },
-    ],
-  })
 
 export default API

@@ -33,7 +33,7 @@ class HttpRequest {
       Taro.showLoading({
         title: '加载中',
       })
-      const token = Taro.getStorageSync('token') || tempToken
+      const token = Taro.getStorageSync('token')
 
       Taro.request({
         method: method.toUpperCase(),
@@ -42,8 +42,8 @@ class HttpRequest {
         data,
         header: {
           'content-type': method === 'get' ? 'application/json' : 'application/x-www-form-urlencoded',
-          token: 'SCUc37Ic9tHReqjdvbnQKVUteLYotLCOi0hMQlhPGdqcIjUh/ZwmGaoZYVlsayUq',
-          platform: 'weixin',
+          token,
+          platform: '3', // 固定参数
           ...requestHeaders,
         },
       })
