@@ -1,24 +1,24 @@
 <template>
   <view class="shop-page" :class="{ empty: productList.length === 0 }">
     <scroll-view v-if="productList.length" class="shop-product-wrapper" scroll-y="true" @scrolltolower="toLower">
-      <view v-for="(product, index) in productList" :key="index" class="shop-product-item">
-        <checkbox :checked="product.checked" @tap="change(product)"></checkbox>
+      <view v-for="(product, index) in productList" @tap="onClick(product)" :key="index" class="shop-product-item">
+        <checkbox :checked="product.checked" @tap.stop="change(product, index)"></checkbox>
         <view class="shop-product-image">
-          <image :src="product.imgUrl" mode="" />
+          <image :src="product.productImage" mode="" />
         </view>
         <view class="shop-product-detail">
-          <view class="shop-product-detail-title">{{ product.title }}</view>
-          <view class="shop-product-detail-info">规格: {{ product.specifications }}</view>
-          <view class="shop-product-detail-info">单位: {{ product.unit }}</view>
-          <view class="shop-product-detail-info">数量: {{ product.number }}</view>
+          <view class="shop-product-detail-title">{{ product.productName }}</view>
+          <view class="shop-product-detail-info">规格: {{ product.productSpecs }}</view>
+          <view class="shop-product-detail-info">单位: {{ product.productUnitConvertRule }} / {{ product.productUnitMax }}</view>
+          <view class="shop-product-detail-info">数量: {{ product.amount }}</view>
           <view class="shop-product-price">
-            <view class="shop-product-detail-price"
+            <view class="shop-product-detail-price" v-show="product.price"
               >¥<text>{{ product.price }}</text></view
             >
             <view class="shop-product-detail-number">
-              <view class="product-action-btn" @tap="decreaseProduct(product, index)">-</view>
-              <text>{{ product.number }}</text>
-              <view class="product-action-btn" @tap="addProduct(product)">+</view>
+              <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)">-</view>
+              <text>{{ product.amount }}</text>
+              <view class="product-action-btn" @tap.stop="addProduct(product)">+</view>
             </view>
           </view>
         </view>
@@ -36,7 +36,7 @@
         <checkbox :checked="checkAll" @tap="handleCheckAll">全选</checkbox>
       </view>
       <view style="display: flex; align-items: center">
-        <view
+        <view v-if="total"
           >合计: ¥<text class="shop-product-total">{{ total }}</text></view
         >
         <button @tap="handleSettle">去结算</button>
@@ -62,23 +62,20 @@ export default {
     }
   },
   components: {},
-  mounted() {
-    this.getProduct()
-  },
+  mounted() {},
   computed: {
     total() {
-      return this.productList.filter(v => v.checked).reduce((prev, cur) => prev + cur.price * cur.number, 0)
+      const total = this.productList.filter(v => v.checked).reduce((prev, cur) => prev + parseFloat(cur.price) * parseInt(cur.amount), 0)
+
+      return total.toFixed(2) || ''
     },
+  },
+
+  onShow() {
+    this.getProduct()
   },
   methods: {
     getProduct(type) {
-      // API.getProduct().then(res => {
-      //   this.productList = (res.data || []).map(v => ({
-      //     ...v,
-      //     checked: true,
-      //   }))
-      //   this.checkAll = this.productList.every(v => v.checked)
-      // })
       this.loading = true
       this.$API
         .getShopcarList({
@@ -91,6 +88,10 @@ export default {
           } else {
             this.productList = data
           }
+          this.productList = this.productList.map(v => ({
+            ...v,
+            checked: false,
+          }))
           if (data.length === 0) {
             this.complete = true
           }
@@ -101,27 +102,30 @@ export default {
     },
     go() {
       Taro.switchTab({ url: '/pages/product/index' })
-      console.log('去逛逛')
     },
     addProduct(product) {
-      product.number++
+      product.amount++
     },
     decreaseProduct(product, index) {
-      if (product.number <= 1) {
+      if (product.amount <= 1) {
         this.productList.splice(index, 1)
       } else {
-        product.number--
+        product.amount--
       }
     },
-    change(product) {
-      product.checked = !product.checked
+    change(product, index) {
+      this.productList[index].checked = !product.checked
+      this.checkAll = this.productList.every(v => v.checked)
     },
     handleCheckAll() {
       this.checkAll = !this.checkAll
       this.productList.forEach(v => (v.checked = this.checkAll))
     },
     handleSettle() {
-      console.log('去结账')
+      const someProductChecked = this.productList.some(v => v.checked)
+      if (someProductChecked) {
+        Taro.navigateTo({ url: '/pages/confirm-order/index' })
+      }
     },
     toLower() {
       if (this.loading || this.complete) {
@@ -129,6 +133,9 @@ export default {
       }
       this.pageNo++
       this.getProduct('loadMore')
+    },
+    onClick(product) {
+      Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.productId}` })
     },
   },
 }

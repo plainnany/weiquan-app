@@ -13,8 +13,11 @@
       </view>
     </view>
     <view class="setting-btn">
-      <nan-button type="primary" @tap="quit">退出当前账号</nan-button>
+      <nan-button type="primary" @tap="handleQuit">退出当前账号</nan-button>
     </view>
+    <nan-modal :visible="visible" title="提示" cancelText="取消" confirmText="确认" @cancel="() => (visible = false)" @confirm="onConfirm">
+      <view style="padding: 30px 0;">确认要退出当前账户么？</view>
+    </nan-modal>
   </view>
 </template>
 
@@ -51,7 +54,7 @@ export default {
           text: '修改登录密码',
           icon: fileIcon,
           showBack: true,
-          path: '',
+          path: '/pages/change-password/index',
         },
         // {
         //   text: '清除缓存',
@@ -66,6 +69,7 @@ export default {
           info: '1.1.0',
         },
       ],
+      visible: false,
     }
   },
   computed: {},
@@ -73,11 +77,29 @@ export default {
     setTitle({ title: '设置' })
   },
   methods: {
+    handleQuit() {
+      this.visible = true
+    },
+    onConfirm() {
+      this.quit()
+    },
     quit() {
-      console.log('退出')
+      const unionId = Taro.getStorageSync('unionId')
+      this.$API
+        .unbindShop({
+          unionId,
+          customerCode: this.$store.state.userInfo.customerCode, // 这个数据好像暂时没有
+        })
+        .then(data => {
+          if (data) {
+            this.accountList.splice(index, 1)
+          }
+        })
     },
     handleNav(item) {
-      Taro.navigateTo({ url: item.path })
+      if (item.path) {
+        Taro.navigateTo({ url: item.path })
+      }
     },
   },
 }

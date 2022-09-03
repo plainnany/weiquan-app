@@ -7,11 +7,11 @@
         </view>
         <view>
           <view class="user-name">
-            <text>{{ userInfo.customerName }}</text>
-            <text class="change-user" @tap="handleNav({ path: '/pages/change-account/index' })">切换账号</text>
+            <text>{{ userInfo.customerName || '默认名称' }}</text>
+            <text class="change-user" @tap="handleNav({ path: '/pages/change-account/index' })" v-if="userInfo.userId">切换账号</text>
           </view>
           <view class="user-mobile">
-            <text>{{ userInfo.consigneeLink }} | </text>
+            <text>{{ userInfo.consigneeLink || '未绑定账号' }} | </text>
             <text>现金用户</text>
           </view>
         </view>
@@ -138,9 +138,7 @@ export default {
         {
           icon: manualImg,
           title: '操作手册',
-          path: 'b',
         },
-
         {
           icon: messageImg,
           title: '消息中心',
@@ -182,7 +180,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('getUserInfo').then(() => {
+    this.$store.dispatch('getUserInfo').finally(() => {
       this.hasGetUserInfo = true
     })
 

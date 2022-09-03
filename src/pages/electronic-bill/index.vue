@@ -127,6 +127,10 @@ export default {
     },
     startDateChane(e) {
       this.startDate = e.detail.value
+
+      if (this.startDate && this.endDate) {
+        this.getBillList()
+      }
     },
     endDateChange(e) {
       this.endDate = e.detail.value

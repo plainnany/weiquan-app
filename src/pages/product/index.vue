@@ -64,6 +64,9 @@ export default {
     }
   },
   mounted() {
+    // this.getCategory()
+  },
+  onShow() {
     this.getCategory()
   },
   methods: {
@@ -107,15 +110,27 @@ export default {
           this.searchLoading = false
         })
         .finally(() => {
-          console.log('finally')
           this.searchLoading = false
         })
     },
     addShop(product) {
-      Taro.showToast({
-        title: '添加成功',
-        icon: 'success',
-      })
+      this.$API
+        .addToShopcar({
+          productId: product.productId,
+          amount: 10,
+        })
+        .then(data => {
+          Taro.showToast({
+            title: '添加成功',
+            icon: 'success',
+          })
+        })
+        .catch(data => {
+          Taro.showToast({
+            title: data.msg,
+            icon: 'error',
+          })
+        })
     },
     viewDetail(product) {
       Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.productId}` })

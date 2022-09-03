@@ -48,7 +48,7 @@ export default {
   components: {},
   data() {
     return {
-      active: 'consume',
+      active: 'charge',
       balance: '',
       tabs: [
         {

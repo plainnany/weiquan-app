@@ -15,7 +15,7 @@
     <view class="product-wrapper">
       <view class="product-card">
         <view class="product-info">
-          <view class="product-price">
+          <view class="product-price" v-show="product.price">
             <text>¥</text>
             <text>{{ product.price }}</text>
             <text>/份</text>
@@ -88,38 +88,7 @@ export default {
   data() {
     return {
       serviceIcon,
-      product: {
-        // price: '39.8',
-        // // tags: ['入口清甜', '好吃不腻'],
-        // name: '950g味全多谷粒乳饮品',
-        // size: '950g',
-        // unit: '1箱',
-        // number: 12,
-        // tip: '品质保证，牛奶不支持7天无理由退货',
-        // qualityPeriod: '39天',
-        // classCode: '5539100070HH',
-        // deliverTime: null,
-        // deliverTimeState: null,
-        // images: ['/wsp/wsp_content/96eb1c00-0736-4113-9595-5ab5b174d47d.jpg'],
-        // isTpm: null,
-        // minOrderQuantity: null,
-        // orderEndTime: null,
-        // price: '100.00',
-        // productId: '981',
-        // productImage: '/wsp/wsp_content/96eb1c00-0736-4113-9595-5ab5b174d47d.jpg',
-        // productName: '950mL味全高品质冷藏牛乳(瓶装外食)',
-        // productSpecs: '950mL',
-        // productUnitMax: '1箱',
-        // productUnitMin: '瓶',
-        // productUnitRule: '12',
-        // productUrl: 'http://124.222.65.228:8080/shopDetail.htm?productId=981&customerCode=null',
-        // ruleMin: null,
-        // ruleStr: null,
-        // sell: false,
-        // tpmImg: null,
-        // tpmProductName: null,
-        // week: null,
-      },
+      product: {},
       swiperOptions: {
         background: ['demo-text-1', 'demo-text-2', 'demo-text-3'],
         indicatorDots: true,
@@ -139,6 +108,8 @@ export default {
 
   mounted() {
     setTitle({ title: '产品详情' })
+  },
+  onShow() {
     this.getProduct()
   },
   methods: {
@@ -160,11 +131,38 @@ export default {
       this.product.productUnitRule--
     },
     addShop() {
-      console.log('添加购物车')
+      this.$API
+        .addToShopcar({
+          productId: this.product.productId,
+          amount: this.product.productUnitRule,
+        })
+        .then(data => {
+          Taro.showToast({
+            title: '添加成功',
+            icon: 'success',
+          })
+        })
+        .catch(data => {
+          Taro.showToast({
+            title: data.msg,
+            icon: 'error',
+          })
+        })
     },
     contact() {
+      if (!this.$store.state.userInfo.customerService) {
+        Taro.showToast({
+          title: '用户未登录，请先登录',
+          icon: 'none',
+        })
+
+        setTimeout(() => {
+          Taro.navigateTo({ url: '/pages/bind-account/index' })
+        }, 2000)
+        return
+      }
       Taro.makePhoneCall({
-        phoneNumber: '123456',
+        phoneNumber: this.$store.state.userInfo.customerService,
       })
     },
   },
