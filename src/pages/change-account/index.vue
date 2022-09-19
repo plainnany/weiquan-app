@@ -1,33 +1,37 @@
 <template>
   <view class="change-account">
-    <view
-      class="user-list-wrapper"
-      :data-index="index"
-      v-for="(user, index) in accountList"
-      :key="index"
-      @tap="changeUser(item)"
-      @touchstart="e => touchStart(e, user)"
-      @touchmove="e => touchMove(e, user)"
-      @touchend="e => touchEnd(e, user)"
-    >
-      <view class="user-list" :style="user.style">
-        <view class="user-avatar">
-          <image :src="user.headPic" mode="" />
-        </view>
-        <view class="user-info">
-          <view
-            >{{ user.customerName }}
-            <text :class="['tag', { assistant: user.userType === 1, manager: user.userType === 2 }]">{{
-              userTypeMap[user.userType]
-            }}</text></view
-          >
-          <view>ID: {{ user.customerCode }}</view>
-        </view>
-        <view class="user-current" v-if="isCurrentUser(user) && !showDelete(user)">
-          <image :src="checkIcon" mode="" />
+    <view class="user-list-wrapper" :data-index="index" v-for="(user, index) in accountList" :key="index">
+      <view
+        class="user-list"
+        :data-index="index"
+        :style="user.style"
+        data-action="change"
+        @tap="changeUser(user)"
+        @touchstart="e => touchStart(e, user)"
+        @touchmove="e => touchMove(e, user)"
+        @touchend="e => touchEnd(e, user)"
+      >
+        <view class="flex-between-center" style="flex: 1">
+          <view style="display:flex; flex: 1">
+            <view class="user-avatar">
+              <image :src="user.headPic" mode="" />
+            </view>
+            <view class="user-info">
+              <view
+                >{{ user.customerName }}
+                <text :class="['tag', { manager: user.userType === 1, assistant: user.userType === 2 }]">{{
+                  userTypeMap[user.userType]
+                }}</text></view
+              >
+              <view>ID: {{ user.customerCode }}</view>
+            </view>
+          </view>
+          <view class="user-current" v-if="isCurrentUser(user) && !showDelete(user)">
+            <image :src="checkIcon" mode="" />
+          </view>
         </view>
       </view>
-      <view class="delete-btn" :data-index="index" v-if="showDelete(user)" @tap="deleteUser(index)">
+      <view class="delete-btn" :data-index="index" data-action="delete" v-if="showDelete(user)" @tap.stop="deleteUser(user, index)">
         删除
       </view>
     </view>
@@ -90,6 +94,7 @@ export default {
       ],
       checkedAccountType: '',
       unionId: '',
+      touching: false,
     }
   },
   computed: {
@@ -102,11 +107,11 @@ export default {
   },
   mounted() {
     setTitle({ title: '切换账号' })
-    this.getBindShopList()
     try {
       const unionId = Taro.getStorageSync('unionId')
       this.unionId = unionId
     } catch (e) {}
+    this.getBindShopList()
   },
   methods: {
     getBindShopList() {
@@ -119,6 +124,7 @@ export default {
         })
     },
     changeUser(item) {
+      if (this.touching) return
       this.$API
         .useShop({
           unionId: this.unionId,
@@ -126,18 +132,37 @@ export default {
         })
         .then(data => {
           if (data) {
+            this.accountList.forEach(account => {
+              account.useflg = null
+              if (account.customerCode === item.customerCode) {
+                account.useflg = '01'
+              }
+            })
+
             Taro.setStorageSync('token', item.token)
+            setTimeout(() => {
+              Taro.navigateBack({ delta: 1 })
+            }, 200)
           }
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'error',
+          })
         })
     },
     addUser() {
+      this.checkedAccountType = ''
+      this.customerCode = ''
+      this.customerPassword = ''
       this.visible = true
     },
     accountTypeChange(e) {
       this.checkedAccountType = this.accountTypes[e.detail.value].label
       this.userType = this.accountTypes[e.detail.value].userType
     },
-    deleteUser() {
+    deleteUser(item, index) {
       this.$API
         .unbindShop({
           unionId: this.unionId,
@@ -154,7 +179,6 @@ export default {
     },
     onConfirm() {
       const password = AES.encrypt(this.customerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
-
       this.$API
         .bindShop({
           unionId: this.unionId,
@@ -165,10 +189,18 @@ export default {
         .then(data => {
           if (data) {
             this.accountList.push(data)
+            this.visible = false
           }
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'error',
+          })
         })
     },
     touchStart(e, user) {
+      this.touching = true
       if (this.isCurrentUser(user)) return
       if (e.touches.length == 1) {
         this.startX = e.touches[0].clientX
@@ -195,6 +227,7 @@ export default {
       }
     },
     touchEnd(e, user) {
+      this.touching = false
       if (this.isCurrentUser(user)) return
       if (e.changedTouches.length == 1) {
         const endX = e.changedTouches[0].clientX

@@ -37,6 +37,7 @@
 <script>
 import './index.less'
 import wechatIcon from '@/images/wechat.png'
+import Taro from '@tarojs/taro'
 
 export default {
   name: 'cost',
@@ -55,7 +56,20 @@ export default {
   },
   methods: {
     handleCharge() {
-      console.log('start  charge')
+      if (!this.chargeNumber) return
+      this.$API
+        .recharge({
+          money: this.chargeNumber,
+        })
+        .then(data => {
+          if (data) {
+            Taro.navigateTo({
+              url: '/pages/web-view/index',
+            })
+          }
+        })
+
+      console.log('start charge')
     },
   },
 }

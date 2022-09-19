@@ -1,7 +1,7 @@
 <template>
   <view class="nan-modal" :class="{ active: visible }">
     <view class="nan-modal-mask" @tap="handleCancel"></view>
-    <view class="nan-modal-container">
+    <view class="nan-modal-container" :class="{ 'full-screen': fullScreen }">
       <view class="nan-modal-header" v-if="title">
         <text>
           {{ title }}
@@ -28,6 +28,7 @@ export default {
     title: String,
     cancelText: String,
     confirmText: String,
+    fullScreen: Boolean,
     showClose: {
       type: Boolean,
       default: true,

@@ -3,12 +3,12 @@
     <view class="common-card">
       <view class="order-settle-item flex-between-center">
         <view class="order-settle-color-grey">订单编号</view>
-        <view>{{ order.orderNumber }}</view>
+        <view>{{ orderNumber }}</view>
       </view>
       <view class="order-settle-item flex-between-center">
         <view class="order-settle-color-grey">实付金额</view>
         <view class="order-settle-price"
-          >¥ <text>{{ order.price }}</text></view
+          >¥ <text>{{ totalFee }}</text></view
         >
       </view>
     </view>
@@ -22,17 +22,17 @@
             </view>
             <view>
               {{ payItem.name }}
-              <text v-if="payItem.method === 'weixin-pocket'"> (¥{{ '123' }}) </text>
+              <text v-if="payItem.method === 'weixin-pocket'"> (¥{{ userInfo.accoutBalance }}) </text>
             </view>
           </view>
           <view>
-            <radio :value="payItem.method" color="#fa4a2d" />
+            <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#fa4a2d" />
           </view>
         </label>
       </radio-group>
     </view>
     <view class="order-settle-footer">
-      <nan-button type="primary">确认支付</nan-button>
+      <nan-button type="primary" @tap="confirmPay">确认支付</nan-button>
     </view>
   </view>
 </template>
@@ -43,24 +43,15 @@ import { setTitle } from '@/utils'
 import wechatIcon from '@/images/wechat.png'
 import alipayIcon from '@/images/alipay.png'
 import weipocketIcon from '@/images/wei-pocket.png'
+import Taro from '@tarojs/taro'
 
 export default {
   name: 'cost',
   components: {},
   data() {
     return {
-      order: {
-        orderNumber: '111111111111111111111111',
-        id: 1,
-        imageUrl: '',
-        price: '12.8',
-        number: '78',
-        specifications: '950g',
-        title: '400ml 乳酸菌原味瓶装',
-        unit: '1箱',
-        type: '正常单',
-        date: '2022-2-22',
-      },
+      orderNumber: '',
+      totalFee: '',
       alipayIcon,
       wechatIcon,
       payList: [
@@ -75,14 +66,53 @@ export default {
           icon: wechatIcon,
         },
       ],
+      payMethod: 'weixin-pocket',
     }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo
+    },
   },
   mounted() {
     setTitle({ title: '订单结算' })
   },
+  onShow() {
+    const params = Taro.getCurrentInstance().router.params
+    this.orderNumber = params.number
+    this.totalFee = params.money
+    this.wechatUrl = params.payUrl
+    this.tradeNumber = params.trade
+  },
   methods: {
     onPaymethodChange(e) {
-      console.log(e, e.detail.value)
+      this.payMethod = e.detail.value
+    },
+    confirmPay() {
+      if (this.payMethod === 'weixin-pocket') {
+        this.$API
+          .balancePayment({
+            out_trade_no: this.tradeNumber,
+            orderNumber: this.orderNumber,
+          })
+          .then(data => {
+            if (data) {
+              Taro.navigateTo({
+                url: `/pages/order-detail/index?url=${this.wechatUrl}`,
+              })
+            }
+          })
+          .catch(err => {
+            Taro.showToast({
+              title: err.msg,
+              icon: 'error',
+            })
+          })
+      } else if (this.payMethod === 'weixin') {
+        Taro.navigateTo({
+          url: `/pages/web-view/index?url=${this.wechatUrl}`,
+        })
+      }
     },
   },
 }

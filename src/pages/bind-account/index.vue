@@ -19,7 +19,7 @@
 <script>
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
-import { AES } from 'crypto-js'
+import crypto from 'crypto-js'
 
 export default {
   name: 'user',
@@ -52,8 +52,7 @@ export default {
   },
   methods: {
     bindAccount() {
-      const password = AES.encrypt(this.customerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
-
+      const password = crypto.AES.encrypt(this.customerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
       this.$API
         .bindShop({
           unionId: this.unionId,
@@ -63,8 +62,16 @@ export default {
         })
         .then(data => {
           if (data) {
+            this.$store.commit('setUserInfo', data)
+            Taro.setStorageSync('token', data.token)
             Taro.navigateBack({ delta: 1 })
           }
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'error',
+          })
         })
     },
     accountTypeChange(e) {

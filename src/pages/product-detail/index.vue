@@ -18,7 +18,7 @@
           <view class="product-price" v-show="product.price">
             <text>¥</text>
             <text>{{ product.price }}</text>
-            <text>/份</text>
+            <!-- <text>/份</text> -->
           </view>
           <!-- <view class="product-tags">
             <text class="product-tag" v-for="(tag, index) in product.tags" :key="index">{{ tag }}</text>
@@ -39,10 +39,10 @@
           </view>
         </view>
       </view>
-      <view class="product-tip product-card">
+      <!-- <view class="product-tip product-card">
         <text>服务</text>
         <text>{{ product.tip }}</text>
-      </view>
+      </view> -->
       <view class="product-content product-card">
         <view class="product-content-title">规格信息</view>
         <view class="product-content-table">
@@ -54,14 +54,14 @@
             <view class="product-content-col">规格</view>
             <view class="product-content-col">{{ product.productSpecs }}</view>
           </view>
-          <view class="product-content-row">
+          <!-- <view class="product-content-row">
             <view class="product-content-col">保质期</view>
             <view class="product-content-col">{{ product.qualityPeriod }}</view>
           </view>
           <view class="product-content-row">
             <view class="product-content-col">储存方式</view>
             <view class="product-content-col">{{ '冷藏' }}</view>
-          </view>
+          </view> -->
         </view>
       </view>
     </view>
@@ -72,6 +72,7 @@
       </view>
       <view class="product-footer-btn">
         <nan-button type="primary" @tap="addShop">加入购物车</nan-button>
+        <nan-button type="primary" @tap="batchOrder">批量下单</nan-button>
       </view>
     </view>
   </view>
@@ -124,6 +125,7 @@ export default {
         })
     },
     add() {
+      // 这个是数量还是加减的单位，和购物车的好像不一样，确认一下
       this.product.productUnitRule++
     },
     decrease() {
@@ -131,6 +133,13 @@ export default {
       this.product.productUnitRule--
     },
     addShop() {
+      if (!this.product.sell) {
+        Taro.showToast({
+          title: '当前商品不支持购买',
+          icon: 'none',
+        })
+        return
+      }
       this.$API
         .addToShopcar({
           productId: this.product.productId,
@@ -148,6 +157,19 @@ export default {
             icon: 'error',
           })
         })
+    },
+    batchOrder() {
+      if (!this.product.sell) {
+        Taro.showToast({
+          title: '当前商品不支持购买',
+          icon: 'none',
+        })
+        return
+      }
+
+      Taro.navigateTo({
+        url: `/pages/confirm-order/index?type=batch&productId=${this.product.productId}&sum=${this.product.productUnitRule}`,
+      })
     },
     contact() {
       if (!this.$store.state.userInfo.customerService) {

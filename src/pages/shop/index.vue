@@ -1,13 +1,13 @@
 <template>
   <view class="shop-page" :class="{ empty: productList.length === 0 }">
     <scroll-view v-if="productList.length" class="shop-product-wrapper" scroll-y="true" @scrolltolower="toLower">
-      <view v-for="(product, index) in productList" @tap="onClick(product)" :key="index" class="shop-product-item">
+      <view v-for="(product, index) in productList" :key="index" class="shop-product-item">
         <checkbox :checked="product.checked" @tap.stop="change(product, index)"></checkbox>
         <view class="shop-product-image">
           <image :src="product.productImage" mode="" />
         </view>
         <view class="shop-product-detail">
-          <view class="shop-product-detail-title">{{ product.productName }}</view>
+          <view class="shop-product-detail-title" @tap="onClick(product)">{{ product.productName }}</view>
           <view class="shop-product-detail-info">规格: {{ product.productSpecs }}</view>
           <view class="shop-product-detail-info">单位: {{ product.productUnitConvertRule }} / {{ product.productUnitMax }}</view>
           <view class="shop-product-detail-info">数量: {{ product.amount }}</view>
@@ -17,7 +17,15 @@
             >
             <view class="shop-product-detail-number">
               <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)">-</view>
-              <text>{{ product.amount }}</text>
+              <!-- <text @tap.stop="">{{ product.amount }}</text> -->
+              <input
+                type="number"
+                v-model="product.amount"
+                @tap.stop="() => {}"
+                @focus.stop="() => {}"
+                @blur.stop="onBlur(product)"
+                placeholder="请输入账户"
+              />
               <view class="product-action-btn" @tap.stop="addProduct(product)">+</view>
             </view>
           </view>
@@ -72,6 +80,7 @@ export default {
   },
 
   onShow() {
+    this.checkAll = false
     this.getProduct()
   },
   methods: {
@@ -83,6 +92,7 @@ export default {
           pageNo: this.pageNo,
         })
         .then(data => {
+          data = data || []
           if (type === 'loadMore') {
             this.productList = this.productList.concat(data)
           } else {
@@ -104,14 +114,17 @@ export default {
       Taro.switchTab({ url: '/pages/product/index' })
     },
     addProduct(product) {
-      product.amount++
+      product.amount = parseInt(product.amount) + parseInt(product.productUnitConvertRule)
+      this.updateProduct(product)
     },
     decreaseProduct(product, index) {
+      product.amount -= parseInt(product.productUnitConvertRule)
       if (product.amount <= 1) {
         this.productList.splice(index, 1)
-      } else {
-        product.amount--
+        return
       }
+
+      this.updateProduct(product)
     },
     change(product, index) {
       this.productList[index].checked = !product.checked
@@ -124,7 +137,21 @@ export default {
     handleSettle() {
       const someProductChecked = this.productList.some(v => v.checked)
       if (someProductChecked) {
-        Taro.navigateTo({ url: '/pages/confirm-order/index' })
+        const shopIds = this.productList
+          .filter(v => v.checked)
+          .map(v => v.oid)
+          .join(',')
+
+        Taro.navigateTo({
+          url: `/pages/confirm-order/index?shopIds=${shopIds}`,
+        })
+        // this.$API
+        //   .paySettlement({
+        //     shopIds,
+        //   })
+        //   .then(data => {
+        //     // Taro.navigateTo({ url: '/pages/confirm-order/index' })
+        //   })
       }
     },
     toLower() {
@@ -136,6 +163,13 @@ export default {
     },
     onClick(product) {
       Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.productId}` })
+    },
+    onBlur(product) {
+      product.amount = parseInt(product.amount)
+      this.updateProduct(product)
+    },
+    updateProduct(product) {
+      console.log('updateProduct')
     },
   },
 }

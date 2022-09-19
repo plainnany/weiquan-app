@@ -38,6 +38,17 @@
       overflow: hidden;
       opacity: 0;
       transition: opacity 200ms ease-in;
+      box-sizing: border-box;
+
+      &.full-screen {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transform: none;
+        width: 100%;
+        border-radius: 0;
+      }
     }
 
     &-header {

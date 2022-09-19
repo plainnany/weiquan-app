@@ -54,10 +54,21 @@
                 </view>
               </view>
               <view class="flex-between-center">
-                <text>共1件商品</text>
-                <view class="flex-between-center">
+                <text>共{{ order.orderListViews.length }}件商品</text>
+                <!-- 待支付 -->
+                <view class="flex-between-center" v-if="order.state === '01'">
+                  <nan-button type="plain" @tap="cancelOrder(order)">取消订单</nan-button>
+                  <nan-button type="primary" @tap="handlePay(order)">去支付</nan-button>
+                </view>
+                <!-- 已付款 -->
+                <view class="flex-between-center" v-if="order.state === '02'">
                   <nan-button type="plain">取消订单</nan-button>
-                  <nan-button type="primary">去支付</nan-button>
+                  <nan-button type="primary">提醒发货</nan-button>
+                </view>
+                <!-- 待发货 -->
+                <view class="flex-between-center" v-if="order.state === '03'">
+                  <nan-button type="plain">取消订单</nan-button>
+                  <nan-button type="primary">提醒发货</nan-button>
                 </view>
               </view>
             </view>
@@ -93,14 +104,14 @@ export default {
           method: 'getPendingPayment',
         },
         {
-          title: '待发货',
+          title: '当天收货',
           key: 'to-deliver',
           method: 'getWaitDelivery',
         },
-        {
-          title: '待收货',
-          key: 'to-receive',
-        },
+        // {
+        //   title: '待收货',
+        //   key: 'to-receive',
+        // },
         {
           title: '已完成',
           key: 'done',
@@ -116,13 +127,14 @@ export default {
         '02': '样品单',
         '03': '搭赠单',
       },
-      // "state":"01：草稿;02:已提交;03:已确认;04:已发货;05:已收货",
+      // "state":"01待付款;02,03,04:待发货05:已完成",
+      //
       STATE_TYPE: {
-        '01': '草稿',
-        '02': '已提交',
-        '03': '已确认',
-        '04': '已发货',
-        '05': '已收货',
+        '01': '待付款',
+        '02': '待发货',
+        '03': '待发货',
+        '04': '待发货',
+        '05': '已完成',
       },
 
       pageNo: 1,
@@ -181,6 +193,22 @@ export default {
       }
       this.pageNo++
       this.getOrder(true)
+    },
+    cancelOrder(order) {
+      this.$API
+        .deleteOrder({
+          mainOrderNumber: order.orderNumber,
+        })
+        .then(data => {
+          const index = this.orderList.findIndex(v => v.orderNumber === order.orderNumber)
+          if (index > -1) {
+            this.orderList.splice(index, 1)
+          }
+        })
+    },
+    handlePay(order) {
+      const money = order.orderListViews.reduce((prev, cur) => prev + parseFloat(cur.price) * parseInt(cur.productSum), 0)
+      Taro.navigateTo({ url: `/pages/order-settle/index?number=${order.orderNumber}&money=${money}` })
     },
   },
 }

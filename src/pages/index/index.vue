@@ -13,7 +13,6 @@
 
 <script>
 import './index.less'
-import API from '@/service/api'
 import Banner from './banner.vue'
 import Nav from './nav.vue'
 import News from './news.vue'
@@ -31,11 +30,7 @@ export default {
       msg: '',
     }
   },
-  mounted() {
-    API.getDetail().then(res => {
-      this.msg = res.message
-    })
-  },
+  mounted() {},
   methods: {},
 }
 </script>

@@ -11,8 +11,9 @@
             <text class="change-user" @tap="handleNav({ path: '/pages/change-account/index' })" v-if="userInfo.userId">切换账号</text>
           </view>
           <view class="user-mobile">
-            <text>{{ userInfo.consigneeLink || '未绑定账号' }} | </text>
-            <text>现金用户</text>
+            <text>{{ userInfo.userId || '未绑定账号' }} | </text>
+            <text>{{ accountTypeMap[userInfo.accountType] }}</text>
+            <!-- <text v-if="userInfo.accountType === '02'">月结用户</text> -->
           </view>
         </view>
       </view>
@@ -95,6 +96,7 @@ import settingImg from '@/images/user/setting.png'
 import './index.less'
 import Taro from '@tarojs/taro'
 import { AES } from 'crypto-js'
+import { BASE_URL } from '@/const'
 
 export default {
   name: 'user',
@@ -110,7 +112,7 @@ export default {
       tabs: [
         { icon: chargeImg, title: '余额及充值', path: '/pages/cost/index' },
         { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
-        { icon: ruleImg, title: '配送规则', path: '/pages/deliver-rule/index' },
+        { icon: ruleImg, title: '配送规则', path: '/pages/deliver-rule/index' }, // 配送规则可能是个h5地址，先暂时放着
       ],
       orderList: [
         { icon: payImg, title: '待付款', path: '/pages/order/index?type=to-pay' },
@@ -118,42 +120,6 @@ export default {
         { icon: toReceiveImg, title: '待收货', path: '/pages/order/index?type=to-receive' },
         { icon: commentsImg, title: '已完成', path: '/pages/order/index?type=done' },
         { icon: customServiceImg, title: '我的订单', path: '/pages/order/index' },
-      ],
-      items: [
-        // {
-        //   icon: orderImg,
-        //   title: '下单提醒',
-        //   path: 'a',
-        // },
-        {
-          icon: complainImg,
-          title: '查看客诉',
-          path: '/pages/custom-comment/index',
-        },
-        {
-          icon: checkImg,
-          title: '检验报告单',
-          path: '/pages/quality-report/index',
-        },
-        {
-          icon: manualImg,
-          title: '操作手册',
-        },
-        {
-          icon: messageImg,
-          title: '消息中心',
-          path: '/pages/web-view/index?type=news',
-        },
-        {
-          icon: settingImg,
-          title: '设置',
-          path: '/pages/setting/index',
-        },
-        {
-          icon: helpImg,
-          title: '帮助中心',
-          path: '/pages/web-view/index?type=help',
-        },
       ],
       visible: false,
       customerCode: '',
@@ -172,22 +138,68 @@ export default {
       checkedAccountType: '',
       unionId: '',
       hasGetUserInfo: false,
+      // 01：现金客户;02：月结客户;03：预付款客户04：货到付款
+      accountTypeMap: {
+        '01': '现金客户',
+        '02': '月结客户',
+        '03': '预付款客户',
+        '04': '货到付款',
+      },
     }
   },
   computed: {
     userInfo() {
       return this.$store.state.userInfo
     },
+    items() {
+      return [
+        {
+          icon: complainImg,
+          title: '查看客诉',
+          path: '/pages/custom-comment/index',
+        },
+        {
+          icon: checkImg,
+          title: '检验报告单',
+          path: '/pages/quality-report/index',
+        },
+        {
+          icon: manualImg,
+          title: '操作手册',
+        },
+        {
+          icon: messageImg,
+          title: '消息中心',
+          isWebview: true,
+          path: `/pages/web-view/index?url=${BASE_URL}/news.htm`,
+        },
+        {
+          icon: settingImg,
+          title: '设置',
+          path: '/pages/setting/index',
+        },
+        {
+          icon: helpImg,
+          title: '帮助中心',
+          isWebview: true,
+          path: `/pages/web-view/index?url=${this.$store.state.userInfo.helpLink}`,
+        },
+      ]
+    },
   },
   mounted() {
-    this.$store.dispatch('getUserInfo').finally(() => {
-      this.hasGetUserInfo = true
-    })
-
     try {
       const unionId = Taro.getStorageSync('unionId')
       this.unionId = unionId
     } catch (e) {}
+  },
+  onShow() {
+    const sesstionToken = Taro.getStorageSync('token')
+    if (this.userInfo.userId && sesstionToken === this.userInfo.token) return
+
+    this.$store.dispatch('getUserInfo').finally(() => {
+      this.hasGetUserInfo = true
+    })
   },
   methods: {
     onCancel() {
@@ -210,7 +222,19 @@ export default {
         })
     },
     handleNav(item) {
-      Taro.navigateTo({ url: item.path })
+      if (!this.$store.state.userInfo.userId && item.isWebview) {
+        Taro.showToast({
+          title: '用户未登录，请先绑定用户',
+          icon: 'none',
+          success() {
+            setTimeout(() => {
+              Taro.navigateTo({ url: '/pages/bind-account/index' })
+            }, 2000)
+          },
+        })
+      } else {
+        Taro.navigateTo({ url: item.path })
+      }
     },
     accountTypeChange(e) {
       this.checkedAccountType = this.accountTypes[e.detail.value].label

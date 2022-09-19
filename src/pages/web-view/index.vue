@@ -1,26 +1,27 @@
 <template>
-  <web-view :src="src"></web-view>
+  <web-view :src="url"></web-view>
 </template>
 
 <script>
 import Taro from '@tarojs/taro'
 
-const webViewSrcMap = {
-  news: '/news.htm', // 消息中心
-  help: '/service.htm', // 帮助中心
-}
+// const webViewSrcMap = {
+//   news: 'http://124.222.65.228:8080/news.htm', // 消息中心
+//   help: 'http://124.222.65.228:8080/service.htm', // 帮助中心
+// }
 
 export default {
   data() {
     return {
-      src: 'http://www.baidu.com',
+      url: '',
     }
   },
-  mounted() {
+  mounted() {},
+  onShow() {
     this.$instance = Taro.getCurrentInstance()
     const params = this.$instance.router.params
-    const { type } = params
-    this.src = webViewSrcMap[type]
+    const { url } = params
+    this.url = url
   },
 }
 </script>

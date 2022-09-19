@@ -42,6 +42,7 @@ class HttpRequest {
         data,
         header: {
           'content-type': method === 'get' ? 'application/json' : 'application/x-www-form-urlencoded',
+          // token: 'SCUc37Ic9tHReqjdvbnQKVUteLYotLCOi0hMQlhPGdqcIjUh/ZwmGaoZYVlsayUq',
           token,
           platform: '3', // 固定参数
           ...requestHeaders,

@@ -11,74 +11,76 @@
             <image :src="locationIcon" mode="" />
           </view>
           <view class="order-detail-location-info">
-            <view>北京市海淀区恒大新宏福苑西区20号楼2单元301</view>
-            <view>金金 15800000000</view>
+            <view>{{ userInfo.customerAddress }} </view>
+            <view>{{ userInfo.customerLinkMan }} {{ userInfo.customerLinkTel }}</view>
           </view>
         </view>
         <view class="order-detail-nav">
           <image :src="backIcon" mode="" />
         </view>
       </view>
-      <view class="common-card">
-        <view>交货时间：2022-2-2</view>
-        <view class="order-detail-item flex-between-center">
-          <view class="flex-between-center">
-            <view class="order-detail-image">
-              <image :src="product.imageUrl" mode="" />
+      <view v-for="(product, index) in orderDetail.list" :key="index">
+        <view class="common-card">
+          <view>交货时间：{{ product.orderDate }}</view>
+          <view class="order-detail-item flex-between-center">
+            <view class="flex-between-center">
+              <view class="order-detail-image">
+                <image :src="product.productImage" mode="" />
+              </view>
+              <view class="order-detail-info">
+                <view>{{ product.productName }}</view>
+                <view>{{ product.productSpecs }} {{ product.specifications }}</view>
+                <view class="order-detail-tag"
+                  ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
+                >
+              </view>
             </view>
-            <view class="order-detail-info">
-              <view>{{ product.title }}</view>
-              <view>{{ product.specifications }} {{ product.unit }}</view>
-              <view class="order-detail-tag"
-                ><text>{{ product.type }}</text></view
+            <view>
+              <view class="order-detail-price" v-if="product.price"
+                >¥ <text>{{ product.price }}</text></view
               >
+              <view>订单量 {{ product.productSum }}</view>
             </view>
           </view>
-          <view>
-            <view class="order-detail-price"
+        </view>
+        <!-- <view class="common-card">
+          <view class="flex-between-center">
+            <text class="order-detail-color-grey">商品小计</text>
+            <view class="order-detail-sum"
               >¥ <text>{{ product.price }}</text></view
             >
-            <view>订单量 {{ product.number }}</view>
           </view>
-        </view>
-      </view>
-      <view class="common-card">
-        <view class="flex-between-center">
-          <text class="order-detail-color-grey">商品小计</text>
-          <view class="order-detail-sum"
-            >¥ <text>{{ product.price }}</text></view
-          >
-        </view>
-        <view class="flex-between-center">
-          <text class="order-detail-color-grey">活动优惠</text>
-          <view class="order-detail-sum"
-            >-¥ <text>{{ '7' }}</text></view
-          >
-        </view>
-        <view class="flex-between-center order-detail-total">
-          <text>应付金额合计</text>
-          <view class="order-detail-sum"
-            >¥ <text>{{ '31.8' }}</text></view
-          >
-        </view>
+          <view class="flex-between-center">
+            <text class="order-detail-color-grey">活动优惠</text>
+            <view class="order-detail-sum"
+              >-¥ <text>{{ '7' }}</text></view
+            >
+          </view>
+          <view class="flex-between-center order-detail-total">
+            <text>应付金额合计</text>
+            <view class="order-detail-sum"
+              >¥ <text>{{ '31.8' }}</text></view
+            >
+          </view>
+        </view> -->
       </view>
       <view class="common-card">
         <view class="flex-between-center order-detail-item">
           <text class="order-detail-color-grey">下单时间</text>
-          <text>2021.12.27 12:22:35 </text>
+          <text>{{ orderDetail.createDate }}</text>
         </view>
         <view class="flex-between-center order-detail-item">
           <text class="order-detail-color-grey">订单编号</text>
-          <text>8283894949838</text>
+          <text>{{ orderDetail.customerOrderCode }}</text>
         </view>
-        <view class="flex-between-center order-detail-item">
+        <!-- <view class="flex-between-center order-detail-item">
           <text class="order-detail-color-grey">付款方式</text>
           <text>支付宝</text>
-        </view>
-        <view class="flex-between-center order-detail-item">
+        </view> -->
+        <!-- <view class="flex-between-center order-detail-item">
           <text class="order-detail-color-grey">交易流水号</text>
           <text>183772889499495885993884</text>
-        </view>
+        </view> -->
       </view>
     </view>
     <view class="order-detail-footer flex-between-center">
@@ -96,6 +98,7 @@ import './index.less'
 import { setTitle } from '@/utils'
 import locationIcon from '@/images/location.png'
 import backIcon from '@/images/user/back.png'
+import Taro from '@tarojs/taro'
 
 export default {
   components: {},
@@ -103,30 +106,46 @@ export default {
     return {
       locationIcon,
       backIcon,
-      product: {
-        id: 1,
-        imageUrl: '',
-        price: '12.8',
-        number: '78',
-        specifications: '950g',
-        title: '400ml 乳酸菌原味瓶装',
-        unit: '1箱',
-        type: '正常单',
+      ORDER_TYPE: {
+        '01': '正常单',
+        '02': '样品单',
+        '03': '搭赠单',
+      },
+      orderDetail: {
+        list: [],
+        //         createDate: "2022-09-19 20:36:56"
+        // customerOrderCode: "2022091920365617123456789"
+        // list: Array(4)
+        // payDate: "2022-09-19 20:37:02"
+        // state: "02"
       },
     }
   },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo
+    },
+  },
   mounted() {
     setTitle({ title: '我的订单' })
-    this.getOrder({ type: 'all' })
+  },
+  onShow() {
+    const { order } = Taro.getCurrentInstance().router.params
+    this.getOrder(order)
   },
   methods: {
     clickTab({ key }) {
       this.activeTab = key
     },
-    getOrder({ type }) {
-      this.$API.getOrder().then(res => {
-        this.orderList = res.data
-      })
+    getOrder(orderNumber) {
+      this.$API
+        .getOrderDetail({
+          orderNumber: '2022091920365617123456789',
+        })
+        .then(data => {
+          this.orderDetail = data
+          console.log(data)
+        })
     },
     viewDeliver() {},
   },

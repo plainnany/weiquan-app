@@ -19,12 +19,14 @@
             <view class="product-list-image"><image :src="product.productImage" mode=""/></view>
             <view class="product-list-detail">
               <view class="product-list-title">{{ product.productName }}</view>
-              <view class="product-list-info">规格: {{ product.specifications }} | 单位: {{ product.unit }}</view>
+              <view class="product-list-info">规格: {{ product.productSpecs }} | 单位: {{ product.productUnitRule }}</view>
               <view style="display:flex; justify-content:space-between;align-items: center;">
-                <view class="product-list-price">
-                  <text style="color: #f55726">¥</text>
-                  <text style="color: #f55726; font-size: 22px;">{{ product.price }} </text>
-                  <text style="color: #999">/ 份</text>
+                <view>
+                  <view class="product-list-price" v-if="product.price">
+                    <text style="color: #f55726">¥</text>
+                    <text style="color: #f55726; font-size: 22px;">{{ product.price }} </text>
+                    <text style="color: #999">/ {{ product.productUnitRule }}</text>
+                  </view>
                 </view>
                 <image @tap.stop="addShop(product)" :src="shopIcon" class="shop-icon" mode="" />
               </view>
@@ -114,6 +116,13 @@ export default {
         })
     },
     addShop(product) {
+      if (!product.sell) {
+        Taro.showToast({
+          title: '当前商品不支持购买',
+          icon: 'none',
+        })
+        return
+      }
       this.$API
         .addToShopcar({
           productId: product.productId,

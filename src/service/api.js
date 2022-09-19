@@ -99,7 +99,7 @@ const requestAddressList = [
     type: 'post',
   },
   {
-    describe: '获取待发货列表',
+    describe: '获取当天收货列表',
     method: 'getWaitDelivery',
     url: '/api/order/waitDelivery.ns',
     type: 'post',
@@ -199,6 +199,60 @@ const requestAddressList = [
     method: 'getOpenId',
     url: '/api/applet/getOpenId.ns',
     type: 'get',
+  },
+  {
+    describe: '创建订单',
+    method: 'createOrder',
+    url: '/api/order/createOrder.ns',
+    type: 'post',
+  },
+  {
+    describe: '批量下单',
+    method: 'submitBatchOrder',
+    url: '/api/order/submitBatchOrder.ns',
+    type: 'post',
+  },
+  {
+    describe: '产品可选的配送时间',
+    method: 'dateChooser',
+    url: '/api/product/dateChooser.ns',
+    type: 'post',
+  },
+  {
+    describe: '从购物车结算',
+    method: 'paySettlement',
+    url: '/api/v2/order/paySettlement.ns',
+    type: 'post',
+  },
+  {
+    describe: '余额支付',
+    method: 'balancePayment',
+    url: '/api/order/balancePayment.ns',
+    type: 'post',
+  },
+  {
+    describe: '支付订单',
+    method: 'orderPay',
+    url: '/api/order/orderPay.ns',
+    type: 'post',
+  },
+  {
+    describe: '取消订单',
+    method: 'deleteOrder',
+    url: '/api/order/deleteOrder.ns',
+    type: 'post',
+  },
+  {
+    describe: '订单详情列表',
+    method: 'getOrderDetail',
+    url: '/api/order/appletListOrderDetail.ns',
+    type: 'post',
+  },
+  {
+    describe: '已完成订单详情',
+    method: 'getCompleteOrderDetail',
+    url: '/api/order/listCompleteOrderDetail.ns',
+    type: 'post',
   },
 ]
 
