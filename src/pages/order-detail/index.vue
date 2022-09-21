@@ -1,8 +1,8 @@
 <template>
   <view class="order-detail">
     <view class="order-detail-type">
-      <view>待付款</view>
-      <view>9分钟后订单关闭，请及时付款哦</view>
+      <view>{{ STATE_TYPE_TEXT[orderDetail.state] }}</view>
+      <view v-if="orderDetail.state === STATE_TYPE.toPay">9分钟后订单关闭，请及时付款哦</view>
     </view>
     <view class="order-detail-content">
       <view class="common-card flex-between-center">
@@ -15,9 +15,9 @@
             <view>{{ userInfo.customerLinkMan }} {{ userInfo.customerLinkTel }}</view>
           </view>
         </view>
-        <view class="order-detail-nav">
+        <!-- <view class="order-detail-nav">
           <image :src="backIcon" mode="" />
-        </view>
+        </view> -->
       </view>
       <view v-for="(product, index) in orderDetail.list" :key="index">
         <view class="common-card">
@@ -83,11 +83,46 @@
         </view> -->
       </view>
     </view>
-    <view class="order-detail-footer flex-between-center">
+    <view class="order-detail-footer flex-between-center" v-if="orderDetail.state === STATE_TYPE.toPay">
       <view></view>
       <view class="flex-between-center">
-        <nan-button type="plain">取消订单</nan-button>
-        <nan-button type="primary">去支付</nan-button>
+        <nan-button type="plain" @tap="cancelOrder">取消订单</nan-button>
+        <nan-button type="primary" @tap="handlePay">去支付</nan-button>
+      </view>
+    </view>
+    <view v-if="payDialogVisible" class="order-pay-modal">
+      <view :class="['order-pay-modal-wrap']"></view>
+      <view :class="['order-pay-modal-wrapper']">
+        <view class="order-pay">
+          <!-- 头部 -->
+          <view class="order-pay-title">
+            <view>支付金额{{ payData.total_fee }}</view>
+            <view @tap.stop="handleClosePay" class="order-pay-close">
+              <image :src="closeIcon" mode="" />
+            </view>
+          </view>
+          <view class="order-pay-content">
+            <radio-group @change="onPaymethodChange">
+              <label class="order-pay-item flex-between-center" v-for="payItem in payList" :key="payItem.name">
+                <view class="flex-between-center">
+                  <view>
+                    <image :src="payItem.icon" mode="" />
+                  </view>
+                  <view>
+                    {{ payItem.name }}
+                    <text v-if="payItem.method === 'weixin-pocket'"> (¥{{ userInfo.accoutBalance }}) </text>
+                  </view>
+                </view>
+                <view>
+                  <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#fa4a2d" />
+                </view>
+              </label>
+            </radio-group>
+          </view>
+          <view class="order-pay-footer">
+            <nan-button type="primary" :disabled="!payMethod" :loading="btnLoading" @tap="confirmPay">确认支付</nan-button>
+          </view>
+        </view>
       </view>
     </view>
   </view>
@@ -99,6 +134,9 @@ import { setTitle } from '@/utils'
 import locationIcon from '@/images/location.png'
 import backIcon from '@/images/user/back.png'
 import Taro from '@tarojs/taro'
+import wechatIcon from '@/images/wechat.png'
+import weipocketIcon from '@/images/wei-pocket.png'
+import closeIcon from '@/images/close.png'
 
 export default {
   components: {},
@@ -106,6 +144,9 @@ export default {
     return {
       locationIcon,
       backIcon,
+      closeIcon,
+      wechatIcon,
+      weipocketIcon,
       ORDER_TYPE: {
         '01': '正常单',
         '02': '样品单',
@@ -113,12 +154,38 @@ export default {
       },
       orderDetail: {
         list: [],
-        //         createDate: "2022-09-19 20:36:56"
-        // customerOrderCode: "2022091920365617123456789"
-        // list: Array(4)
-        // payDate: "2022-09-19 20:37:02"
-        // state: "02"
       },
+      // "state":"01待付款;02,03,04:待发货05:已完成",
+      STATE_TYPE: {
+        toPay: '01',
+        toDeliver: '02',
+        toDeliver: '03',
+        toDeliver: '04',
+        done: '05',
+      },
+      STATE_TYPE_TEXT: {
+        '01': '待付款',
+        '02': '待发货',
+        '03': '待发货',
+        '04': '待发货',
+        '05': '已完成',
+      },
+      payDialogVisible: false,
+      payData: {},
+      payMethod: '',
+      payList: [
+        {
+          method: 'weixin-pocket',
+          name: '余额支付',
+          icon: weipocketIcon,
+        },
+        {
+          method: 'weixin',
+          name: '微信支付',
+          icon: wechatIcon,
+        },
+      ],
+      btnLoading: false,
     }
   },
   computed: {
@@ -140,7 +207,8 @@ export default {
     getOrder(orderNumber) {
       this.$API
         .getOrderDetail({
-          orderNumber: '2022091920365617123456789',
+          // orderNumber: '2022091920365617123456789',
+          orderNumber,
         })
         .then(data => {
           this.orderDetail = data
@@ -148,6 +216,73 @@ export default {
         })
     },
     viewDeliver() {},
+    cancelOrder() {
+      this.$API
+        .deleteOrder({
+          mainOrderNumber: this.orderDetail.customerOrderCode,
+        })
+        .then(data => {
+          Taro.navigateTo({ url: `/pages/order/index` })
+        })
+    },
+    handlePay() {
+      this.$API
+        .orderPay({
+          orderNumber: this.orderDetail.customerOrderCode,
+        })
+        .then(data => {
+          if (data) {
+            this.payData = data
+            this.showModal()
+          }
+        })
+    },
+    handleClosePay() {
+      this.hideModal()
+    },
+    onPaymethodChange(e) {
+      this.payMethod = e.detail.value
+    },
+    confirmPay() {
+      if (this.payMethod === 'weixin-pocket') {
+        this.btnLoading = true
+        this.$API
+          .balancePayment({
+            out_trade_no: this.payData.out_trade_no,
+            orderNumber: this.payData.orderNumber,
+          })
+          .then(data => {
+            if (data) {
+              this.btnLoading = false
+              this.hideModal()
+              Taro.showToast({
+                title: '支付成功',
+                icon: 'success',
+              })
+              Taro.navigateTo({ url: `/pages/order/index` })
+            }
+          })
+          .catch(err => {
+            this.btnLoading = false
+            Taro.showToast({
+              title: err.msg,
+              icon: 'error',
+            })
+          })
+      } else if (this.payMethod === 'weixin') {
+        Taro.navigateTo({
+          url: `/pages/web-view/index?url=${this.payData.wechatUrl}`,
+        })
+      }
+    },
+
+    showModal() {
+      this.payDialogVisible = true
+    },
+    hideModal() {
+      this.payMethod = ''
+      this.payDialogVisible = false
+    },
   },
 }
 </script>

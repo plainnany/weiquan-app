@@ -98,7 +98,7 @@ export default {
           .then(data => {
             if (data) {
               Taro.navigateTo({
-                url: `/pages/order-detail/index?url=${this.wechatUrl}`,
+                url: `/pages/order-detail/index?order=${this.orderNumber}`,
               })
             }
           })

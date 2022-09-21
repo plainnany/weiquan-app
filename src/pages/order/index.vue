@@ -1,27 +1,28 @@
 <template>
-  <view class="order-page">
-    <view class="order-tabs">
-      <view class="order-tab" :class="{ active: activeTab === tab.key }" v-for="tab in tabs" :key="tab.key" @tap="clickTab(tab)">{{
-        tab.title
-      }}</view>
-    </view>
-    <view class="order-result">
-      <view class="order-result-empty" v-if="!orderList.length && hasGetOrder">
-        <image :src="orderEmptyIcon" mode="" />
-        <view class="order-result-empty-text">
-          抱歉，没有找到订单哦
-        </view>
+  <view>
+    <view class="order-page">
+      <view class="order-tabs">
+        <view class="order-tab" :class="{ active: activeTab === tab.key }" v-for="tab in tabs" :key="tab.key" @tap="clickTab(tab)">{{
+          tab.title
+        }}</view>
       </view>
-      <scroll-view :scroll-y="true" @scrolltolower="toLower" v-else>
-        <view class="order-result-list">
-          <view class="common-card" v-for="(order, index) in orderList" :key="index">
-            <view class="order-result-title">
-              <text>订单号 {{ order.orderNumber }}</text>
-              <text class="order-result-type">{{ STATE_TYPE[order.state] }}</text>
-            </view>
-            <view class="order-result-content">
-              <view>交货时间 {{ order.orderDate }}</view>
-              <!-- <view class="order-result-deliver flex-between-center" @tap="viewDeliver(order)">
+      <view class="order-result">
+        <view class="order-result-empty" v-if="!orderList.length && hasGetOrder">
+          <image :src="orderEmptyIcon" mode="" />
+          <view class="order-result-empty-text">
+            抱歉，没有找到订单哦
+          </view>
+        </view>
+        <scroll-view :scroll-y="true" @scrolltolower="toLower" v-else>
+          <view class="order-result-list">
+            <view class="common-card" v-for="(order, index) in orderList" :key="index">
+              <view class="order-result-title">
+                <text>订单号 {{ order.orderNumber }}</text>
+                <text class="order-result-type">{{ STATE_TYPE[order.state] }}</text>
+              </view>
+              <view class="order-result-content">
+                <view>交货时间 {{ order.orderDate }}</view>
+                <!-- <view class="order-result-deliver flex-between-center" @tap="viewDeliver(order)">
                 <view class="flex-between-center">
                   <image :src="carIcon" mode="" />
                   <view class="order-result-deliver-info">
@@ -33,48 +34,84 @@
                   <image :src="backIcon" mode="" />
                 </view>
               </view> -->
-              <view class="order-result-item flex-between-center" v-for="(product, pIndex) in order.orderListViews" :key="pIndex">
-                <view class="flex-between-center">
-                  <view class="order-result-image">
-                    <image :src="product.productImage" mode="" />
+                <view class="order-result-item flex-between-center" v-for="(product, pIndex) in order.orderListViews" :key="pIndex">
+                  <view class="flex-between-center">
+                    <view class="order-result-image">
+                      <image :src="product.productImage" mode="" />
+                    </view>
+                    <view class="order-result-info">
+                      <view>{{ product.productName }}</view>
+                      <view>{{ product.specifications }} {{ product.unit }}</view>
+                      <view class="order-result-tag"
+                        ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
+                      >
+                    </view>
                   </view>
-                  <view class="order-result-info">
-                    <view>{{ product.productName }}</view>
-                    <view>{{ product.specifications }} {{ product.unit }}</view>
-                    <view class="order-result-tag"
-                      ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
+                  <view>
+                    <view class="order-result-price"
+                      >¥ <text>{{ product.price }}</text></view
                     >
+                    <view>订单量 {{ product.productSum }}</view>
                   </view>
                 </view>
-                <view>
-                  <view class="order-result-price"
-                    >¥ <text>{{ product.price }}</text></view
-                  >
-                  <view>订单量 {{ product.productSum }}</view>
-                </view>
-              </view>
-              <view class="flex-between-center">
-                <text>共{{ order.orderListViews.length }}件商品</text>
-                <!-- 待支付 -->
-                <view class="flex-between-center" v-if="order.state === '01'">
-                  <nan-button type="plain" @tap="cancelOrder(order)">取消订单</nan-button>
-                  <nan-button type="primary" @tap="handlePay(order)">去支付</nan-button>
-                </view>
-                <!-- 已付款 -->
-                <view class="flex-between-center" v-if="order.state === '02'">
-                  <nan-button type="plain">取消订单</nan-button>
-                  <nan-button type="primary">提醒发货</nan-button>
-                </view>
-                <!-- 待发货 -->
-                <view class="flex-between-center" v-if="order.state === '03'">
-                  <nan-button type="plain">取消订单</nan-button>
-                  <nan-button type="primary">提醒发货</nan-button>
+                <view class="flex-between-center">
+                  <text>共{{ order.orderListViews.length }}件商品</text>
+                  <!-- 待支付 -->
+                  <view class="flex-between-center" v-if="order.state === '01'">
+                    <nan-button type="plain" @tap="cancelOrder(order)">取消订单</nan-button>
+                    <nan-button type="primary" @tap="handlePay(order)">去支付</nan-button>
+                  </view>
+                  <!-- 已付款 -->
+                  <view class="flex-between-center" v-if="order.state === '02'">
+                    <nan-button type="plain">取消订单</nan-button>
+                    <nan-button type="primary">提醒发货</nan-button>
+                  </view>
+                  <!-- 待发货 -->
+                  <view class="flex-between-center" v-if="order.state === '03'">
+                    <nan-button type="plain">取消订单</nan-button>
+                    <nan-button type="primary">提醒发货</nan-button>
+                  </view>
                 </view>
               </view>
             </view>
           </view>
+        </scroll-view>
+      </view>
+    </view>
+    <view v-if="payDialogVisible" class="order-pay-modal">
+      <view :class="['order-pay-modal-wrap']"></view>
+      <view :class="['order-pay-modal-wrapper']">
+        <view class="order-pay">
+          <!-- 头部 -->
+          <view class="order-pay-title">
+            <view>支付金额{{ payData.total_fee }}</view>
+            <view @tap.stop="handleClosePay" class="order-pay-close">
+              <image :src="closeIcon" mode="" />
+            </view>
+          </view>
+          <view class="order-pay-content">
+            <radio-group @change="onPaymethodChange">
+              <label class="order-pay-item flex-between-center" v-for="payItem in payList" :key="payItem.name">
+                <view class="flex-between-center">
+                  <view>
+                    <image :src="payItem.icon" mode="" />
+                  </view>
+                  <view>
+                    {{ payItem.name }}
+                    <text v-if="payItem.method === 'weixin-pocket'"> (¥{{ userInfo.accoutBalance }}) </text>
+                  </view>
+                </view>
+                <view>
+                  <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#fa4a2d" />
+                </view>
+              </label>
+            </radio-group>
+          </view>
+          <view class="order-pay-footer">
+            <nan-button type="primary" :disabled="!payMethod" :loading="btnLoading" @tap="confirmPay">确认支付</nan-button>
+          </view>
         </view>
-      </scroll-view>
+      </view>
     </view>
   </view>
 </template>
@@ -86,6 +123,9 @@ import orderEmptyIcon from '@/images/order-empty.png'
 import carIcon from '@/images/car.png'
 import backIcon from '@/images/user/back.png'
 import Taro from '@tarojs/taro'
+import wechatIcon from '@/images/wechat.png'
+import weipocketIcon from '@/images/wei-pocket.png'
+import closeIcon from '@/images/close.png'
 
 export default {
   components: {},
@@ -122,6 +162,7 @@ export default {
       orderEmptyIcon,
       carIcon,
       backIcon,
+      closeIcon,
       ORDER_TYPE: {
         '01': '正常单',
         '02': '样品单',
@@ -141,7 +182,30 @@ export default {
       complete: false,
       loading: false,
       hasGetOrder: false,
+      payDialogVisible: false,
+      payData: {},
+      payMethod: '',
+      payList: [
+        {
+          method: 'weixin-pocket',
+          name: '余额支付',
+          icon: weipocketIcon,
+        },
+        {
+          method: 'weixin',
+          name: '微信支付',
+          icon: wechatIcon,
+        },
+      ],
+      wrapAnimate: 'wrapAnimate',
+      frameAnimate: 'frameAnimate',
+      btnLoading: false,
     }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo
+    },
   },
   created() {
     this.$instance = Taro.getCurrentInstance()
@@ -207,8 +271,74 @@ export default {
         })
     },
     handlePay(order) {
-      const money = order.orderListViews.reduce((prev, cur) => prev + parseFloat(cur.price) * parseInt(cur.productSum), 0)
-      Taro.navigateTo({ url: `/pages/order-settle/index?number=${order.orderNumber}&money=${money}` })
+      this.$API
+        .orderPay({
+          orderNumber: order.orderNumber,
+        })
+        .then(data => {
+          if (data) {
+            this.payData = data
+            this.showModal()
+          }
+        })
+      // const money = order.orderListViews.reduce((prev, cur) => prev + parseFloat(cur.price) * parseInt(cur.productSum), 0)
+      // Taro.navigateTo({ url: `/pages/order-settle/index?number=${order.orderNumber}&money=${money}` })
+    },
+    handleClosePay() {
+      this.hideModal()
+    },
+    onPaymethodChange(e) {
+      this.payMethod = e.detail.value
+    },
+    confirmPay() {
+      if (this.payMethod === 'weixin-pocket') {
+        this.btnLoading = true
+        this.$API
+          .balancePayment({
+            out_trade_no: this.payData.out_trade_no,
+            orderNumber: this.payData.orderNumber,
+          })
+          .then(data => {
+            if (data) {
+              this.btnLoading = false
+              this.hideModal()
+              const index = this.orderList.findIndex(v => v.orderNumber === this.payData.orderNumber)
+              if (index > -1) {
+                this.orderList.splice(index, 1)
+              }
+              Taro.showToast({
+                title: '支付成功',
+                icon: 'success',
+              })
+            }
+          })
+          .catch(err => {
+            this.btnLoading = false
+            Taro.showToast({
+              title: err.msg,
+              icon: 'error',
+            })
+          })
+      } else if (this.payMethod === 'weixin') {
+        Taro.navigateTo({
+          url: `/pages/web-view/index?url=${this.payData.wechatUrl}`,
+        })
+      }
+    },
+
+    showModal() {
+      this.payDialogVisible = true
+      // this.wrapAnimate = 'wrapAnimate'
+      // this.frameAnimate = 'frameAnimate'
+    },
+    hideModal() {
+      // this.wrapAnimate = 'wrapAnimateOut'
+      // this.frameAnimate = 'frameAnimateOut'
+      this.payMethod = ''
+      this.payDialogVisible = false
+      // setTimeout(() => {
+      //   this.payDialogVisible = false
+      // }, 400)
     },
   },
 }
