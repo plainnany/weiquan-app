@@ -58,28 +58,39 @@ export default {
       searchComplete: false,
     }
   },
+  onShow() {
+    this.startSearch = null
+  },
   mounted() {
     setTitle({
       title: '搜索',
     })
-    this.searchProduct({ keyword: '', pageNo: 1 })
   },
   methods: {
     addShop(product) {
+      if (!product.sell) {
+        Taro.showToast({
+          title: '当前商品不支持购买',
+          icon: 'none',
+        })
+        return
+      }
       this.$API
         .addToShopcar({
           productId: product.productId,
-          amount: 1,
+          amount: product.productUnitRule,
         })
         .then(data => {
           Taro.showToast({
-            title: '已添加到购物车',
+            title: '添加成功',
             icon: 'success',
           })
         })
         .catch(err => {
-          // 接口报错了
-          console.log('catch error', err)
+          Taro.showToast({
+            title: err.msg,
+            icon: 'error',
+          })
         })
     },
     viewDetail(product) {
@@ -87,7 +98,7 @@ export default {
     },
     onSearch(e) {
       const { value } = e.detail
-      this.keyword = value
+      this.keyword = value || ''
       this.searchProduct({ keyword: value, pageNo: 1 })
     },
     searchProduct(params) {
@@ -108,13 +119,19 @@ export default {
             this.searchComplete = true
           }
         })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'error',
+          })
+        })
         .finally(() => {
           this.startSearch = true
           this.searchLoading = false
         })
     },
     deleteKeyword() {
-      this.searchProduct('')
+      this.searchProduct({ pageNo: 1, keyword: '' })
       this.keyword = ''
     },
     toLower() {
