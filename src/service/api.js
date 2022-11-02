@@ -254,6 +254,12 @@ const requestAddressList = [
     url: '/api/order/listCompleteOrderDetail.ns',
     type: 'post',
   },
+  {
+    describe: '首页接口',
+    method: 'getHomeData',
+    url: '/api/applet/home.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}

@@ -1,8 +1,12 @@
 <template>
-  <view class="search-bar">
-    <icon class="search-icon" type="search" size="16" />
-    <input type="text" @focus="focus" placeholder="喝出美好生活" placeholder-class="placeholder-style" />
+  <view class="search-bar-wrapper">
+
+    <view class="search-bar">
+      <icon class="search-icon" type="search" size="16" />
+      <input type="text" @focus="focus" placeholder="喝出美好生活" placeholder-class="placeholder-style" />
+    </view>
   </view>
+
 </template>
 
 <script>
@@ -25,6 +29,12 @@ export default {
 
 <style lang="less">
 .search-bar {
+  &-wrapper {
+    width: 100%;
+    background-color: #fff;
+    padding-bottom: 20px;
+  }
+
   display: flex;
   align-items: center;
   border-radius: 40px;
