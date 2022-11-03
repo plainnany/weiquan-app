@@ -1,7 +1,7 @@
 export default defineAppConfig({
   pages: [
     'pages/index/index', // 首页
-    'pages/product/index', // 产品详情
+    'pages/product/index', // 分类
     'pages/shop/index', // 购物车
     'pages/user/index', // 用户中心
     'pages/search/index', // 搜索

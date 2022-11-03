@@ -4,7 +4,7 @@
       <SearchBar />
       <view class="banner">
         <swiper :indicator-dots="false" :autoplay="false">
-          <swiper-item v-for="(banner, index) in banners" :key="index">
+          <swiper-item v-for="(banner, index) in banners" :key="index" @tap="handleLink(banner.jumpLink)">
             <image :src="banner.fileUrl" />
           </swiper-item>
         </swiper>
@@ -15,15 +15,15 @@
           <text>{{ message }}</text>
         </view>
         <view class="nav card">
-          <swiper :indicator-dots="true" :autoplay="false" :indicator-color="'#B3B2B2'">
+          <swiper :indicator-dots="true" :autoplay="false" :indicator-color="'#B3B2B2'" :indicator-active-color="'#cb1010'">
             <swiper-item>
               <view class="nav-item">
-                <view>
+                <view @tap="handleNav('sign')">
                   <image :src="signImg" mode="" />
                   <view>签收</view>
                 </view>
                 <view class="divider"></view>
-                <view>
+                <view @tap="handleNav('notice')">
                   <image :src="noticeImg" mode="" />
                   <view>消息</view>
                 </view>
@@ -31,19 +31,19 @@
             </swiper-item>
             <swiper-item>
               <view class="nav-item">
-                <view>
+                <view @tap="handleNav('charge')">
                   <image :src="chargeImg" mode="" />
                   <view>充值</view>
                 </view>
                 <view class="divider"></view>
-                <view>
+                <view @tap="handleNav('category')">
                   <image :src="categoryImg" mode="" />
                   <view>分类</view>
                 </view>
               </view>
             </swiper-item>
           </swiper>
-          <view class="invite">
+          <view class="invite" @tap="handleLink(inviteLink)">
             <image :src="inviteImg" mode="" />
             <view>
               <text class="invite-strong">一起种草</text>
@@ -65,11 +65,10 @@
           </view>
         </view>
         <view class="product row">
-          <view class="col" v-for="product in category" :key="product.id">
-            <view class="product-item">
+          <view class="col" v-for="(product, index) in category" :key="index">
+            <view class="product-item" @tap="onCategory(index)">
               <view class="product-text">{{ product.productClass }}</view>
               <image :src="product.productImage" mode="" />
-              <view class="product-tag"> <text>我太牛了</text></view>
             </view>
           </view>
         </view>
@@ -88,6 +87,7 @@ import categoryImg from '@/images/category.png'
 import chargeImg from '@/images/recharge.png'
 import inviteImg from '@/images/invite.png'
 import backImg from '@/images/red-back.png'
+import Taro from '@tarojs/taro'
 
 export default {
   components: {
@@ -103,21 +103,15 @@ export default {
       chargeImg,
       inviteImg,
       backImg,
-      swiperOptions: {
-        background: ['demo-text-1', 'demo-text-2', 'demo-text-3'],
-        indicatorDots: true,
-        vertical: false,
-        autoplay: true,
-        interval: 3000,
-        duration: 2000,
-        indicatorColor: '#FA4A2D',
-      },
       banners: [],
       gif: '',
       video: '',
       category: '',
       message: '',
     }
+  },
+  onShow() {
+    this.$store.commit('setSwitchCategoryTab', '')
   },
   mounted() {
     this.getData()
@@ -131,7 +125,32 @@ export default {
         this.video = data.video
         this.category = data.classList || []
         this.message = data.sysMessage
+        this.inviteLink = data.community
       })
+    },
+    onCategory(index) {
+      this.$store.commit('setSwitchCategoryTab', index + 1)
+      Taro.switchTab({
+        url: `/pages/product/index`,
+      })
+    },
+    handleNav(type) {
+      const urlMap = {
+        sign: '/pages/order/index',
+        notice: '/pages/user/index',
+        charge: '/pages/charge/index',
+        category: '/pages/product/index',
+      }
+      if (type === 'category' || type === 'notice') {
+        Taro.switchTab({ url: urlMap[type] })
+      } else {
+        Taro.navigateTo({
+          url: urlMap[type],
+        })
+      }
+    },
+    handleLink(link) {
+      Taro.navigateTo({ url: `/pages/web-view/index?url=${link}` })
     },
   },
 }

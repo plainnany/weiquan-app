@@ -53,7 +53,7 @@ export default {
       activeIndex: 0,
       categoryList: [
         {
-          classCode: '500101',
+          classCode: 'special',
           productClass: '可定品项',
         },
       ],
@@ -69,6 +69,10 @@ export default {
     // this.getCategory()
   },
   onShow() {
+    this.categoryIndex = this.$store.state.switchCategoryTab
+    this.activeIndex = this.categoryIndex || 0
+    this.searchPageNum = 1
+    this.searchComplete = false
     this.getCategory()
   },
   methods: {
@@ -76,9 +80,8 @@ export default {
       API.getCategory().then(data => {
         this.categoryList = this.categoryList.concat(data)
         const firstCategory = data[0]
-        if (firstCategory) {
-          this.getProductByCategory(0)
-        }
+        if (!firstCategory) return
+        this.getProductByCategory()
       })
     },
     handleCategory(index) {

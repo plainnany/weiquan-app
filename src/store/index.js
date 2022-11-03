@@ -6,12 +6,16 @@ Vue.use(Vuex)
 
 const state = {
   userInfo: {},
+  switchCategoryTab: '',
 }
 
 const getters = {}
 const mutations = {
   setUserInfo(state, data) {
     state.userInfo = data
+  },
+  setSwitchCategoryTab(state, data) {
+    state.switchCategoryTab = data
   },
 }
 
