@@ -15,7 +15,7 @@
           <text>{{ message }}</text>
         </view>
         <view class="nav card">
-          <swiper :indicator-dots="true" :autoplay="false" :indicator-color="'#B3B2B2'" :indicator-active-color="'#cb1010'">
+          <swiper :indicator-dots="true" :autoplay="false" :indicator-color="'#B3B2B2'" :indicator-active-color="'#FA4A2D'">
             <swiper-item>
               <view class="nav-item">
                 <view @tap="handleNav('sign')">

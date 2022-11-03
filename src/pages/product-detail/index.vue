@@ -1,12 +1,7 @@
 <template>
   <view class="product-detail">
     <view class="product-banner">
-      <swiper
-        :indicator-dots="swiperOptions.indicatorDots"
-        :autoplay="swiperOptions.autoplay"
-        :interval="swiperOptions.interval"
-        :indicator-color="swiperOptions.indicatorColor"
-      >
+      <swiper :autoplay="false" :indicator-active-color="swiperOptions.indicatorColor">
         <swiper-item v-for="(imageUrl, index) in product.images" :key="index">
           <image :src="imageUrl" />
         </swiper-item>
@@ -100,6 +95,7 @@ export default {
         indicatorColor: '#FA4A2D',
       },
       $instance: null,
+      productUnitRule: 0,
     }
   },
   computed: {},
@@ -122,15 +118,16 @@ export default {
         })
         .then(data => {
           this.product = data
+          this.productUnitRule = parseInt(this.product.productUnitRule)
         })
     },
     add() {
       // 这个是数量还是加减的单位，和购物车的好像不一样，确认一下
-      this.product.productUnitRule++
+      this.product.productUnitRule = parseInt(this.productUnitRule) + parseInt(this.product.productUnitRule)
     },
     decrease() {
       if (this.product.productUnitRule < 1) return
-      this.product.productUnitRule--
+      this.product.productUnitRule = parseInt(this.product.productUnitRule) - parseInt(this.productUnitRule)
     },
     addShop() {
       if (!this.product.sell) {
