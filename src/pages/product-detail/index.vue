@@ -28,9 +28,20 @@
           <view>购买数量</view>
           <view class="product-number-action">
             <view class="product-action-btn" @tap="decrease">-</view>
-            <view>{{ product.productUnitRule }}</view>
+            <view>
+              <!-- {{ product.minOrderQuantity }} -->
+              <input
+                type="number"
+                v-model="product.minOrderQuantity"
+                @tap.stop="() => {}"
+                @focus.stop="() => {}"
+                @blur.stop="onBlur(product)"
+                placeholder="请输入数量"
+              />
+            </view>
+
             <view class="product-action-btn" @tap="add">+</view>
-            <view>瓶</view>
+            <view>{{ product.productUnitMin }}</view>
           </view>
         </view>
       </view>
@@ -119,15 +130,16 @@ export default {
         .then(data => {
           this.product = data
           this.productUnitRule = parseInt(this.product.productUnitRule)
+          this.minOrderQuantity = parseInt(this.product.minOrderQuantity)
         })
     },
     add() {
       // 这个是数量还是加减的单位，和购物车的好像不一样，确认一下
-      this.product.productUnitRule = parseInt(this.productUnitRule) + parseInt(this.product.productUnitRule)
+      this.product.minOrderQuantity = parseInt(this.productUnitRule) + parseInt(this.product.minOrderQuantity)
     },
     decrease() {
-      if (this.product.productUnitRule < 1) return
-      this.product.productUnitRule = parseInt(this.product.productUnitRule) - parseInt(this.productUnitRule)
+      if (this.product.minOrderQuantity <= this.minOrderQuantity) return
+      this.product.minOrderQuantity = parseInt(this.product.minOrderQuantity) - parseInt(this.productUnitRule)
     },
     addShop() {
       if (!this.product.sell) {
@@ -183,6 +195,10 @@ export default {
       Taro.makePhoneCall({
         phoneNumber: this.$store.state.userInfo.customerService,
       })
+    },
+    onBlur(product) {
+      if (!product.minOrderQuantity) return
+      product.minOrderQuantity = parseInt(product.minOrderQuantity)
     },
   },
 }

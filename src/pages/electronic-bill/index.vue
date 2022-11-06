@@ -1,9 +1,19 @@
 <template>
   <view class="electronic-page">
     <view class="electronic-date">
-      <picker mode="date" @change="startDateChane">{{ startDate || defaultDate }}</picker>
-      <text class="electronic-date-seperator">|</text>
-      <picker mode="date" @change="endDateChange" :start="startDate">{{ endDate || defaultDate }}</picker>
+      <picker mode="date" @change="startDateChane">
+        <image :src="dateIcon" class="date" mode="" />
+        <text>
+          {{ startDate || defaultDate }}
+        </text>
+        <image :src="arrowIcon" class="arrow" mode="" />
+      </picker>
+      <text class="electronic-date-seperator"></text>
+      <picker mode="date" @change="endDateChange" :start="startDate">
+        <image :src="dateIcon" class="date" mode="" />
+        {{ endDate || defaultDate }}
+        <image :src="arrowIcon" class="arrow" mode="" />
+      </picker>
     </view>
     <view class="electronic-list">
       <view class="electronic-list-item" v-for="(bill, index) in billData.list" :key="index">
@@ -54,6 +64,8 @@
 <script>
 import { setTitle } from '@/utils'
 import './index.less'
+import dateIcon from '@/images/date.png'
+import arrowIcon from '@/images/arrow-down.png'
 
 export default {
   name: 'electronic-bill',
@@ -106,6 +118,8 @@ export default {
           ],
         },
       ],
+      dateIcon,
+      arrowIcon,
     }
   },
   mounted() {

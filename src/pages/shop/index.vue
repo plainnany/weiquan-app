@@ -24,7 +24,7 @@
                 @tap.stop="() => {}"
                 @focus.stop="() => {}"
                 @blur.stop="onBlur(product)"
-                placeholder="请输入账户"
+                placeholder="请输入数量"
               />
               <view class="product-action-btn" @tap.stop="addProduct(product)">+</view>
             </view>
@@ -165,6 +165,7 @@ export default {
       Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.productId}` })
     },
     onBlur(product) {
+      if (!product.amount) return
       product.amount = parseInt(product.amount)
       this.updateProduct(product)
     },

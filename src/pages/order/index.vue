@@ -62,15 +62,15 @@
                     <nan-button type="primary" @tap="handlePay(order)">去支付</nan-button>
                   </view>
                   <!-- 已付款 -->
-                  <view class="flex-between-center" v-if="order.state === '02'">
+                  <!-- <view class="flex-between-center" v-if="order.state === '02'">
                     <nan-button type="plain">取消订单</nan-button>
                     <nan-button type="primary">提醒发货</nan-button>
-                  </view>
+                  </view> -->
                   <!-- 待发货 -->
-                  <view class="flex-between-center" v-if="order.state === '03'">
+                  <!-- <view class="flex-between-center" v-if="order.state === '03'">
                     <nan-button type="plain">取消订单</nan-button>
                     <nan-button type="primary">提醒发货</nan-button>
-                  </view>
+                  </view> -->
                 </view>
               </view>
             </view>

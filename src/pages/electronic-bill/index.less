@@ -1,6 +1,7 @@
 .electronic-page {
   background-color: #fafcfd;
   min-height: 100vh;
+  font-size: 26px;
   .electronic-date {
     position: fixed;
     width: 100%;
@@ -11,11 +12,23 @@
     justify-content: space-between;
     box-sizing: border-box;
 
+    .date {
+      width: 32px;
+      height: 32px;
+      vertical-align: sub;
+      margin-right: 27px;
+    }
+
+    .arrow {
+      width: 25px;
+      height: 16px;
+      margin-left: 44px;
+    }
+
     &-seperator {
       display: inline-block;
       width: 1px;
       background-color: #979797;
-      color: #fff;
     }
 
     .u-date {

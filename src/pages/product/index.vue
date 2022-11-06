@@ -129,7 +129,7 @@ export default {
       this.$API
         .addToShopcar({
           productId: product.productId,
-          amount: 10,
+          amount: product.minOrderQuantity,
         })
         .then(data => {
           Taro.showToast({

@@ -11,6 +11,16 @@ Vue.component('nan-button', NanButton)
 
 Vue.prototype.$API = API
 
+function getBindShopList(unionId) {
+  API.getBindShopList({
+    unionId,
+  }).then(data => {
+    const token = ((data || []).find(v => v.useflg === '01') || {}).token
+    Taro.setStorageSync('token', token)
+    store.dispatch('getUserInfo')
+  })
+}
+
 function login() {
   Taro.login({
     success(res) {
@@ -20,7 +30,7 @@ function login() {
       }).then(data => {
         const { unionid } = data
         Taro.setStorageSync('unionId', unionid)
-        store.dispatch('getUserInfo')
+        getBindShopList(unionid)
       })
       console.log(res.code)
     },
@@ -41,7 +51,7 @@ const App = {
           login()
         } else {
           console.log(res, '登录有效')
-          store.dispatch('getUserInfo')
+          getBindShopList(sessionUnionId)
         }
       },
       fail(res) {

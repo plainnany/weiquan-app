@@ -103,12 +103,7 @@ export default {
   components: {},
   data() {
     return {
-      msg: '',
-      linkIcon: '',
       backImg,
-      avatarImg: '',
-      username: '测试用户名称',
-      mobile: '123****5678',
       tabs: [
         { icon: chargeImg, title: '余额及充值', path: '/pages/cost/index' },
         { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
@@ -117,7 +112,7 @@ export default {
       orderList: [
         { icon: payImg, title: '待付款', path: '/pages/order/index?type=to-pay' },
         { icon: deleverImg, title: '查询修改', path: '/pages/order/index' },
-        { icon: toReceiveImg, title: '待收货', path: '/pages/order/index?type=to-receive' },
+        { icon: toReceiveImg, title: '待收货', path: '/pages/order/index?type=to-deliver' },
         { icon: commentsImg, title: '已完成', path: '/pages/order/index?type=done' },
         { icon: customServiceImg, title: '我的订单', path: '/pages/order/index' },
       ],
