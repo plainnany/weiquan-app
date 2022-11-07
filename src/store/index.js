@@ -7,6 +7,7 @@ Vue.use(Vuex)
 const state = {
   userInfo: {},
   switchCategoryTab: '',
+  bindStatus: false, // 是否跳转过绑定用户页面
 }
 
 const getters = {}
@@ -16,6 +17,9 @@ const mutations = {
   },
   setSwitchCategoryTab(state, data) {
     state.switchCategoryTab = data
+  },
+  setBindStatus(state, data) {
+    state.bindStatus = data
   },
 }
 

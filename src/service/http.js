@@ -1,7 +1,6 @@
 import Taro from '@tarojs/taro'
 import { BASE_URL } from '@/const'
-
-const tempToken = ''
+import store from '@/store'
 
 class HttpRequest {
   constructor() {}
@@ -42,7 +41,6 @@ class HttpRequest {
         data,
         header: {
           'content-type': method === 'get' ? 'application/json' : 'application/x-www-form-urlencoded',
-          // token: 'SCUc37Ic9tHReqjdvbnQKVUteLYotLCOi0hMQlhPGdqcIjUh/ZwmGaoZYVlsayUq',
           token,
           platform: '3', // 固定参数
           ...requestHeaders,
@@ -69,12 +67,16 @@ class HttpRequest {
       return res.data
     } else if (res.returnCode === 401) {
       // 此处不太好使用弹窗绑定账号，可以给绑定账号单独做个页面，跳转过去
+      // 跳转用户绑定页面只跳转一次
       Taro.showToast({
         title: '用户未登录，请先绑定用户',
         icon: 'none',
         success() {
           setTimeout(() => {
-            Taro.navigateTo({ url: '/pages/bind-account/index' })
+            if (!store.state.bindStatus) {
+              Taro.navigateTo({ url: '/pages/bind-account/index' })
+            }
+            store.commit('setBindStatus', true)
           }, 2000)
         },
       })
