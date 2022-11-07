@@ -112,10 +112,10 @@ export default {
   },
   onShow() {
     this.$store.commit('setSwitchCategoryTab', '')
-    // this.getData()
+    this.getData()
   },
   mounted() {
-    this.getData()
+    // this.getData()
   },
   methods: {
     getData() {
