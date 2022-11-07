@@ -14,11 +14,18 @@ Vue.prototype.$API = API
 function getBindShopList(unionId) {
   API.getBindShopList({
     unionId,
-  }).then(data => {
-    const token = ((data || []).find(v => v.useflg === '01') || {}).token
-    Taro.setStorageSync('token', token)
-    store.dispatch('getUserInfo')
   })
+    .then(data => {
+      const token = ((data || []).find(v => v.useflg === '01') || {}).token
+      Taro.setStorageSync('token', token)
+      store.dispatch('getUserInfo')
+    })
+    .catch(err => {
+      Taro.showToast({
+        title: err.msg,
+        icon: 'none',
+      })
+    })
 }
 
 function login() {
