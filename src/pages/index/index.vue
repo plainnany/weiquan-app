@@ -54,12 +54,12 @@
         </view>
         <view class="link row">
           <view class="col">
-            <view class="link-item">
+            <view class="link-item" @tap="handleLink(gif.jumpLink)">
               <image :src="gif.fileUrl" mode="" />
             </view>
           </view>
           <view class="col">
-            <view class="link-item">
+            <view class="link-item" @tap="handleLink(video.jumpLink)">
               <video :src="video.fileUrl" />
             </view>
           </view>
@@ -151,6 +151,12 @@ export default {
       }
     },
     handleLink(link) {
+      if (!this.$store.state.userInfo.userId) {
+        return Taro.showToast({
+          title: '用户未登录，请先绑定用户',
+          icon: 'none',
+        })
+      }
       Taro.navigateTo({ url: `/pages/web-view/index?url=${link}` })
     },
   },

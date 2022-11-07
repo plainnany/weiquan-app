@@ -52,6 +52,13 @@ export default {
   },
   methods: {
     bindAccount() {
+      if (!this.customerCode || !this.customerPassword || !this.checkedAccountType) {
+        return Taro.showToast({
+          title: '请将内容填写完整',
+          icon: 'none',
+        })
+      }
+
       const password = crypto.AES.encrypt(this.customerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
       this.$API
         .bindShop({

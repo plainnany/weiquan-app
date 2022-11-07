@@ -201,6 +201,12 @@ export default {
       this.visible = false
     },
     onConfirm() {
+      if (!this.customerCode || !this.customerPassword || !this.checkedAccountType) {
+        return Taro.showToast({
+          title: '请将内容填写完整',
+          icon: 'none',
+        })
+      }
       const password = AES.encrypt(this.customerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
 
       this.$API
@@ -212,8 +218,16 @@ export default {
         })
         .then(data => {
           if (data) {
-            console.log(data)
+            this.$store.commit('setUserInfo', data)
+            Taro.setStorageSync('token', data.token)
+            this.visible = false
           }
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'none',
+          })
         })
     },
     handleNav(item) {
