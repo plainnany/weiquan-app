@@ -24,7 +24,7 @@
           <text>规格: {{ product.productSpecs }}</text>
           <text>单位: {{ product.productUnitMax }}</text>
         </view>
-        <view class="product-number">
+        <view class="product-number" v-if="product.sell">
           <view>购买数量</view>
           <view class="product-number-action">
             <view class="product-action-btn" @tap="decrease">-</view>
