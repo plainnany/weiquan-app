@@ -26,7 +26,7 @@ import './index.less'
 import backIcon from '@/images/user/back.png'
 import fileIcon from '@/images/setting/file.png'
 import lockIcon from '@/images/setting/lock.png'
-import noticeIcon from '@/images/setting/notice.png'
+// import noticeIcon from '@/images/setting/notice.png'
 import warningIcon from '@/images/setting/warning.png'
 import questionIcon from '@/images/setting/question.png'
 import { setTitle } from '@/utils'
@@ -88,11 +88,14 @@ export default {
       this.$API
         .unbindShop({
           unionId,
-          customerCode: this.$store.state.userInfo.customerCode, // 这个数据好像暂时没有
+          customerCode: this.$store.state.userInfo.userId,
+          userType: this.$store.state.userInfo.dianZhang ? 1 : 2,
         })
         .then(data => {
           if (data) {
-            this.accountList.splice(index, 1)
+            Taro.setStorageSync('token', '')
+            this.$store.commit('setUserInfo', {})
+            Taro.switchTab({ url: '/pages/index/index' })
           }
         })
     },

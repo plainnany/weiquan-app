@@ -70,11 +70,6 @@ import arrowIcon from '@/images/arrow-down.png'
 export default {
   name: 'electronic-bill',
   components: {},
-  mounted() {
-    setTitle({
-      title: '电子对账单',
-    })
-  },
   computed: {
     defaultDate() {
       const date = new Date()
@@ -124,6 +119,9 @@ export default {
   },
   mounted() {
     this.getBillList()
+    setTitle({
+      title: '电子对账单',
+    })
   },
   methods: {
     getBillList() {

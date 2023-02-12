@@ -62,7 +62,7 @@
       </view>
     </view>
 
-    <nan-modal :visible="visible" title="绑定账号" confirmText="确认" @cancel="onCancel" @confirm="onConfirm">
+    <nan-modal v-if="visible" :visible="visible" title="绑定账号" confirmText="确认" @cancel="onCancel" @confirm="onConfirm">
       <view class="form-item">选择身份</view>
       <view class="form-item-wrapper">
         <picker mode="selector" :range="accountTypes" @change="accountTypeChange" range-key="label">
