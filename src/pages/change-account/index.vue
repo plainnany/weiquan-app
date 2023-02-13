@@ -129,6 +129,7 @@ export default {
         .useShop({
           unionId: this.unionId,
           customerCode: item.customerCode,
+          userType: item.userType,
         })
         .then(data => {
           if (data) {
@@ -170,7 +171,7 @@ export default {
         })
         .then(data => {
           if (data) {
-            this.accountList.splice(index, 1)
+            // this.accountList.splice(index, 1)
           }
         })
     },
