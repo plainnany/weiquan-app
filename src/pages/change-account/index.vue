@@ -17,8 +17,8 @@
               <image :src="user.headPic" mode="" />
             </view>
             <view class="user-info">
-              <view
-                >{{ user.customerName }}
+              <view>
+                <text>{{ user.customerName }}</text>
                 <text :class="['tag', { manager: user.userType === 1, assistant: user.userType === 2 }]">{{
                   userTypeMap[user.userType]
                 }}</text></view
