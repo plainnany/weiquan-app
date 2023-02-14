@@ -107,7 +107,7 @@ export default {
       tabs: [
         { icon: chargeImg, title: '余额及充值', path: '/pages/cost/index' },
         { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
-        { icon: ruleImg, title: '配送规则', path: '/pages/deliver-rule/index' }, // 配送规则可能是个h5地址，先暂时放着
+        { icon: ruleImg, title: '配送规则', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
       ],
       orderList: [
         { icon: payImg, title: '待付款', path: '/pages/order/index?type=to-pay' },
@@ -158,10 +158,11 @@ export default {
           title: '检验报告单',
           path: '/pages/quality-report/index',
         },
-        {
-          icon: manualImg,
-          title: '操作手册',
-        },
+        // 操作中心暂时去掉
+        // {
+        //   icon: manualImg,
+        //   title: '操作手册',
+        // },
         {
           icon: messageImg,
           title: '消息中心',
@@ -177,7 +178,8 @@ export default {
           icon: helpImg,
           title: '帮助中心',
           isWebview: true,
-          path: `/pages/web-view/index?url=${this.$store.state.userInfo.helpLink}`,
+          path: `/pages/web-view/index?url=${BASE_URL}/service.htm`,
+          // path: `/pages/web-view/index?url=${this.$store.state.userInfo.helpLink}`,
         },
       ]
     },
@@ -195,6 +197,9 @@ export default {
     this.$store.dispatch('getUserInfo').finally(() => {
       this.hasGetUserInfo = true
     })
+  },
+  onHide() {
+    this.visible = false
   },
   methods: {
     onCancel() {
@@ -242,6 +247,10 @@ export default {
           },
         })
       } else {
+        if (item.path.includes('product-rule')) {
+          Taro.navigateTo({ url: `${item.path}&token=${this.userInfo.token}` })
+          return
+        }
         Taro.navigateTo({ url: item.path })
       }
     },

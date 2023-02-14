@@ -20,8 +20,12 @@ export default {
   onShow() {
     this.$instance = Taro.getCurrentInstance()
     const params = this.$instance.router.params
-    const { url } = params
-    this.url = url
+    const { url, token } = params
+    if (token) {
+      this.url = `${url}?token=${token}`
+    } else {
+      this.url = url
+    }
   },
 }
 </script>

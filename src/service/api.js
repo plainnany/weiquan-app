@@ -155,7 +155,7 @@ const requestAddressList = [
   {
     describe: '提交客诉',
     method: 'submitComplain',
-    url: '/api/v2/complain/submit.ns',
+    url: '/api/complain/submit.ns',
     type: 'post',
   },
   {

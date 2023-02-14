@@ -16,7 +16,7 @@
       <view>充值金额</view>
       <view class="charge-input">
         <text>¥</text>
-        <input placeholder="请输入充值金额" v-model="chargeNumber" />
+        <input type="number" placeholder="请输入充值金额" v-model="chargeNumber" />
       </view>
     </view>
     <view class="charge-number charge-card">
@@ -29,7 +29,7 @@
       </view>
     </view>
     <view class="charge-confirm">
-      <button @tap="handleCharge">确认充值</button>
+      <button @tap="handleCharge" :loading="btnLoading">确认充值</button>
     </view>
   </view>
 </template>
@@ -47,6 +47,7 @@ export default {
       chargeNumber: '',
       wechatIcon,
       balance: '',
+      btnLoading: false,
     }
   },
   mounted() {
@@ -56,20 +57,33 @@ export default {
   },
   methods: {
     handleCharge() {
-      if (!this.chargeNumber) return
+      if (!this.chargeNumber) {
+        return Taro.showToast({
+          title: '请输入充值金额',
+          icon: 'error',
+        })
+      }
+      if (!/\d+/.test(this.chargeNumber)) {
+        return Taro.showToast({
+          title: '请输入正确金额',
+          icon: 'error',
+        })
+      }
+      this.btnLoading = true
       this.$API
         .recharge({
           money: this.chargeNumber,
         })
         .then(data => {
-          if (data) {
+          if (data && data.wechatUrl) {
             Taro.navigateTo({
-              url: '/pages/web-view/index',
+              url: `/pages/web-view/index?url=${data.wechatUrl}`,
             })
           }
         })
-
-      console.log('start charge')
+        .finally(() => {
+          this.btnLoading = false
+        })
     },
   },
 }

@@ -82,8 +82,8 @@ export default {
       return !this.complainCode
     },
     btnDisabled() {
-      const { description, dictid, number, productCode } = this.form
-      if (!description || !dictid || !number || !productCode) {
+      const { description, dictid, number, productCode,  } = this.form
+      if (!description || !dictid || !number || !productCode || !this.questionImages.length) {
         return true
       }
       return false

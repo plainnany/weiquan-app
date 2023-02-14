@@ -25,6 +25,7 @@
 
 <script>
 import './date-chooser.less'
+import Taro from '@tarojs/taro'
 
 export default {
   props: {
@@ -156,10 +157,17 @@ export default {
       if (this.isBatchOrder) {
         query = this.chosenDates.map(v => `${v.year}-${v.month}-${v.day}`).join(',')
       } else {
-        query = `${this.chosenDate.year}-${this.chosenDate.month}-${this.chosenDate.day}`
+        if (this.chosenDate) {
+          query = `${this.chosenDate.year}-${this.chosenDate.month}-${this.chosenDate.day}`
+        }
       }
       if (query) {
         this.$emit('confirm', query)
+      } else {
+        Taro.showToast({
+          title: '请选择配送时间',
+          icon: 'error',
+        })
       }
     },
   },

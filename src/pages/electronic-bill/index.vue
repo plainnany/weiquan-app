@@ -53,9 +53,9 @@
       </view>
     </view>
     <view class="electronic-total">
-      <text style="color: #f93a4a;">{{ billData.num }}</text>
+      <text style="color: #f93a4a;">{{ billData.num || '-' }}</text>
       <text>个订单，</text>
-      <text style="color: red">{{ billData.amount }}</text
+      <text style="color: red">{{ billData.amount || '-' }}</text
       >元
     </view>
   </view>
