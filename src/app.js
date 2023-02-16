@@ -52,22 +52,34 @@ function login() {
 const App = {
   store,
   onShow() {
-    Taro.checkSession({
-      success(res) {
-        const sessionCode = Taro.getStorageSync('code')
-        const sessionUnionId = Taro.getStorageSync('unionId')
-        if (!sessionCode || !sessionUnionId) {
-          login()
-        } else {
-          console.log(res, '登录有效')
-          getBindShopList(sessionUnionId)
-        }
-      },
-      fail(res) {
-        console.log(res, '登录失效')
-        login()
-      },
-    })
+    const sessionCode = Taro.getStorageSync('code')
+    const sessionUnionId = Taro.getStorageSync('unionId')
+    if (!sessionCode || !sessionUnionId) {
+      login()
+    } else {
+      getBindShopList(sessionUnionId)
+    }
+
+    // Taro.checkSession({
+    //   success(res) {
+    //     console.log('checkSession success')
+
+    //     const sessionCode = Taro.getStorageSync('code')
+    //     const sessionUnionId = Taro.getStorageSync('unionId')
+    //     if (!sessionCode || !sessionUnionId) {
+    //       login()
+    //     } else {
+    //       console.log(res, '登录有效')
+    //       getBindShopList(sessionUnionId)
+    //     }
+    //   },
+    //   fail(res) {
+    //     console.log('checkSession 登录失效')
+
+    //     console.log(res, '登录失效')
+    //     login()
+    //   },
+    // })
   },
   render(h) {
     // this.$slots.default 是将要会渲染的页面

@@ -5,7 +5,7 @@
     </view>
     <view v-for="(item, index) in dateList" :key="index">
       <view class="month">{{ item.monthStr }} {{ item.year }}</view>
-      <view class="date-row" v-for="round in parseInt(item.day.length / 7)" :key="round">
+      <view class="date-row" v-for="round in Math.ceil(item.day.length / 7)" :key="round">
         <view
           class="date-col"
           v-for="index in 7"
@@ -126,14 +126,14 @@ export default {
     formatDate(dateList) {
       const firstDate = dateList[0]
       const lastDate = dateList[dateList.length - 1]
-      const preAppend = Array(8 - this.weekMap[firstDate.week])
+      const preAppend = Array(this.weekMap[firstDate.week])
         .fill(1)
         .map(() => ({
           week: '',
           flg: false,
           day: '',
         }))
-      const lastAppend = Array(6 - this.weekMap[lastDate.week])
+      const lastAppend = Array(Math.abs(6 - this.weekMap[lastDate.week]))
         .fill(1)
         .map(() => ({
           week: '',
