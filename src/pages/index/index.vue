@@ -43,16 +43,16 @@
               </view>
             </swiper-item>
           </swiper>
-          <view class="invite" @tap="handleLink(inviteLink)">
+          <!-- <view class="invite" @tap="handleLink(inviteLink)">
             <image :src="inviteImg" mode="" />
             <view>
               <text class="invite-strong">一起种草</text>
               <text>邀请好友一起种草，好礼享不停</text>
               <image class="back-icon" :src="backImg" mode="" />
             </view>
-          </view>
+          </view> -->
         </view>
-        <view class="link row">
+        <!-- <view class="link row">
           <view class="col">
             <view class="link-item" @tap="handleLink(gif.jumpLink)">
               <image :src="gif.fileUrl" mode="" />
@@ -63,7 +63,7 @@
               <video :src="video.fileUrl" />
             </view>
           </view>
-        </view>
+        </view> -->
         <view class="product row">
           <view class="col" v-for="(product, index) in category" :key="index">
             <view class="product-item" @tap="onCategory(index)">

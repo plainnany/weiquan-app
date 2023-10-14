@@ -101,7 +101,7 @@ const requestAddressList = [
   {
     describe: '获取当天收货列表',
     method: 'getWaitDelivery',
-    url: '/api/order/waitDelivery.ns',
+    url: '/api/v2/delivery/todayDeliveryOrder.ns',
     type: 'post',
   },
   {
@@ -258,6 +258,12 @@ const requestAddressList = [
     describe: '首页接口',
     method: 'getHomeData',
     url: '/api/applet/home.ns',
+    type: 'post',
+  },
+  {
+    describe: '确认收货',
+    method: 'confirmReceipt',
+    url: '/api/order/confirmReceipt.ns?latitude=1&longitude=1',
     type: 'post',
   },
 ]

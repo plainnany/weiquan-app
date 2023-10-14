@@ -7,15 +7,56 @@
         }}</view>
       </view>
       <view class="order-result">
-        <view class="order-result-empty" v-if="!orderList.length && hasGetOrder">
+        <view class="order-result-empty" v-if="showEmpty">
           <image :src="orderEmptyIcon" mode="" />
           <view class="order-result-empty-text">
             抱歉，没有找到订单哦
           </view>
         </view>
         <scroll-view :scroll-y="true" @scrolltolower="toLower" v-else>
-          <view class="order-result-list">
-            <view class="common-card" v-for="(order, index) in orderList" :key="index">
+          <view class="order-result-list" v-if="activeTab === 'to-delivery'">
+            <view class="common-card">
+              <view class="order-result-title">
+                <text @tap="contact" class="contact">联系配送员</text>
+                <text>当天收货</text>
+              </view>
+              <view
+                class="order-result-content"
+                v-for="(product, pIndex) in delivery"
+                :key="pIndex"
+                @tap="viewOrderDetail(product.customerOrderCode)"
+              >
+                <view>交货时间 {{ product.deliveryDate }}</view>
+                <view class="flex-between-center order-result-item ">
+                  <view class="flex-between-center">
+                    <view class="order-result-image">
+                      <image :src="product.productImage" mode="" />
+                    </view>
+                    <view class="order-result-info">
+                      <view>{{ product.productName }}</view>
+                      <view>{{ product.productSpecs }} {{ product.specifications }}</view>
+                      <view class="order-result-tag"
+                        ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
+                      >
+                    </view>
+                  </view>
+                  <view>
+                    <view>订单量 {{ product.productSum }}</view>
+                  </view>
+                </view>
+              </view>
+              <view class="flex-between-center">
+                <text>共{{ delivery.length }}件商品</text>
+                <!-- 待支付 -->
+                <view class="flex-between-center">
+                  <nan-button type="plain" @tap="viewLogistics">查看物流</nan-button>
+                  <nan-button type="primary" @tap="confirmDelivery" :loading="confirmBtnLoading">确认收货</nan-button>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class="order-result-list" v-else>
+            <view class="common-card" v-for="(order, index) in orderList" :key="index" @tap="viewOrderDetail(order.orderNumber)">
               <view class="order-result-title">
                 <text>订单号 {{ order.orderNumber }}</text>
                 <text class="order-result-type">{{ STATE_TYPE[order.state] }}</text>
@@ -41,7 +82,7 @@
                     </view>
                     <view class="order-result-info">
                       <view>{{ product.productName }}</view>
-                      <view>{{ product.specifications }} {{ product.unit }}</view>
+                      <view>{{ product.productSpecs }} {{ product.specifications }}</view>
                       <view class="order-result-tag"
                         ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
                       >
@@ -145,7 +186,7 @@ export default {
         },
         {
           title: '当天收货',
-          key: 'to-deliver',
+          key: 'to-delivery',
           method: 'getWaitDelivery',
         },
         // {
@@ -200,11 +241,20 @@ export default {
       wrapAnimate: 'wrapAnimate',
       frameAnimate: 'frameAnimate',
       btnLoading: false,
+      delivery: [], // 当日收货订单列表
+      phone: '', // 当前收货的手机号
+      confirmBtnLoading: false,
     }
   },
   computed: {
     userInfo() {
       return this.$store.state.userInfo
+    },
+    showEmpty() {
+      if (this.activeTab === 'to-delivery') {
+        return !this.delivery.length && this.hasGetOrder
+      }
+      return !this.orderList.length && this.hasGetOrder
     },
   },
   created() {
@@ -233,9 +283,12 @@ export default {
         pageNo: this.pageNo,
         limit: 10,
       })
-        .then(data => {
-          data = data || []
-          if (isLoadMore) {
+        .then(res => {
+          const data = res || []
+          if (this.activeTab === 'to-delivery') {
+            this.delivery = res.delivery || []
+            this.phone = (res.phone || [])[0]
+          } else if (isLoadMore) {
             this.orderList = this.orderList.concat(data)
           } else {
             this.orderList = data
@@ -339,6 +392,39 @@ export default {
       // setTimeout(() => {
       //   this.payDialogVisible = false
       // }, 400)
+    },
+    viewOrderDetail(orderNumber) {
+      Taro.navigateTo({
+        url: `/pages/order-detail/index?order=${orderNumber}`,
+      })
+    },
+    contact() {
+      Taro.makePhoneCall({
+        phoneNumber: this.phone,
+      })
+    },
+    // 查看物流
+    viewLogistics() {
+      Taro.navigateTo({ url: `/pages/web-view/index?url=${this.$store.state.userInfo.mapUrl}` })
+    },
+    // 确认收货
+    confirmDelivery() {
+      this.confirmBtnLoading = true
+      const json = this.delivery.map(v => ({ orderCode: v.orderCode, amount: v.productSum, minOrderQuantity: v.configSum }))
+      this.$API
+        .confirmReceipt({ json: JSON.stringify(json) })
+        .then(() => {
+          this.getOrder()
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'error',
+          })
+        })
+        .finally(() => {
+          this.confirmBtnLoading = false
+        })
     },
   },
 }

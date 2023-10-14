@@ -69,6 +69,12 @@ export default {
     // this.getCategory()
   },
   onShow() {
+    this.categoryList = [
+      {
+        classCode: 'special',
+        productClass: '可定品项',
+      },
+    ]
     this.categoryIndex = this.$store.state.switchCategoryTab
     this.activeIndex = this.categoryIndex || 0
     this.searchPageNum = 1
