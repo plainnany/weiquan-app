@@ -20,9 +20,12 @@ export default {
   onShow() {
     this.$instance = Taro.getCurrentInstance()
     const params = this.$instance.router.params
-    const { url, token } = params
-    if (token) {
-      this.url = `${url}?token=${token}`
+    const { url } = params
+    const token = Taro.getStorageSync('token')
+    const code = this.$store.state.userInfo.userId
+    debugger
+    if (code) {
+      this.url = `${url}&customerCode=${code}`
     } else {
       this.url = url
     }
