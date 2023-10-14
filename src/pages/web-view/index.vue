@@ -23,9 +23,8 @@ export default {
     const { url } = params
     const token = Taro.getStorageSync('token')
     const code = this.$store.state.userInfo.userId
-    debugger
     if (code) {
-      this.url = `${url}&customerCode=${code}`
+      this.url = `${url}?customerCode=${code}`
     } else {
       this.url = url
     }
