@@ -11,9 +11,8 @@
             <text class="change-user" @tap="handleNav({ path: '/pages/change-account/index' })" v-if="userInfo.userId">切换账号</text>
           </view>
           <view class="user-mobile">
-            <text>{{ userInfo.userId || '未绑定账号' }} | </text>
-            <text>{{ accountTypeMap[userInfo.accountType] }}</text>
-            <!-- <text v-if="userInfo.accountType === '02'">月结用户</text> -->
+            <view>{{ userInfo.userId || '未绑定账号' }} </view>
+            <view>{{ accountTypeMap[userInfo.accountType] }}</view>
           </view>
         </view>
       </view>
@@ -24,15 +23,15 @@
         <text class="user-bind-account" @tap="() => (visible = true)">立即绑定</text>
       </view>
     </view>
-    <view class="user-card user-charge">
+    <!-- <view class="user-card user-charge">
       <view v-for="(tab, index) in tabs" :key="index" @tap="handleNav(tab)">
         <image :src="tab.icon" mode="" />
         <view>
           {{ tab.title }}
         </view>
       </view>
-    </view>
-    <view class="user-order" @tap="handleNav({ path: '/pages/order/index' })">
+    </view> -->
+    <!-- <view class="user-order" @tap="handleNav({ path: '/pages/order/index' })">
       <text>
         我的订单
       </text>
@@ -40,12 +39,11 @@
         >所有订单
         <image :src="backImg" mode="" />
       </view>
-    </view>
+    </view> -->
     <view class="order-all user-card">
       <view v-for="(order, index) in orderList" :key="index" @tap="handleNav(order)">
         <view class="order-icon">
           <image :src="order.icon" mode="" />
-          <!-- <text class="order-num">5</text> -->
         </view>
         <view>
           {{ order.title }}
@@ -53,7 +51,16 @@
       </view>
     </view>
     <view class="user-action user-card">
-      <view class="action-item" v-for="(item, index) in items" :key="index" @tap="handleNav(item)">
+      <view class="action-item" v-for="(item, index) in items1" :key="index" @tap="handleNav(item)">
+        <image :src="item.icon" mode="" />
+        <view class="action-item-text">{{ item.title }}</view>
+        <view class="action-item-link">
+          <image :src="backImg" mode="" />
+        </view>
+      </view>
+    </view>
+    <view class="user-action user-card">
+      <view class="action-item" v-for="(item, index) in items2" :key="index" @tap="handleNav(item)">
         <image :src="item.icon" mode="" />
         <view class="action-item-text">{{ item.title }}</view>
         <view class="action-item-link">
@@ -104,15 +111,15 @@ export default {
   data() {
     return {
       backImg,
-      tabs: [
-        { icon: chargeImg, title: '余额及充值', path: '/pages/cost/index' },
-        { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
-        { icon: ruleImg, title: '配送规则', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
-      ],
+      // tabs: [
+      //   { icon: chargeImg, title: '余额及充值', path: '/pages/cost/index' },
+      //   { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
+      //   { icon: ruleImg, title: '配送规则', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
+      // ],
       orderList: [
         { icon: payImg, title: '待付款', path: '/pages/order/index?type=to-pay' },
-        { icon: deleverImg, title: '查询修改', path: '/pages/order/index' },
-        { icon: toReceiveImg, title: '待收货', path: '/pages/order/index?type=to-deliver' },
+        { icon: deleverImg, title: '查询&修改', path: '/pages/order/index' },
+        { icon: toReceiveImg, title: '当天收货', path: '/pages/order/index?type=to-delivery' },
         { icon: commentsImg, title: '已完成', path: '/pages/order/index?type=done' },
         { icon: customServiceImg, title: '我的订单', path: '/pages/order/index' },
       ],
@@ -146,7 +153,15 @@ export default {
     userInfo() {
       return this.$store.state.userInfo
     },
-    items() {
+    items1() {
+      return [
+        { icon: chargeImg, title: '余额及充值', path: '/pages/cost/index' },
+        { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
+        { icon: ruleImg, title: '开票申请', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
+        { icon: ruleImg, title: '配送规则', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
+      ]
+    },
+    items2() {
       return [
         {
           icon: complainImg,

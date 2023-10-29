@@ -2,31 +2,34 @@
   <view class="shop-page" :class="{ empty: productList.length === 0 }">
     <scroll-view v-if="productList.length" class="shop-product-wrapper" scroll-y="true" @scrolltolower="toLower">
       <view v-for="(product, index) in productList" :key="index" class="shop-product-item">
-        <checkbox :checked="product.checked" @tap.stop="change(product, index)"></checkbox>
-        <view class="shop-product-image">
-          <image :src="product.productImage" mode="" />
-        </view>
-        <view class="shop-product-detail">
-          <view class="shop-product-detail-title" @tap="onClick(product)">{{ product.productName }}</view>
-          <view class="shop-product-detail-info">规格: {{ product.productSpecs }}</view>
-          <view class="shop-product-detail-info">单位: {{ product.productUnitConvertRule }} / {{ product.productUnitMax }}</view>
-          <view class="shop-product-detail-info">数量: {{ product.amount }}</view>
-          <view class="shop-product-price">
-            <view class="shop-product-detail-price" v-show="product.price"
-              >¥<text>{{ product.price }}</text></view
-            >
-            <view class="shop-product-detail-number">
-              <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)">-</view>
-              <!-- <text @tap.stop="">{{ product.amount }}</text> -->
-              <input
-                type="number"
-                v-model="product.amount"
-                @tap.stop="() => {}"
-                @focus.stop="() => {}"
-                @blur.stop="onBlur(product)"
-                placeholder="请输入数量"
-              />
-              <view class="product-action-btn" @tap.stop="addProduct(product)">+</view>
+        <view class="border">
+          <checkbox :checked="product.checked" @tap.stop="change(product, index)"></checkbox>
+          <view class="shop-product-image">
+            <image :src="product.productImage" mode="" />
+          </view>
+          <view class="shop-product-detail">
+            <view class="shop-product-content">
+              <view class="shop-product-detail-title" @tap="onClick(product)">{{ product.productName }}</view>
+              <view class="shop-product-detail-info">规格: {{ product.productSpecs }}</view>
+              <view class="shop-product-detail-info">单位: {{ 1 }}{{ product.productUnitMax }}/数量:{{ product.amount }}</view>
+            </view>
+            <view class="shop-product-price">
+              <view class="shop-product-detail-price" v-show="product.price"
+                >¥ <text>{{ product.priceSum }}</text></view
+              >
+              <view class="shop-product-detail-number">
+                <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)">-</view>
+                <!-- <text @tap.stop="">{{ product.amount }}</text> -->
+                <input
+                  type="number"
+                  v-model="product.amount"
+                  @tap.stop="() => {}"
+                  @focus.stop="() => {}"
+                  @blur.stop="onBlur(product)"
+                  placeholder="请输入数量"
+                />
+                <view class="product-action-btn" @tap.stop="addProduct(product)">+</view>
+              </view>
             </view>
           </view>
         </view>
