@@ -9,22 +9,12 @@
     </view>
     <view class="product-wrapper">
       <view class="product-card">
-        <view class="product-info">
-          <view class="product-price" v-show="product.price">
-            <text>¥</text>
-            <text>{{ product.price }}</text>
-            <!-- <text>/份</text> -->
-          </view>
-          <!-- <view class="product-tags">
-            <text class="product-tag" v-for="(tag, index) in product.tags" :key="index">{{ tag }}</text>
-          </view> -->
-        </view>
         <view class="product-title">{{ product.productName }}</view>
         <view class="product-size">
-          <text>规格: {{ product.productSpecs }}</text>
-          <text>单位: {{ product.productUnitMax }}</text>
+          <view class="product-box"> 规格: {{ product.productSpecs }} </view>
+          <view class="product-box"> 单位: {{ product.productUnitMax }} </view>
         </view>
-        <view class="product-number" v-if="product.sell">
+        <view class="product-number product-box" v-if="product.sell">
           <view>购买数量</view>
           <view class="product-number-action">
             <view class="product-action-btn" @tap="decrease">-</view>
@@ -49,16 +39,32 @@
         <text>服务</text>
         <text>{{ product.tip }}</text>
       </view> -->
+      <view class="product-content-title">
+        <view class="product-content-divider"></view>
+        <text class="circle">
+          详情
+        </text>
+      </view>
       <view class="product-content product-card">
-        <view class="product-content-title">规格信息</view>
         <view class="product-content-table">
           <view class="product-content-row">
-            <view class="product-content-col">名称</view>
+            <view class="product-content-col">产品品牌</view>
             <view class="product-content-col">{{ product.productName }}</view>
           </view>
           <view class="product-content-row">
-            <view class="product-content-col">规格</view>
+            <view class="product-content-col">产品规格</view>
             <view class="product-content-col">{{ product.productSpecs }}</view>
+          </view>
+          <view class="product-content-row">
+            <view class="product-content-col">下单截止</view>
+            <view class="product-content-col"></view>
+          </view>
+          <view class="product-content-row">
+            <view class="product-content-col">配送规则</view>
+            <view class="product-content-col"></view>
+          </view>
+          <view class="product-content-img" v-for="(imageUrl, index) in product.images" :key="index">
+            <image :src="imageUrl" mode="" />
           </view>
           <!-- <view class="product-content-row">
             <view class="product-content-col">保质期</view>
@@ -125,7 +131,7 @@ export default {
       const params = this.$instance.router.params
       this.$API
         .getProductDetail({
-          productId: params.id,
+          productId: params.id || '2387238237',
         })
         .then(data => {
           this.product = data

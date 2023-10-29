@@ -10,40 +10,25 @@
         </swiper>
       </view>
       <view class="main">
-        <view class="notice card">
-          <image :src="notificationImg" mode="" />
-          <text>{{ message }}</text>
-        </view>
-        <view class="nav card">
-          <swiper :indicator-dots="true" :autoplay="false" :indicator-color="'#B3B2B2'" :indicator-active-color="'#FA4A2D'">
-            <swiper-item>
-              <view class="nav-item">
-                <view @tap="handleNav('sign')">
-                  <image :src="signImg" mode="" />
-                  <view>签收</view>
-                </view>
-                <view class="divider"></view>
-                <view @tap="handleNav('notice')">
-                  <image :src="noticeImg" mode="" />
-                  <view>消息</view>
-                </view>
-              </view>
-            </swiper-item>
-            <swiper-item>
-              <view class="nav-item">
-                <view @tap="handleNav('charge')">
-                  <image :src="chargeImg" mode="" />
-                  <view>充值</view>
-                </view>
-                <view class="divider"></view>
-                <view @tap="handleNav('category')">
-                  <image :src="categoryImg" mode="" />
-                  <view>分类</view>
-                </view>
-              </view>
-            </swiper-item>
-          </swiper>
-          <!-- <view class="invite" @tap="handleLink(inviteLink)">
+        <view class="card">
+          <view class="nav">
+            <view @tap="handleNav('sign')" class="nav-item">
+              <image :src="signImg" mode="" />
+              <view>签收</view>
+            </view>
+            <view @tap="handleNav('notice')" class="nav-item">
+              <image :src="noticeImg" mode="" />
+              <view>消息</view>
+            </view>
+            <view @tap="handleNav('charge')" class="nav-item">
+              <image :src="chargeImg" mode="" />
+              <view>充值</view>
+            </view>
+            <view @tap="handleNav('category')" class="nav-item">
+              <image :src="categoryImg" mode="" />
+              <view>分类</view>
+            </view>
+            <!-- <view class="invite" @tap="handleLink(inviteLink)">
             <image :src="inviteImg" mode="" />
             <view>
               <text class="invite-strong">一起种草</text>
@@ -51,7 +36,18 @@
               <image class="back-icon" :src="backImg" mode="" />
             </view>
           </view> -->
+          </view>
+          <view class="notice">
+            <image :src="notificationImg" mode="" />
+            <text>系统通知：</text>
+            <text class="scroll-wrapper">
+              <text class="scroll">
+                {{ message }}
+              </text>
+            </text>
+          </view>
         </view>
+
         <!-- <view class="link row">
           <view class="col">
             <view class="link-item" @tap="handleLink(gif.jumpLink)">

@@ -1,25 +1,29 @@
 <template>
   <view class="product-page">
     <SearchBar />
-    <view class="product-wrapper">
-      <view class="product-items">
+    <view class="product-items">
+      <scroll-view :scroll-x="true" :key="scrollViewKey" :scroll-into-view="scrollId">
         <view
           class="product-category"
           :class="{ active: activeIndex === index }"
+          :id="`product-id-${index}`"
           v-for="(category, index) in categoryList"
           :key="index"
           @tap="handleCategory(index)"
         >
           {{ category.productClass }}
         </view>
-      </view>
+      </scroll-view>
+    </view>
+    <view class="product-wrapper">
       <view class="product-list" :key="activeIndex">
         <scroll-view :scroll-y="true" id="scroll-view" @scrolltolower="toLower">
-          <view class="product-list-item" @tap="viewDetail(product)" v-for="(product, index) in productList" :key="index">
-            <view class="product-list-image"><image :src="product.productImage" mode=""/></view>
-            <view class="product-list-detail">
-              <view class="product-list-title">{{ product.productName }}</view>
-              <view class="product-list-info">规格: {{ product.productSpecs }} | 单位: {{ product.productUnitRule }}</view>
+          <view class="scroll-inner">
+            <view class="product-list-item" @tap="viewDetail(product)" v-for="(product, index) in productList" :key="index">
+              <view class="product-list-image"><image :src="product.productImage" mode=""/></view>
+              <view class="product-list-detail">
+                <view class="product-list-title">{{ product.productName }}</view>
+                <!-- <view class="product-list-info">规格: {{ product.productSpecs }} | 单位: {{ product.productUnitRule }}</view>
               <view style="display:flex; justify-content:space-between;align-items: center;">
                 <view>
                   <view class="product-list-price" v-if="product.price">
@@ -29,6 +33,7 @@
                   </view>
                 </view>
                 <image @tap.stop="addShop(product)" :src="shopIcon" class="shop-icon" mode="" />
+              </view> -->
               </view>
             </view>
           </view>
@@ -45,6 +50,7 @@ import API from '@/service/api'
 import SearchBar from '../index/searchBar.vue'
 import shopIcon from '@/images/shop.png'
 import NanModal from '@/components/modal'
+import { parse } from '@babel/core'
 
 export default {
   components: { SearchBar, NanModal },
@@ -63,8 +69,11 @@ export default {
       searchComplete: false,
       searchPageNum: 1,
       // scrollTop: 0,
+      scrollId: '',
+      scrollViewKey: '',
     }
   },
+  computed: {},
   mounted() {
     // this.getCategory()
   },
@@ -80,11 +89,16 @@ export default {
     this.searchPageNum = 1
     this.searchComplete = false
     this.getCategory()
+    this.scrollViewKey = parseInt(Math.random() * 1000)
   },
   methods: {
     getCategory() {
       API.getCategory().then(data => {
         this.categoryList = this.categoryList.concat(data)
+        this.$nextTick(() => {
+          this.scrollId = `product-id-${this.activeIndex}`
+          this.scrollViewKey = parseInt(Math.random() * 1000)
+        })
         const firstCategory = data[0]
         if (!firstCategory) return
         this.getProductByCategory()
