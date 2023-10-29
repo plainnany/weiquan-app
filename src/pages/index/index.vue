@@ -12,21 +12,21 @@
       <view class="main">
         <view class="card">
           <view class="nav">
+            <view @tap="handleNav('charge')" class="nav-item">
+              <image :src="chargeImg" mode="" />
+              <view>支付充值</view>
+            </view>
             <view @tap="handleNav('sign')" class="nav-item">
               <image :src="signImg" mode="" />
-              <view>签收</view>
+              <view>快速签收</view>
+            </view>
+            <view @tap="handleNav('shop')" class="nav-item">
+              <image :src="categoryImg" mode="" />
+              <view>一键下单</view>
             </view>
             <view @tap="handleNav('notice')" class="nav-item">
               <image :src="noticeImg" mode="" />
-              <view>消息</view>
-            </view>
-            <view @tap="handleNav('charge')" class="nav-item">
-              <image :src="chargeImg" mode="" />
-              <view>充值</view>
-            </view>
-            <view @tap="handleNav('category')" class="nav-item">
-              <image :src="categoryImg" mode="" />
-              <view>分类</view>
+              <view>重要消息</view>
             </view>
             <!-- <view class="invite" @tap="handleLink(inviteLink)">
             <image :src="inviteImg" mode="" />
@@ -133,12 +133,12 @@ export default {
     },
     handleNav(type) {
       const urlMap = {
-        sign: '/pages/order/index',
+        sign: '/pages/order/index?type=to-delivery',
         notice: '/pages/user/index',
         charge: '/pages/charge/index',
-        category: '/pages/product/index',
+        shop: '/pages/shop/index',
       }
-      if (type === 'category' || type === 'notice') {
+      if (type === 'shop' || type === 'notice') {
         Taro.switchTab({ url: urlMap[type] })
       } else {
         Taro.navigateTo({
