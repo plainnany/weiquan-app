@@ -11,9 +11,10 @@
         <view class="custom-list">
           <view class="custom-list-item" v-for="(item, index) in complainList" :key="index" @tap="handleClick(item)">
             <view
-              >客诉编号 <text>{{ item.complainCode }}</text></view
+              >编号： <text>{{ item.complainCode }}</text></view
             >
             <view>{{ item.complainDate }}</view>
+            <view class="custom-comment-status">已处理</view>
           </view>
         </view>
       </scroll-view>
@@ -51,7 +52,7 @@ export default {
   },
   mounted() {
     this.getComplainList()
-    setTitle({ title: '客诉查看' })
+    setTitle({ title: '查看客诉' })
   },
   methods: {
     clickTab({ key }) {

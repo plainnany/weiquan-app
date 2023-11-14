@@ -1,6 +1,16 @@
 .order-page {
   position: relative;
   background: #f8f9fa;
+
+  .common-card {
+    padding: 24px 0 32px 0;
+  }
+
+  .order-date {
+    font-size: 22px;
+    margin-top: 8px;
+    color: #999;
+  }
   .order-tabs {
     position: fixed;
     top: 0;
@@ -54,7 +64,7 @@
     font-size: 24px;
 
     &-list {
-      padding: 20px;
+      padding: 32px 0;
     }
 
     scroll-view {
@@ -68,12 +78,16 @@
       font-weight: 400;
       color: #999999;
       line-height: 33px;
-      padding: 24px 0;
-      border-bottom: 1px solid #ececec;
-      margin-bottom: 20px;
+      padding: 12px 32px 24px 32px;
+    }
+
+    &-footer {
+      padding: 0 24px;
     }
 
     &-type {
+      margin-top: 20px;
+      font-size: 32px;
       color: #f55726;
     }
 
@@ -134,9 +148,11 @@
     }
 
     &-item {
-      margin-top: 20px;
-      margin-bottom: 50px;
+      background: #f8f9fa;
+      padding: 0 32px;
+      margin-bottom: 40px;
     }
+
 
     &-price {
       font-weight: 500;

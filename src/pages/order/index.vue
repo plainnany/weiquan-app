@@ -59,10 +59,9 @@
             <view class="common-card" v-for="(order, index) in orderList" :key="index" @tap="viewOrderDetail(order.orderNumber)">
               <view class="order-result-title">
                 <text>订单号 {{ order.orderNumber }}</text>
-                <text class="order-result-type">{{ STATE_TYPE[order.state] }}</text>
+                <!-- <text class="order-result-type">{{ STATE_TYPE[order.state] }}</text> -->
               </view>
               <view class="order-result-content">
-                <view>交货时间 {{ order.orderDate }}</view>
                 <!-- <view class="order-result-deliver flex-between-center" @tap="viewDeliver(order)">
                 <view class="flex-between-center">
                   <image :src="carIcon" mode="" />
@@ -75,27 +74,28 @@
                   <image :src="backIcon" mode="" />
                 </view>
               </view> -->
-                <view class="order-result-item flex-between-center" v-for="(product, pIndex) in order.orderListViews" :key="pIndex">
-                  <view class="flex-between-center">
-                    <view class="order-result-image">
-                      <image :src="product.productImage" mode="" />
+                <view class="order-result-item ">
+                  <view class="flex-between-center" v-for="(product, pIndex) in order.orderListViews" :key="pIndex">
+                    <view class="flex-between-center">
+                      <view class="order-result-image">
+                        <image :src="product.productImage" mode="" />
+                      </view>
+                      <view class="order-result-info">
+                        <view>{{ product.productName }}</view>
+                        <view>{{ product.productSpecs }} {{ product.specifications }}</view>
+                        <view class="order-result-tag"
+                          ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
+                        >
+                        <view class="order-date">交货时间 {{ order.orderDate }}</view>
+                      </view>
                     </view>
-                    <view class="order-result-info">
-                      <view>{{ product.productName }}</view>
-                      <view>{{ product.productSpecs }} {{ product.specifications }}</view>
-                      <view class="order-result-tag"
-                        ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
-                      >
+                    <view>
+                      <view>订单量 {{ product.productSum }}</view>
+                      <view class="order-result-type">{{ STATE_TYPE[order.state] }}</view>
                     </view>
-                  </view>
-                  <view>
-                    <view class="order-result-price"
-                      >¥ <text>{{ product.price }}</text></view
-                    >
-                    <view>订单量 {{ product.productSum }}</view>
                   </view>
                 </view>
-                <view class="flex-between-center">
+                <view class="flex-between-center order-result-footer">
                   <text>共{{ order.orderListViews.length }}件商品</text>
                   <!-- 待支付 -->
                   <view class="flex-between-center" v-if="order.state === '01'">

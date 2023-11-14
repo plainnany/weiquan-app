@@ -63,7 +63,6 @@
         <view class="product row">
           <view class="col" v-for="(product, index) in category" :key="index">
             <view class="product-item" @tap="onCategory(index)">
-              <view class="product-text">{{ product.productClass }}</view>
               <image :src="product.productImage" mode="" />
             </view>
           </view>

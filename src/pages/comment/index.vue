@@ -1,6 +1,6 @@
 <template>
   <view class="comment-page">
-    <view class="common-card">
+    <view class="comment-card">
       <view class="comment-page-item">
         <view class="comment-page-item-label">问题原因</view>
         <view class="input-wrapper">
@@ -26,18 +26,18 @@
         </view>
       </view>
       <view class="comment-page-item">
+        <view class="comment-page-item-label">问题说明</view>
+        <view class="input-wrapper">
+          <textarea v-model="form.description" placeholder="请输入问题说明" />
+        </view>
+      </view>
+      <view class="comment-page-item">
         <view class="comment-page-item-label">上传凭证 <text style="color: #666">(请拍摄产品生产日期和异常图片)</text></view>
-        <view style="display:flex;">
+        <view class="comment-page-upload">
           <view class="comment-page-image-item" v-for="(image, index) in questionImages" :key="index">
             <image :src="image" mode="" />
           </view>
           <view class="comment-page-upload-image" @tap="uploadImage" v-if="canEdit"> + </view>
-        </view>
-      </view>
-      <view class="comment-page-item">
-        <view class="comment-page-item-label">问题说明</view>
-        <view class="input-wrapper">
-          <textarea v-model="form.description" placeholder="请输入问题说明" />
         </view>
       </view>
     </view>
