@@ -1,29 +1,29 @@
 <template>
-  <view class="remain-page">
-    <view class="remain-info">
-      <view class="remain-title">
-        账户余额(元)
-      </view>
-      <view class="remain-money">
-        <view class="remain-num">
-          <text>{{ balance }}</text>
+  <view class="charge-record">
+    <view class="charge-tabs">
+      <view class="charge-tab" :class="{ active: active === tab.key }" @tap="clickTab(tab)" v-for="tab in tabs" :key="tab.key">
+        {{ tab.name }}</view
+      >
+    </view>
+    <scroll-view :scroll-y="true" @scrolltolower="toLower">
+      <view class="charge-list">
+        <view class="charge-list-item" v-for="(item, index) in chargeList" :key="index">
+          <view class="charge-list-item-title">
+            <text>现金充值</text>
+            <text class="charge-list-item-date">{{ item.billDate }}</text>
+          </view>
+          <view class="charge-list-item-content">
+            <view>
+              <view class="charge-list-item-remain">余额 {{ item.accountBalance }}</view>
+            </view>
+            <view class="charge-list-item-number"
+              ><text>{{ active === 'charge' ? '+' : '-' }}</text
+              ><text>{{ item.payAmount }}</text></view
+            >
+          </view>
         </view>
       </view>
-    </view>
-    <view class="remain-item" @tap="handleCharge">
-      <view class="remain-item-icon"> </view>
-      <view>
-        充值
-      </view>
-      <view class="remain-item-arrow">></view>
-    </view>
-    <view class="remain-item" @tap="handleDetail">
-      <view class="remain-item-icon"> </view>
-      <view>
-        查看明细
-      </view>
-      <view class="remain-item-arrow">></view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -72,9 +72,6 @@ export default {
     },
     handleCharge() {
       Taro.navigateTo({ url: '/pages/charge/index' })
-    },
-    handleDetail() {
-      Taro.navigateTo({ url: '/pages/cost/detail' })
     },
     getChargeList(type) {
       const method = this.active === 'charge' ? 'rechargeRecord' : 'consumptionRecord'

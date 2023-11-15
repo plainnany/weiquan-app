@@ -1,31 +1,18 @@
 <template>
   <view class="charge-page">
-    <view class="charge-info">
-      <text>
-        可用余额(元)
-      </text>
-      <view class="charge-money">
-        <view class="charge-num">
-          <text>¥</text>
-          <text>{{ balance }}</text>
-        </view>
-        <text class="charge-btn">充值</text>
-      </view>
-    </view>
-    <view class="charge-number charge-card">
-      <view>充值金额</view>
-      <view class="charge-input">
-        <text>¥</text>
-        <input type="number" placeholder="请输入充值金额" v-model="chargeNumber" />
-      </view>
-    </view>
-    <view class="charge-number charge-card">
-      <view>支付方式</view>
+    <view class="charge-way">请选择充值方式</view>
+    <view class="charge-card">
       <view class="charge-method">
         <view>
           <image :src="wechatIcon" mode="" />
           <text>微信支付</text>
         </view>
+      </view>
+    </view>
+    <view class="charge-number charge-card">
+      <view>金额</view>
+      <view class="charge-input">
+        <input type="number" placeholder="请输入充值金额" v-model="chargeNumber" />
       </view>
     </view>
     <view class="charge-confirm">

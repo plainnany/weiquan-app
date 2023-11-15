@@ -6,6 +6,7 @@ export default defineAppConfig({
     'pages/user/index', // 用户中心
     'pages/search/index', // 搜索
     'pages/cost/index', // 余额
+    'pages/cost/detail', // 余额明细
     'pages/charge/index', // 充值
     'pages/electronic-bill/index', // 电子对账单
     'pages/change-account/index', // 切换用户
