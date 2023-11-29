@@ -9,7 +9,7 @@ export default defineAppConfig({
     'pages/cost/detail', // 余额明细
     'pages/charge/index', // 充值
     'pages/electronic-bill/index', // 电子对账单
-    'pages/change-account/index', // 切换用户
+    // 'pages/change-account/index', // 切换用户
     'pages/user-info/index', // 用户信息
     'pages/setting/index', // 切换用户
     'pages/deliver-rule/index', // 配送规则
@@ -25,6 +25,8 @@ export default defineAppConfig({
     'pages/quality-report/index', // 质检报告
     'pages/change-receive-code/index', // 修改门店收货码
     'pages/change-password/index', // 修改登录密码
+    'pages/account-manage/index', // 账户管理
+    'pages/account-modify/index', // 账户修改
   ],
   tabBar: {
     color: '#666666',

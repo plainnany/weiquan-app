@@ -8,12 +8,13 @@
         <view>
           <view class="user-name">
             <text>{{ userInfo.customerName || '默认名称' }}</text>
-            <text class="change-user" @tap="handleNav({ path: '/pages/change-account/index' })" v-if="userInfo.userId">切换账号</text>
+            <!-- <text class="change-user" @tap="handleNav({ path: '/pages/change-account/index' })" v-if="userInfo.userId">切换账号</text> -->
           </view>
           <view class="user-mobile">
-            <view>{{ userInfo.userId || '未绑定账号' }} </view>
+            <view>ID: {{ userInfo.userId || '未绑定账号' }} </view>
             <view>{{ accountTypeMap[userInfo.accountType] }}</view>
           </view>
+          <view class="user-detail" @tap="handleNav({ path: '/pages/account-manage/index' })">></view>
         </view>
       </view>
       <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
@@ -23,23 +24,6 @@
         <text class="user-bind-account" @tap="() => (visible = true)">立即绑定</text>
       </view>
     </view>
-    <!-- <view class="user-card user-charge">
-      <view v-for="(tab, index) in tabs" :key="index" @tap="handleNav(tab)">
-        <image :src="tab.icon" mode="" />
-        <view>
-          {{ tab.title }}
-        </view>
-      </view>
-    </view> -->
-    <!-- <view class="user-order" @tap="handleNav({ path: '/pages/order/index' })">
-      <text>
-        我的订单
-      </text>
-      <view class="user-order-link"
-        >所有订单
-        <image :src="backImg" mode="" />
-      </view>
-    </view> -->
     <view class="order-all user-card">
       <view v-for="(order, index) in orderList" :key="index" @tap="handleNav(order)">
         <view class="order-icon">
