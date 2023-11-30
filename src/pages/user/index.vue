@@ -1,7 +1,7 @@
 <template>
   <view class="user-page">
     <view class="user-info">
-      <view class="user-info-wrapper">
+      <view class="user-info-wrapper" @tap="handleNav({ path: '/pages/account-manage/index' })">
         <view class="user-avatar">
           <image :src="userInfo.headPic" mode="" />
         </view>
@@ -14,7 +14,9 @@
             <view>ID: {{ userInfo.userId || '未绑定账号' }} </view>
             <view>{{ accountTypeMap[userInfo.accountType] }}</view>
           </view>
-          <view class="user-detail" @tap="handleNav({ path: '/pages/account-manage/index' })">></view>
+          <view class="user-detail">
+            <image :src="arrowRightImg" class="back" mode="" />
+          </view>
         </view>
       </view>
       <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
@@ -88,6 +90,7 @@ import './index.less'
 import Taro from '@tarojs/taro'
 import { AES } from 'crypto-js'
 import { BASE_URL } from '@/const'
+import arrowRightImg from '@/images/user/arrow-right.png'
 
 export default {
   name: 'user',
@@ -131,6 +134,7 @@ export default {
         '03': '预付款客户',
         '04': '货到付款',
       },
+      arrowRightImg,
     }
   },
   computed: {

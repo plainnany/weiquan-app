@@ -266,6 +266,30 @@ const requestAddressList = [
     url: '/api/order/confirmReceipt.ns?latitude=1&longitude=1',
     type: 'post',
   },
+  {
+    describe: '修改联系电话',
+    method: 'mobileReset',
+    url: '/api/customer/mobileReset.ns',
+    type: 'post',
+  },
+  {
+    describe: '修改收货电话',
+    method: 'updateConsigneeLink',
+    url: '/api/customer/updateConsigneeLink.ns',
+    type: 'post',
+  },
+  {
+    describe: '修改联系人',
+    method: 'updateCustomerLinkMan',
+    url: '/api/customer/updateCustomerLinkMan.ns',
+    type: 'post',
+  },
+  {
+    describe: '发送短信验证码',
+    method: 'sendCode',
+    url: '/api/sms/sendCode.ns ',
+    type: 'post',
+  },
 ]
 
 const API = {}
