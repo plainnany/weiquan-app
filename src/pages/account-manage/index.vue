@@ -6,7 +6,10 @@
         <view v-if="item.key === 'headPic'">
           <image :src="userInfo.headPic" mode="" />
         </view>
-        <view v-else>{{ userInfo[item.key] }}</view>
+        <view v-else class="right">
+          {{ userInfo[item.key] }}
+          <image :src="item.icon" mode="" />
+        </view>
       </view>
     </view>
   </view>
@@ -16,6 +19,7 @@
 import Taro from '@tarojs/taro'
 import './index.less'
 import { setTitle } from '@/utils'
+import backImg from '@/images/user/back.png'
 
 export default {
   components: {},
@@ -44,16 +48,19 @@ export default {
             name: '收货人',
             key: 'customerLinkMan',
             needChange: true,
+            icon: backImg,
           },
           {
             name: '收货人电话',
             key: 'consigneeLink',
             needChange: true,
+            icon: backImg,
           },
           {
             name: '联系人电话',
             key: 'customerLinkTel',
             needChange: true,
+            icon: backImg,
           },
         ],
       ],

@@ -1,0 +1,890 @@
+
+token : SCUc37Ic9tHReqjdvbnQKVUteLYotLCOi0hMQlhPGdqcIjUh/ZwmGaoZYVlsayUq
+
+统一返参
+{
+    "returnCode": 200,
+    "secure": false,
+    "msg": "错误信息，非200为错误",
+    "data": 最终业务返回值,
+    "result": true / 结果 true 表示成功
+}
+
+
+
+
+1.首页轮播
+url : /api/banner/home.ns
+入参：无
+出参：
+data:{
+ "banner":[
+	{
+	 "title":"轮播标题",
+	 "imageUrl":"轮播图片",
+	 "jumpLink":"点击跳转地址"
+	}
+ ],
+ "ProductClass":[
+	{
+	 "productClass":"分类名称",
+	 "classCode":"分类编码",
+	 "productImage":"分类图片"
+	}
+ ]
+}
+
+ProductClass：为当前用户可定品项
+
+2.所有分类
+url : /api/banner/product.ns
+入参：无
+出参：
+data:[
+	{
+	 "productClass":"分类名称",
+	 "classCode":"分类编码",
+	 "productImage":"分类图片"
+	}
+]
+
+
+3.系统通知
+url: /api/banner/sysNotice.ns
+入参 type ：01 固定/ 02 为司机端，小程序不需要
+出参：
+data:[
+  {
+	"content":"内容"
+  }
+]
+    
+
+4.充值记录
+url : /api/bill/rechargeRecord.ns
+入参： pageNo:页码
+       limit: 每页多少条
+出参：	
+data:[
+   {
+	"payAmount":"金额",
+	"billDate":"时间",
+	"accountBalance":"当前余额",
+	"billDesc":"描述"
+   }
+]   
+
+
+5.消费记录
+url : /api/bill/consumptionRecord.ns
+入参：pageNo:页码
+      limit: 每页多少条
+出参：
+data:[
+  {
+   "payAmount":"金额",
+   "billDate":"时间",
+   "accountBalance":"当前余额",
+   "orderNumber":"单号"
+  }
+]
+
+
+6.充值记录
+url : /api/bill/recharge.ns	
+入参：money：充值金额
+出参：
+data:{
+  "out_trade_no":"订单号",
+  "total_fee":"金额",
+  "subject":"描述",
+  "aliPayUrl":"跳转地址",
+  "wechatUrl":"跳转地址",
+  "orderNumber":"订单号"
+}
+
+7.获取余额
+url : /api/bill/balance.ns	
+入参：无
+出参：
+data:"金额"
+
+
+8.客诉列表
+url: /api/complain/loadComplainByUserId.ns
+入参：pageNo 页码 limit 一页多少条 state 02未处理/03已处理
+出参：
+data:[
+  {
+   "complainCode":"客诉单号",
+   "complainDate":"时间",
+   "complainDesc":"描述",
+   "num":"数量",
+   "productCode":"品项",
+   "productName":"品项名称",
+   "dictid":"客诉类型编码",
+   "dictname":"客诉类型名称",
+   "resolveTime":"处理时间",
+   "resolveSolution":"处理描述",
+   "imageUrl":["图片1","图片2"]
+  }
+]
+
+
+9.客诉列表
+url: /api/complain/loadComplainByCode.ns
+入参：complainCode 客诉编码
+出参：
+data:{
+   "complainCode":"客诉单号",
+   "complainDate":"时间",
+   "complainDesc":"描述",
+   "num":"数量",
+   "productCode":"品项",
+   "productName":"品项名称",
+   "dictid":"客诉类型编码",
+   "dictname":"客诉类型名称",
+   "resolveTime":"处理时间",
+   "resolveSolution":"处理描述",
+   "imageUrl":["图片1","图片2"]
+  }
+
+
+10.客诉列表
+url: /api/v2/complain/complainType.ns
+入参：state 01 固定01 
+出参：
+data:[
+  {
+  "DICTID":"类型code",
+  "DICTNAME":"类型名称"
+  }
+]
+
+11.客诉品项列表
+url : /api/product/complaintProductList.ns
+入参： customerOrderCode 客户订单号 非必传，从订单进入传入
+出参：
+data:[
+  {
+   "productCode":"品项编码",
+   "productName":"品项名称"
+  }
+]
+
+
+12.提交客诉
+url: /api/v2/complain/submit.ns
+入参：
+    complainDetail：描述
+	imgUrl：[] 图片列表
+	dictid：客诉类型
+	num：数量
+	productCode： 品项编码
+出参：
+data: true / false	
+
+
+13.获取当前用户信息
+url: /api/customer/userInfo.ns
+入参：无
+出参：
+data:{
+  "customerName":"名称",
+  "customerState":"状态 01正常 02停用 03冻结",
+  "accoutBalance":"余额",
+  "headPic":"头像",
+  "customerLinkTel":"电话",
+  "token":"token",
+  "accountType":"01现金/02月结",
+  "customerAddress":"地址",
+  "customerLinkMan":"联系人",
+  "priceFlag":"是否显示价格 01显示/02否",
+  "customerService":"客服电话",
+  "productRule":"配送规则",
+  "consigneeLink":"电话",
+  "franchiser":"是否经销商 01是/02否",
+  "helpLink":"帮助中心(h5)",
+  "isMap":"是否显示地图 01是/02否",
+  "mapUrl":"地图地址(h5)",
+  "isInvoice":"是否开票 01是/02否",
+  "questionnaireUrl":"问题地址(h5)"
+}
+	
+13.修改收货码
+url: /api/customer/updateRecieveCode.ns	
+入参：recieveCode 新收货码	
+出参：
+data: true/false	
+
+14.忘记密码
+url: /api/customer/missPass.ns	
+入参：
+   	mobile：手机号
+	mobileCode：验证码
+	password ：新密码
+出参：
+data: true/false	
+
+15.质检报告
+url: /api/customer/report.ns	
+入参：
+   productCode：品项编码
+   batchCode：批次号
+   inspectionType： 01
+出参：
+data:["质检1","质检2"]   
+
+
+16.消息条数
+url: /api/customer/messageCount.ns	
+入参：无
+出参：
+data:{
+  "orderCount":"订单数",
+  "sysCount":"系统消息数",
+  "postCount":"公告数",
+  "total":"总数"
+}
+
+
+17.读消息
+url: /api/customer/readPost.ns	
+入参：postId 消息id
+出参：
+data:["质检1","质检2"]   
+
+
+18.上传头像
+url: /api/upload/portrait.ns
+入参：文件流
+出参：
+data: true/false
+
+19.电子对账单
+入参： start 开始时间 end结束时间  yyyy-MM-dd
+data:{
+  "num":"总条数",
+  "amount":"总金额",
+  "list":[
+	 {
+	  "time":"时间",
+	  "week":"周几",
+	  "amount":"金额",
+	  "num":"数量",
+	  "list":[
+	    {
+		  "productName":"品项名称",
+		  "productUnitConvertRule":"品项规格",
+		  "productPrice":"单价",
+		  "num":"数量",
+		  "price":"金额",
+		  "deliveryCode":"发货单号",
+		  "deliveryDate":"交货日期",
+		  "type":"01领货/02退货"
+		}
+	  ]
+	 }
+  ]
+}
+
+20.当日收货列表
+url : /api/v2/delivery/todayDeliveryOrder.ns
+入参：无
+出参：
+data:[
+  {
+    "phone":["司机电话"],
+	"delivery":[
+		{
+			"deliveryCode":"发货单号",
+			"orderCode":"订单号",
+			"productName":"品项名称",
+			"productSpecs":"品项规格",
+			"productSum":"数量",
+			"configSum":"签署量",
+			"deliveryDate":"交货日期",
+			"productImage":"品项图片",
+			"specifications":"规格单位",
+			"firstBatchCode":"第一次录入批次号",
+			"secondBatchCode":"第二次录入批次号",
+			"firstNum":"第一次数量",
+			"secondNum":"第二次数量",
+			"customerOrderCode":"客户订单号"
+	    }
+	]
+  }
+]
+
+
+21.系统消息列表
+url: /api/message/loadSystemMessage.ns
+入参：pageNo limit
+出参：
+data:[
+   {
+    "message":"消息",
+	"msgType":"1订单2系统",
+	"isRead":"是否已读true/false",
+	"createDtae":"时间"
+   }
+]
+
+
+22.订单消息列表
+url: /api/message/loadOrderMessage.ns
+入参：pageNo limit
+出参：
+data:[
+   {
+    "message":"消息",
+	"msgType":"1订单2系统",
+	"isRead":"是否已读true/false",
+	"createDtae":"时间"
+   }
+]
+
+
+23.消息中心
+url: /api/message/messageCenter.ns
+入参：pageNo limit
+出参：
+data:[
+   {
+    "System":"系统消息",
+	"Order":"订单消息",
+	"Post":"公告"
+   }
+]
+
+
+24.搜索商品
+url: /api/product/searchProduct.ns
+入参：
+    pageNo 
+	limit
+	keyword:关键字
+出参：
+data:[
+ {
+  "productId":"品项id",
+  "productName":"品项名称",
+  "productImage":"品项图片",
+  "sell":"是否可以买 01是02否",
+  "productUnitRule":"规格",
+  "productCode":"品项编码",
+  "isTpm":"是否搭赠，01是 02否"
+ }
+]	
+	
+	
+25.获取指定分类下品项列表
+url: /api/product/loadProductByClassCode.ns
+入参：
+    pageNo 
+	limit
+	ProductClassCode:分类编码
+出参：
+data:[
+ {
+  "productId":"品项id",
+  "productName":"品项名称",
+  "productImage":"品项图片",
+  "sell":"是否可以买 01是02否",
+  "productUnitRule":"规格",
+  "productCode":"品项编码",
+  "isTpm":"是否搭赠，01是 02否"
+ }
+]		
+
+26.品项详情
+url: /api/product/loadProductByClassCode.ns
+入参：
+   productId:品项id
+   currentMemberType: 用户类型
+出参：
+data:{
+   "productId":"品项id",
+   "productName":"品项名称",
+   "productImage":"图片",
+   "Boolean":"是否可以买",
+   "productSpecs":"品项规格",
+   "classCode":"品项编码",
+   "productUnitMax":"最大规格",
+   "productUnitMin":"最小规格",
+   "productUrl":"详情 h5",
+   "productUnitRule":"包装规格",
+   "minOrderQuantity":"最小起订量",
+   "price":"单价",
+   "images":["图片list"],
+   "deliverTime":"配送时间",
+   "week":["可在周几下单"],
+   "deliverTimeState":"配送类型",
+   "orderEndTime":"下单截止时间",
+   "isTpm":"是否搭赠 01是/02否",
+   "ruleStr":"规则",
+   "ruleMin":"--",
+   "tpmImg":"搭赠图片",
+   "tpmProductName":"搭赠品项名称"
+}   
+
+
+27.获取用户可定品项
+url: /api/product/findSellGoods.ns
+入参：pageNo limit
+出参：
+data:[
+  {
+  "productId":"品项id",
+  "productName":"品项名称",
+  "productImage":"品项图片",
+  "sell":"是否可以买 01是02否",
+  "productUnitRule":"规格",
+  "productCode":"品项编码",
+  "isTpm":"是否搭赠，01是 02否"
+ }
+]
+
+
+28.发送短信验证
+url: /api/sms/sendCode.ns
+入参：
+   mobileTel：手机号
+   smsType：类型 1
+出参：无   
+
+
+29.验证手机验证码
+url : /api/service/validateCode.ns
+入参：
+    mobileCode：验证码
+	mobile ：手机号
+	smsType：1
+出参：无	
+
+
+30.公告信息
+url : /api/service/validateCode.ns
+入参： type 01  pageNo limit 
+出参：
+data:[
+   {
+     "postUrl":"详情地址 (h5)",
+	 "postTitle":"标题",
+	 "createTime":"时间",
+	 "imageUrl":"预览图",
+	 "postDesc":"简介",
+	 "isRead":"是否读 true/false",
+	 "postId":"id"
+   }
+]
+
+
+31.节假日(节假日不可订购)
+url: /api/service/findHoliday.ns
+入参：productCode 品项编码
+出参：
+data:{
+  "startTime":"开始时间",
+  "endTime":"结束时间",
+  "lineCodes":"路线编码",
+  "type":"",
+  "customerCode":""
+}
+
+32.当前用户品项下单规则 h5
+url : /product-rule.htm
+
+33.帮助中心 h5
+url : /service.htm
+
+34.品项详情 h5
+url: /shopDetail.htm
+入参：productId 品项id
+
+35.公告 h5
+url : /news.htm
+
+
+36.添加购物车
+url : /api/shopcar/addToShopcar.ns
+入参： productId 品项id 
+       amount 数量
+出参：无
+
+	   
+37.删除购物车
+url : /api/shopcar/addToShopcar.ns
+入参： oid Long[] 数组
+出参：无
+
+
+38.获取购物车
+url : /api/shopcar/addToShopcar.ns
+入参： currentMemberType用户类型
+       pageNo limit 
+出参：
+data:[
+  {
+   "productId":"id",
+   "productImage":"图片",
+   "productName":"名称",
+   "productSpecs":"包装规格",
+   "minOrderQuantity":"最小起订量",
+   "amount":"数量",
+   "productUnitConvertRule":"单位",
+   "productUnitMax":"最大规格",
+   "customerProductUnitConvertRule":"包装规格",
+   "priceSum":"总价",
+   "price":"单价",
+   "productCode":"品项编码",
+   "deliveryRule":"下单规则",
+   "singleKey":"true/false",
+   "deliverTimeState":"时间",
+   "week":["周几"],
+   "orderEndTime":"下单截止时间"
+  }
+]
+
+
+38.获取购物车
+url : /api/shopcar/addToShopcar.ns
+入参： currentMemberType用户类型
+       json ：json串 格式示例 [{"shopCarId":"id","amount":"数量"}]
+出参：无
+
+
+39.购物车下单
+url: /api/order/createOrder.ns
+入参：
+    json：json串 示例 [{"deliverTime":"交货日","shopCarId":"id"}]
+出参：
+data:{
+  "accountType":"账号类型 01现金 02月结 月结不需要支付直接跳转到成功页，现金需要支付跳转到支付页",
+  "pay":{
+    "out_trade_no":"交易单号",
+	"total_fee":"金额",
+	"subject":"描述",
+	"wechatUrl":"微信小程序跳转地址",
+	"orderNumber":"订单号"
+  }
+}
+
+39.批量下单
+url: /api/order/submitBatchOrder.ns
+入参：
+    deliverTime：数组 ["交货日1","交货日2"],
+	productId : 品项 
+	amount ： 数量
+出参：
+data:{
+  "accountType":"账号类型 01现金 02月结 月结不需要支付直接跳转到成功页，现金需要支付跳转到支付页",
+  "pay":{
+    "out_trade_no":"交易单号",
+	"total_fee":"金额",
+	"subject":"描述",
+	"wechatUrl":"微信小程序跳转地址",
+	"orderNumber":"订单号"
+  }
+}
+
+
+40.取消订单
+url: /api/order/deleteOrder.ns
+入参：
+    mainOrderNumber：订单号
+出参：无	
+
+41.订单详情
+url : /api/order/listOrderDetail.ns
+入参 ：
+   orderNumber: 订单号
+出参：
+data:[
+  {
+    "orderNumber":"订单号",
+	"state":"01：草稿;02:已提交;03:已确认;04:已发货;05:已收货",
+	"amount":"总金额",
+	"createTime":"时间",
+	"productName":"品项名称",
+	"productSpecs":"规格",
+	"productSum":"发货量",
+	"configSum":"签收量",
+	"logisticsSum":"签收量",
+	"deliveryDate":"交货日",
+	"productImage":"图片",
+	"specifications":"单位",
+	"orderDate":"下单时间",
+	"price":"价格",
+	"payDate":"支付时间",
+	"productUnitConvertRule":"包装规格",
+	"orderCode":"订单号",
+	"driverTel":"司机电话",
+	"firstBatchCode":"第一次录入批次号",
+	"secondBatchCode":"第二次录入批次号",
+	"firstNum":"第一次数量",
+	"secondNum":"第二次数量",
+	"unit":"单位",
+	"orderType":"01正常单，02样品单 03搭赠单"
+  }
+]
+
+
+41.已完成订单详情
+url : /api/order/listCompleteOrderDetail.ns
+入参 ：
+   orderNumber: 订单号
+出参：
+data:[
+  {
+    "orderNumber":"订单号",
+	"state":"01：草稿;02:已提交;03:已确认;04:已发货;05:已收货",
+	"amount":"总金额",
+	"createTime":"时间",
+	"productName":"品项名称",
+	"productSpecs":"规格",
+	"productSum":"发货量",
+	"configSum":"签收量",
+	"logisticsSum":"签收量",
+	"deliveryDate":"交货日",
+	"productImage":"图片",
+	"specifications":"单位",
+	"orderDate":"下单时间",
+	"price":"价格",
+	"payDate":"支付时间",
+	"productUnitConvertRule":"包装规格",
+	"orderCode":"订单号",
+	"driverTel":"司机电话",
+	"firstBatchCode":"第一次录入批次号",
+	"secondBatchCode":"第二次录入批次号",
+	"firstNum":"第一次数量",
+	"secondNum":"第二次数量",
+	"unit":"单位",
+	"orderType":"01正常单，02样品单 03搭赠单"
+  }
+]
+
+
+42.所有订单列表
+url : /api/order/listAllOrder.ns
+入参 ：
+   pageNo limit
+出参：
+data:[
+  {
+    "orderNumber":"订单号",
+	"state":"01：草稿;02:已提交;03:已确认;04:已发货;05:已收货",
+	"orderDate":"订单时间",
+	"flg":"",
+	"orderListViews":[
+	   {
+	     "productName":"品项名称",
+		 "productSpecs":"",
+		 "productSum":"",
+		 "configSum":"",
+		 "logisticsSum":"",
+		 "productImage":"",
+		 "specifications":"",
+		 "deliveryDate":"",
+		 "price":"",
+		 "state":"",
+		 "orderCode":"",
+		 "flg":"",
+		 "orderType":"01正常单，02样品单 03搭赠单"
+	   }
+	]
+  }
+]   
+
+
+43.待付款列表
+url : /api/order/pendingPayment.ns
+入参 ：
+   pageNo limit
+出参：
+data:[
+  {
+    "orderNumber":"订单号",
+	"state":"01：草稿;02:已提交;03:已确认;04:已发货;05:已收货",
+	"orderDate":"订单时间",
+	"flg":"",
+	"orderListViews":[
+	   {
+	     "productName":"品项名称",
+		 "productSpecs":"",
+		 "productSum":"",
+		 "configSum":"",
+		 "logisticsSum":"",
+		 "productImage":"",
+		 "specifications":"",
+		 "deliveryDate":"",
+		 "price":"",
+		 "state":"",
+		 "orderCode":"",
+		 "flg":"",
+		 "orderType":"01正常单，02样品单 03搭赠单"
+	   }
+	]
+  }
+]   
+
+
+43.待付发货列表
+url : /api/order/waitDelivery.ns
+入参 ：
+   pageNo limit
+出参：
+data:[
+  {
+    "orderNumber":"订单号",
+	"state":"01：草稿;02:已提交;03:已确认;04:已发货;05:已收货",
+	"orderDate":"订单时间",
+	"flg":"",
+	"orderListViews":[
+	   {
+	     "productName":"品项名称",
+		 "productSpecs":"",
+		 "productSum":"",
+		 "configSum":"",
+		 "logisticsSum":"",
+		 "productImage":"",
+		 "specifications":"",
+		 "deliveryDate":"",
+		 "price":"",
+		 "state":"",
+		 "orderCode":"",
+		 "flg":"",
+		 "orderType":"01正常单，02样品单 03搭赠单"
+	   }
+	]
+  }
+] 
+
+
+44.已完成列表
+url : /api/order/alreadyCompleted.ns
+入参 ：
+   pageNo limit
+出参：
+data:[
+  {
+    "orderNumber":"订单号",
+	"state":"01：草稿;02:已提交;03:已确认;04:已发货;05:已收货",
+	"orderDate":"订单时间",
+	"flg":"",
+	"orderListViews":[
+	   {
+	     "productName":"品项名称",
+		 "productSpecs":"",
+		 "productSum":"",
+		 "configSum":"",
+		 "logisticsSum":"",
+		 "productImage":"",
+		 "specifications":"",
+		 "deliveryDate":"",
+		 "price":"",
+		 "state":"",
+		 "orderCode":"",
+		 "flg":"",
+		 "orderType":"01正常单，02样品单 03搭赠单"
+	   }
+	]
+  }
+]     
+
+45.余额支付
+url : /api/order/balancePayment.ns
+入参： out_trade_no 交易单号
+       orderNumber 订单号
+出参：
+data : money 金额
+
+
+46.确认收货
+url : /api/order/confirmReceipt.ns
+入参： json： json串 [{"orderCode":"订单号","amount":"数量","minOrderQuantity":"最小起订量"}]
+出参：无
+
+47.再来一单
+url: /api/order/anotherOne.ns
+入参： orderNumber 客户订单号
+出参：无
+	   
+
+48.支付订单
+url: /api/order/orderPay.ns
+入参： orderNumber 客户订单号
+出参：
+data:{
+    "out_trade_no":"交易单号",
+	"total_fee":"金额",
+	"subject":"描述",
+	"wechatUrl":"微信小程序跳转地址",
+	"orderNumber":"订单号"
+}  
+
+
+49.可修改订单列表
+url: /api/order/listSetOrder.ns
+入参： deliveryDate 交货时间
+出参：
+data:{
+    "deliveryDate":"交货日",
+	"flg":"true/false 是否可以修改",
+	"orderViews":[
+	  {
+	    "productId":"品项id",
+		"productName":"品项名称",
+		"productTime":"时间",
+		"productImage":"图片",
+		"productSpecs":"规格",
+		"productSum":"数量",
+		"deliveryDate":"交货日期",
+		"orderCode":"订单号",
+		"specifications":"规格",
+		"uninConvertRule":"包装规格",
+		"customerOrderCode":"客户订单号",
+		"minOrderQuantity":"最下起订量",
+		"modifyOrderDeadline":"修改截止时间",
+		"flg":"是否可修改 true/false",
+		"deliveryRule":"配送规则",
+		"orderEndTime":"订单截止时间"
+	  }
+	]
+}  
+
+49.修改订单列表
+url: /api/order/updateOrder.ns
+入参：
+    lat 纬度
+    lng 经度
+	json json串 示例 [{"orderCode":"订单号","amount":"数量"}]
+出参：无
+
+
+50.购物车下单获取金额
+url: /v2/getAmount.ns
+入参：
+    currentMemberType 用户类型 通用
+	deliverTime ： ["交货日1","交货日2"] 批量下单传值
+	productId ： 品项id 批量下单传值
+    amount : 数量 批量下单传值
+	json : json串 示例 [{"shopCarId":"购物车id","deliverTime":"交货日"}] (购物车下单传值)
+出参：
+data:{
+  "sum":"总金额",
+  "list":[
+    {
+	  "date":"str",
+	  "isTpm":"是否搭赠 01是 02否"
+	}
+  ]
+} 
+  	
+
+
+
+
+
+ 
+
