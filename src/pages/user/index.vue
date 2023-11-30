@@ -157,17 +157,16 @@ export default {
           title: '检验报告单',
           path: '/pages/quality-report/index',
         },
-        // 操作中心暂时去掉
-        // {
-        //   icon: manualImg,
-        //   title: '操作手册',
-        // },
         {
-          icon: messageImg,
-          title: '消息中心',
-          isWebview: true,
-          path: `/pages/web-view/index?url=${BASE_URL}/news.htm`,
+          icon: manualImg,
+          title: '操作手册/公告',
         },
+        // {
+        //   icon: messageImg,
+        //   title: '消息中心',
+        //   isWebview: true,
+        //   path: `/pages/web-view/index?url=${BASE_URL}/news.htm`,
+        // },
         {
           icon: settingImg,
           title: '设置',

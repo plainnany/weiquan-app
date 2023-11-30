@@ -21,7 +21,7 @@
               <view>快速签收</view>
             </view>
             <view @tap="handleNav('shop')" class="nav-item">
-              <image :src="categoryImg" mode="" />
+              <image :src="goShop" mode="" />
               <view>一键下单</view>
             </view>
             <view @tap="handleNav('notice')" class="nav-item">
@@ -78,7 +78,7 @@ import SearchBar from './searchBar.vue'
 import signImg from '@/images/sign-home.png'
 import noticeImg from '@/images/notice.png'
 import notificationImg from '@/images/notification.png'
-import categoryImg from '@/images/category.png'
+import goShop from '@/images/go-shop.png'
 import chargeImg from '@/images/recharge.png'
 import inviteImg from '@/images/invite.png'
 import backImg from '@/images/red-back.png'
@@ -94,7 +94,7 @@ export default {
       signImg,
       notificationImg,
       noticeImg,
-      categoryImg,
+      goShop,
       chargeImg,
       inviteImg,
       backImg,
