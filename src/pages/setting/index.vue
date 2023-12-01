@@ -1,23 +1,24 @@
 <template>
   <view class="setting-page">
-    <view class="setting-card" v-for="(item, index) in list" :key="index" @tap="handleNav(item)">
-      <view style="display:flex; align-items: center">
-        <image :src="item.icon" mode="" />
-        <text>{{ item.text }}</text>
-      </view>
-      <view v-if="item.showBack">
-        <image :src="backIcon" class="back-icon" mode="" />
-      </view>
-      <view v-if="item.showInfo">
-        {{ item.info }}
+    <view class="setting-page-card" v-for="(group, index) in list" :key="index">
+      <view class="setting-page-item" v-for="item in group" :key="item.text" @tap="handleNav(item)">
+        <view>
+          {{ item.text }}
+        </view>
+        <view v-if="item.showBack">
+          <image :src="backIcon" class="back-icon" mode="" />
+        </view>
+        <view v-if="item.showInfo">
+          {{ item.info }}
+        </view>
       </view>
     </view>
-    <view class="setting-btn">
-      <nan-button type="primary" @tap="handleQuit">退出当前账号</nan-button>
+    <view class="setting-btn" @tap="handleQuit">
+      退出登录
     </view>
-    <nan-modal :visible="visible" title="提示" cancelText="取消" confirmText="确认" @cancel="() => (visible = false)" @confirm="onConfirm">
-      <view style="padding: 30px 0;">确认要退出当前账户么？</view>
-    </nan-modal>
+    <Modal :visible="visible" title="退出登录" cancelText="取消" confirmText="确认" @cancel="() => (visible = false)" @confirm="onConfirm">
+      <view>你确定要退出登录？</view>
+    </Modal>
   </view>
 </template>
 
@@ -31,43 +32,50 @@ import warningIcon from '@/images/setting/warning.png'
 import questionIcon from '@/images/setting/question.png'
 import { setTitle } from '@/utils'
 import Taro from '@tarojs/taro'
+import Modal from './modal.vue'
 
 export default {
-  components: {},
+  components: { Modal },
   data() {
     return {
       backIcon,
       list: [
-        {
-          text: '问题反馈',
-          icon: warningIcon,
-          showBack: true,
-          path: '/pages/custom-comment/index',
-        },
-        {
-          text: '修改门店收货码',
-          icon: lockIcon,
-          showBack: true,
-          path: '/pages/change-receive-code/index',
-        },
-        {
-          text: '修改登录密码',
-          icon: fileIcon,
-          showBack: true,
-          path: '/pages/change-password/index',
-        },
+        [
+          {
+            text: '问题反馈',
+            icon: warningIcon,
+            showBack: true,
+            path: '/pages/custom-comment/index',
+          },
+        ],
+        [
+          {
+            text: '修改门店收货码',
+            icon: lockIcon,
+            showBack: true,
+            path: '/pages/change-receive-code/index',
+          },
+          {
+            text: '修改登录密码',
+            icon: fileIcon,
+            showBack: true,
+            path: '/pages/change-password/index',
+          },
+        ],
         // {
         //   text: '清除缓存',
         //   icon: noticeIcon,
         //   showInfo: true,
         //   info: '23M',
         // },
-        {
-          text: '当前版本',
-          icon: questionIcon,
-          showInfo: true,
-          info: '1.1.0',
-        },
+        [
+          {
+            text: '当前版本',
+            icon: questionIcon,
+            showInfo: true,
+            info: '1.1.0',
+          },
+        ],
       ],
       visible: false,
     }

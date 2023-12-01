@@ -8,9 +8,8 @@
       </view>
       <view class="order-result">
         <view class="order-result-empty" v-if="showEmpty">
-          <image :src="orderEmptyIcon" mode="" />
           <view class="order-result-empty-text">
-            抱歉，没有找到订单哦
+            暂无数据
           </view>
         </view>
         <scroll-view :scroll-y="true" @scrolltolower="toLower" v-else>

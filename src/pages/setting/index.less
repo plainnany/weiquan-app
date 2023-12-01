@@ -1,35 +1,37 @@
+@border-color: rgb(240, 242, 245);
 .setting-page {
-  padding: 20px 30px;
-  background: #f8f9fa;
+  padding: 20px 0;
   min-height: 100vh;
+  background: @border-color;
   box-sizing: border-box;
-  font-size: 30px;
-  .setting-card {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 50px 44px;
-    margin-bottom: 22px;
+  font-size: 28px;
+  &-card {
+    margin-bottom: 24px;
+    background-color: #fff;
+  }
 
+  &-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 24px 30px;
+    border-bottom: 1px solid @border-color;
 
-    text {
-      margin-left: 32px;
-    }
-  }
-
-  image {
-    width: 32px;
-    height: 32px;
-    vertical-align: middle;
-    &.back-icon {
-      width: 60px;
-      height: 60px;
+    image {
+      width: 48px;
+      height: 48px;
+      vertical-align: middle;
     }
   }
 
   .setting-btn {
     margin-top: 60px;
+    background-color: #fff;
+    border-color: @border-color;
+    color: #fa4a2d;
+    font-size: 30px;
+    line-height: 38px;
+    padding: 22px 0;
+    text-align: center;
   }
 }

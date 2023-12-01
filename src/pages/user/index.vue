@@ -171,17 +171,18 @@ export default {
         //   isWebview: true,
         //   path: `/pages/web-view/index?url=${BASE_URL}/news.htm`,
         // },
-        {
-          icon: settingImg,
-          title: '设置',
-          path: '/pages/setting/index',
-        },
+
         {
           icon: helpImg,
           title: '帮助中心',
           isWebview: true,
           path: `/pages/web-view/index?url=${BASE_URL}/service.htm`,
           // path: `/pages/web-view/index?url=${this.$store.state.userInfo.helpLink}`,
+        },
+        {
+          icon: settingImg,
+          title: '设置',
+          path: '/pages/setting/index',
         },
       ]
     },
