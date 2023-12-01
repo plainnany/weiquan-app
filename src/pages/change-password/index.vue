@@ -2,10 +2,10 @@
   <view class="change-password">
     <view class="change-password-title">店长密码设置</view>
     <view class="common-card">
-      <input v-model.trim="originManagerPassword" placeholder="原密码" />
+      <input v-model.trim="originManagerPassword" placeholder="原密码（6-13位数字+字母）" />
     </view>
     <view class="common-card">
-      <input v-model.trim="managerPassword" type="password" placeholder="新密码" />
+      <input v-model.trim="managerPassword" type="password" placeholder="新密码（6-13位数字+字母）" />
     </view>
     <view class="common-card">
       <input v-model.trim="confirmManagerPassword" type="password" placeholder="确认新密码" />
@@ -13,10 +13,10 @@
     <view class="error-tip" v-if="validatePassword('manager')">{{ managerErrorTip }}</view>
     <view class="change-password-title">店员密码设置</view>
     <view class="common-card">
-      <input v-model.trim="originAssistantPassword" placeholder="原密码" />
+      <input v-model.trim="originAssistantPassword" placeholder="原密码（6-13位数字+字母）" />
     </view>
     <view class="common-card">
-      <input v-model.trim="assistantPassword" type="password" placeholder="新密码" />
+      <input v-model.trim="assistantPassword" type="password" placeholder="新密码（6-13位数字+字母）" />
     </view>
     <view class="common-card">
       <input v-model.trim="confirmAssistantPassword" type="password" placeholder="确认新密码" />
@@ -98,16 +98,18 @@ export default {
 </script>
 
 <style lang="less">
+@bg: rgb(240, 242, 245);
+
 .change-password {
-  background: #f8f9fa;
-  font-size: 28px;
+  background: @bg;
+  font-size: 32px;
   padding: 40px 30px;
   box-sizing: border-box;
   min-height: 100vh;
 
   &-title {
     color: #666;
-    margin-bottom: 30px;
+    margin: 36px 0;
   }
 
   .error-tip {
@@ -118,6 +120,7 @@ export default {
 
   button {
     margin-top: 50px;
+    font-size: 32px;
   }
 }
 </style>
