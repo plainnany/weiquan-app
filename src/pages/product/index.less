@@ -96,9 +96,20 @@ page {
     color: #666;
     padding: 0 32px;
     &.active {
-      border-bottom: 2px solid #fa4a2d;
+      position: relative;
+      &::after {
+        content: ' ';
+        display: block;
+        height: 6px;
+        width: 100%;
+        background-color: #fa4a2d;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+      // border-bottom: 2px solid #fa4a2d;
       // background-color: #fff;
-      color: #fa4a2d;
+      // color: #fa4a2d;
     }
   }
 }

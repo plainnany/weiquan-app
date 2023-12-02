@@ -112,6 +112,8 @@ export default {
       this.searchComplete = false
       // scroll-view不知为何设置scrollTop无效，通过key来解决了
       // this.scrollTop = 0
+      this.$store.commit('setSwitchCategoryTab', index)
+
       this.getProductByCategory()
     },
     getProductByCategory(type) {
