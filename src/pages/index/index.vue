@@ -47,6 +47,9 @@
             </text>
           </view>
         </view>
+        <view class="card middle" @tap="onCategory(-1)">
+          <image :src="imgUrl" mode="" />
+        </view>
 
         <!-- <view class="link row">
           <view class="col">
@@ -83,6 +86,7 @@ import chargeImg from '@/images/recharge.png'
 import inviteImg from '@/images/invite.png'
 import backImg from '@/images/red-back.png'
 import Taro from '@tarojs/taro'
+import { downloadImg } from '@/utils'
 
 export default {
   components: {
@@ -103,6 +107,7 @@ export default {
       video: '',
       category: '',
       message: '',
+      imgUrl: '',
     }
   },
   onShow() {
@@ -111,8 +116,19 @@ export default {
   },
   mounted() {
     // this.getData()
+    this.downloadImage()
   },
   methods: {
+    downloadImage() {
+      Taro.downloadFile({
+        url: 'https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/kd.png',
+        success: res => {
+          if (res.statusCode === 200) {
+            this.imgUrl = res.tempFilePath
+          }
+        },
+      })
+    },
     getData() {
       this.$API.getHomeData().then(data => {
         data = data || {}
@@ -133,11 +149,11 @@ export default {
     handleNav(type) {
       const urlMap = {
         sign: '/pages/order/index?type=to-delivery',
-        notice: '/pages/user/index',
+        notice: '/pages/notice/index',
         charge: '/pages/charge/index',
         shop: '/pages/shop/index',
       }
-      if (type === 'shop' || type === 'notice') {
+      if (type === 'shop') {
         Taro.switchTab({ url: urlMap[type] })
       } else {
         Taro.navigateTo({

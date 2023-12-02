@@ -1,0 +1,60 @@
+<template>
+  <view class="notice-page">
+    <view class="notice-page-item" v-for="(item, key) in messageCenter" :key="key" @tap="handleNav(item, key)">
+      <view>
+        <image :src="userInfo.headPic" mode="" />
+      </view>
+      <view class="info">
+        <view class="info-title">
+          {{ titleMap[key] }}
+          <view v-if="item.createDtae || item.createTime" class="extra">{{ item.createDtae || item.createTime }}</view>
+        </view>
+        <view class="info-tip">{{ key === 'Post' ? item.postTitle : item.message }}</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import Taro from '@tarojs/taro'
+import './index.less'
+import { setTitle } from '@/utils'
+
+export default {
+  components: {},
+  data() {
+    return {
+      messageCenter: {},
+      titleMap: {
+        Order: '订单消息',
+        System: '系统消息',
+        Post: '操作手册/公告',
+      },
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo
+    },
+  },
+  mounted() {
+    setTitle({ title: '消息中心' })
+  },
+  onShow() {
+    this.getNotice()
+  },
+  methods: {
+    handleNav(item, key) {
+      Taro.navigateTo({
+        url: `/pages/notice/detail?title=${this.titleMap[key]}&key=${key}&post=${item.postTitle}&date=${item.createTime}&postUrl=${item.postUrl}`,
+      })
+    },
+    getNotice() {
+      this.$API.messageCenter().then(data => {
+        this.messageCenter = data
+        delete this.messageCenter.version
+      })
+    },
+  },
+}
+</script>

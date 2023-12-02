@@ -1,0 +1,47 @@
+@bg: rgb(240, 242, 245);
+
+.notice-detail {
+  background-color: @bg;
+  padding: 24px 0;
+  font-size: 30px;
+  min-height: 100vh;
+
+  .notice-wrapper {
+    padding: 0 48px;
+  }
+
+  scroll-view {
+    height: 100vh;
+    box-sizing: border-box;
+  }
+
+  .post {
+    background-color: #fff;
+    padding: 24px;
+  }
+
+  .post-title {
+    font-size: 36px;
+    margin-bottom: 80px;
+  }
+  .post-date {
+    color: #666;
+  }
+  &-item {
+    margin-bottom: 48px;
+    text-align: center;
+
+    .date {
+      color: #fff;
+      background-color: #ccc;
+      border-radius: 8px;
+      padding: 12px;
+      display: inline-block;
+      margin-bottom: 48px;
+    }
+    .content {
+      background-color: #fff;
+      padding: 12px;
+    }
+  }
+}

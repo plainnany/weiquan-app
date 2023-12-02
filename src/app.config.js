@@ -27,6 +27,8 @@ export default defineAppConfig({
     'pages/change-password/index', // 修改登录密码
     'pages/account-manage/index', // 账户管理
     'pages/account-modify/index', // 账户修改
+    'pages/notice/index', // 消息中心
+    'pages/notice/detail', // 消息详情
   ],
   tabBar: {
     color: '#666666',

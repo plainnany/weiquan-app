@@ -290,6 +290,30 @@ const requestAddressList = [
     url: '/api/sms/sendCode.ns ',
     type: 'post',
   },
+  {
+    describe: '消息中心列表',
+    method: 'messageCenter',
+    url: '/api/message/messageCenter.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取系统消息',
+    method: 'loadSystemMessage',
+    url: '/api/message/loadSystemMessage.ns ',
+    type: 'post',
+  },
+  {
+    describe: '订单消息',
+    method: 'loadOrderMessage',
+    url: '/api/message/loadOrderMessage.ns  ',
+    type: 'post',
+  },
+  {
+    describe: '公告',
+    method: 'companyPost',
+    url: '/api/service/companyPost.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}

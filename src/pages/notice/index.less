@@ -1,0 +1,43 @@
+@border-color: rgb(240, 242, 245);
+.notice-page {
+  // background: @border-color;
+  height: 100vh;
+  font-size: 28px;
+
+  &-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 30px;
+    border-bottom: 1px solid @border-color;
+
+    image {
+      width: 92px;
+      height: 92px;
+      margin-right: 50px;
+    }
+    .info {
+      flex: 1;
+      &-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 32px;
+      }
+
+      .extra {
+        color: #666;
+        font-size: 28px;
+      }
+
+      &-tip {
+        margin-top: 32px;
+        color: #666;
+        max-width: 60vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}
