@@ -78,13 +78,15 @@
       </view>
     </view>
     <view class="product-footer">
-      <view class="product-footer-action" @tap="contact">
+      <!-- <view class="product-footer-action" @tap="contact">
         <image :src="serviceIcon" mode="" />
         <view>客服</view>
-      </view>
+      </view> -->
       <view class="product-footer-btn">
-        <nan-button type="primary" @tap="addShop">加入购物车</nan-button>
-        <nan-button type="primary" @tap="batchOrder">批量下单</nan-button>
+        <view class="nav" @tap="handleNav('/pages/index/index')">返回首页</view>
+        <view class="nav" @tap="handleNav('/pages/shop/index')">购物车</view>
+        <view class="nav-shop" @tap="addShop">加入购物车</view>
+        <view class="nav-primary" @tap="batchOrder">批量下单</view>
       </view>
     </view>
   </view>
@@ -127,6 +129,9 @@ export default {
     this.getProduct()
   },
   methods: {
+    handleNav(url) {
+      Taro.switchTab({ url })
+    },
     getProduct() {
       const params = this.$instance.router.params
       this.$API

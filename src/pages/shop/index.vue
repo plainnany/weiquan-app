@@ -8,8 +8,8 @@
             <image :src="product.productImage" mode="" />
           </view>
           <view class="shop-product-detail">
-            <view class="shop-product-content">
-              <view class="shop-product-detail-title" @tap="onClick(product)">{{ product.productName }}</view>
+            <view class="shop-product-content" @tap="onClick(product)">
+              <view class="shop-product-detail-title">{{ product.productName }}</view>
               <view class="shop-product-detail-info">规格: {{ product.productSpecs }}</view>
               <view class="shop-product-detail-info">单位: {{ 1 }}{{ product.productUnitMax }}/数量:{{ product.amount }}</view>
             </view>
@@ -43,14 +43,14 @@
       </view>
     </view>
     <view class="shop-product-footer" v-if="productList.length">
-      <view>
+      <view class="left">
         <checkbox :checked="checkAll" @tap="handleCheckAll">全选</checkbox>
       </view>
       <view style="display: flex; align-items: center">
-        <view v-if="total"
+        <!-- <view v-if="total > 0"
           >合计: ¥<text class="shop-product-total">{{ total }}</text></view
-        >
-        <button @tap="handleSettle">去结算</button>
+        > -->
+        <button @tap="handleSettle">结算({{ checkedNum }})</button>
       </view>
     </view>
   </view>
@@ -79,6 +79,9 @@ export default {
       const total = this.productList.filter(v => v.checked).reduce((prev, cur) => prev + parseFloat(cur.price) * parseInt(cur.amount), 0)
 
       return total.toFixed(2) || ''
+    },
+    checkedNum() {
+      return this.productList.filter(v => v.checked).length
     },
   },
 

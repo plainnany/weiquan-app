@@ -1,13 +1,13 @@
 <template>
   <view class="confirm-order">
-    <view class="common-card flex-between-center">
-      <view class="flex-between-center">
+    <view class="common-card flex">
+      <view class="flex">
         <view class="confirm-order-location">
           <image :src="locationIcon" mode="" />
         </view>
         <view class="confirm-order-location-info">
-          <view>{{ userInfo.customerAddress }} </view>
           <view>{{ userInfo.customerLinkMan }} {{ userInfo.customerLinkTel }}</view>
+          <view>{{ userInfo.customerAddress }} </view>
         </view>
       </view>
       <!-- <view class="confirm-order-nav">
@@ -15,37 +15,38 @@
       </view> -->
     </view>
     <view v-for="product in productList" :key="product.productId">
-      <view class="common-card flex-between-center" @tap="chooseDate(product)">
-        <view style="color: #666">{{ product.deliverTime || '请选择配送时间' }}</view>
-        <view class="confirm-order-nav">
-          <image :src="backIcon" mode="" />
-        </view>
-      </view>
       <view class="common-card">
-        <view class="confirm-order-item flex-between-center">
-          <view class="flex-between-center">
+        <view class="delivery-date" @tap="chooseDate(product)">
+          <view style="color: #666">{{ product.deliverTime || '配送时间' }}</view>
+          <view class="confirm-order-nav">
+            <image :src="backIcon" mode="" />
+          </view>
+        </view>
+        <view class="confirm-order-item flex">
+          <view class="flex">
             <view class="confirm-order-image">
               <image :src="product.productImage" mode="" />
             </view>
             <view class="confirm-order-info">
               <view>{{ product.productName }}</view>
-              <view>{{ product.productSpecs }} {{ product.productUnitConvertRule }} / {{ product.productUnitMax }}</view>
+              <view>规格：{{ product.productSpecs }} </view>
+              <view>单位：{{ product.productUnitConvertRule }} / {{ product.productUnitMax }}</view>
               <!-- <view class="confirm-order-tag"
               ><text>{{ product.type }}</text></view
             > -->
             </view>
           </view>
-          <view>
-            <view class="confirm-order-price"
+          <view class="confirm-order-price">
+            <view
               >¥ <text>{{ product.total }}</text></view
             >
-            <view>订单量 {{ product.productUnitConvertRule }}</view>
+            <view>X {{ product.productUnitConvertRule }}</view>
           </view>
         </view>
       </view>
     </view>
     <view class="confirm-order-footer">
-      <nan-button type="primary" @tap="confirmOrder">去结算</nan-button>
+      <view class="confirm-order-btn" @tap="confirmOrder">立即结算</view>
     </view>
     <view>
       <nan-modal :visible="dateChooseVisible" v-if="dateChooseVisible" fullScreen>
