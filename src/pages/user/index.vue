@@ -145,7 +145,7 @@ export default {
       return [
         { icon: chargeImg, title: '账户余额及充值', path: '/pages/cost/index' },
         { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
-        { icon: ruleImg, title: '开票申请', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
+        // { icon: ruleImg, title: '开票申请', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
         { icon: ruleImg, title: '配送规则', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
       ]
     },
@@ -164,12 +164,12 @@ export default {
         {
           icon: manualImg,
           title: '操作手册/公告',
+          isNotice: true,
         },
         // {
         //   icon: messageImg,
         //   title: '消息中心',
-        //   isWebview: true,
-        //   path: `/pages/web-view/index?url=${BASE_URL}/news.htm`,
+        //   path: `/pages/notice/index`,
         // },
 
         {
@@ -250,6 +250,9 @@ export default {
           },
         })
       } else {
+        if (item.isNotice) {
+          return this.getNotice(item)
+        }
         if (item.path.includes('product-rule')) {
           Taro.navigateTo({ url: `${item.path}&token=${this.userInfo.token}` })
           return
@@ -260,6 +263,14 @@ export default {
     accountTypeChange(e) {
       this.checkedAccountType = this.accountTypes[e.detail.value].label
       this.userType = this.accountTypes[e.detail.value].userType
+    },
+    getNotice(item) {
+      this.$API.messageCenter().then(res => {
+        const data = res.Post
+        Taro.navigateTo({
+          url: `/pages/notice/detail?title=${item.title}&key=Post&post=${data.postTitle}&date=${data.createTime}&postUrl=${data.postUrl}`,
+        })
+      })
     },
   },
 }
