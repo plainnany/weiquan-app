@@ -320,6 +320,12 @@ const requestAddressList = [
     url: '/api/files/upload.ns',
     type: 'post',
   },
+  {
+    describe: '上传头像',
+    method: 'updateHeadPic',
+    url: '/api/applet/updateHeadPic.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}

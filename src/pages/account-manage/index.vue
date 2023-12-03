@@ -2,7 +2,7 @@
   <view class="account-manage">
     <view class="account-manage-card" v-for="(group, index) in items" :key="index">
       <view class="account-manage-item" v-for="item in group" :key="item.key" @tap="handleChange(item)">
-        <view>{{ item.name }}</view>
+        <view class="label">{{ item.name }}</view>
         <view v-if="item.key === 'headPic'">
           <image :src="userInfo.headPic" v-if="userInfo.headPic" mode="" />
         </view>
@@ -104,7 +104,7 @@ export default {
     handleUpload(tempFilePaths) {
       tempFilePaths.forEach(tempFilePath => {
         Taro.uploadFile({
-          url: BASE_URL + '/api/files/upload.ns', //仅为示例，非真实的接口地址
+          url: BASE_URL + '/api/files/upload.ns',
           filePath: tempFilePath,
           name: 'file',
           formData: {
@@ -114,8 +114,11 @@ export default {
             const response = JSON.parse(res.data)
             const url = (response.data || [])[0]?.url
             if (!url) return
-            this.userInfo.headPic = url
-            this.$store.commit('setUserInfo', this.userInfo)
+            this.$API.updateHeadPic({ url }).then(data => {
+              debugger
+              this.userInfo.headPic = url
+              this.$store.commit('setUserInfo', this.userInfo)
+            })
           },
           fail: err => {
             console.log(err)

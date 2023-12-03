@@ -1,6 +1,5 @@
 <template>
   <view class="product-page">
-    <SearchBar />
     <view class="product-items">
       <scroll-view :scroll-x="true" :key="scrollViewKey" :scroll-into-view="scrollId">
         <view
@@ -50,7 +49,6 @@ import API from '@/service/api'
 import SearchBar from '../index/searchBar.vue'
 import shopIcon from '@/images/shop.png'
 import NanModal from '@/components/modal'
-import { parse } from '@babel/core'
 
 export default {
   components: { SearchBar, NanModal },
