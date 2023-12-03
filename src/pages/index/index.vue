@@ -48,7 +48,7 @@
           </view>
         </view>
         <view class="card middle" @tap="onCategory(-1)">
-          <image :src="imgUrl" mode="" />
+          <image :src="`https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/kd.png`" mode="" />
         </view>
 
         <!-- <view class="link row">
