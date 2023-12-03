@@ -53,6 +53,7 @@ import './index.less'
 import { setTitle } from '@/utils'
 import locationIcon from '@/images/location.png'
 import backIcon from '@/images/user/back.png'
+import { BASE_URL } from '@/const'
 
 export default {
   components: {},
@@ -82,7 +83,7 @@ export default {
       return !this.complainCode
     },
     btnDisabled() {
-      const { description, dictid, number, productCode,  } = this.form
+      const { description, dictid, number, productCode } = this.form
       if (!description || !dictid || !number || !productCode || !this.questionImages.length) {
         return true
       }
@@ -177,16 +178,17 @@ export default {
     handleUpload(tempFilePaths) {
       tempFilePaths.forEach(tempFilePath => {
         Taro.uploadFile({
-          url: '/upload', //仅为示例，非真实的接口地址
+          url: BASE_URL + '/api/files/upload.ns', //仅为示例，非真实的接口地址
           filePath: tempFilePath,
           name: 'file',
           formData: {
             user: 'test',
           },
           success: res => {
-            const data = res.data
-            console.log(data)
-            this.questionImages.push(tempFilePath)
+            const response = JSON.parse(res.data)
+            const url = (response.data || [])[0]?.url
+            if (!url) return
+            this.questionImages.push(url)
           },
           fail: err => {
             console.log(err)

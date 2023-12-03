@@ -19,6 +19,7 @@ function getBindShopList(unionId) {
       const token = ((data || []).find(v => v.useflg === '01') || {}).token
       if (!token) return
       Taro.setStorageSync('token', token)
+      if (JSON.stringify(store.state.userInfo) !== {}) return
 
       store.dispatch('getUserInfo')
     })

@@ -314,6 +314,12 @@ const requestAddressList = [
     url: '/api/service/companyPost.ns',
     type: 'post',
   },
+  {
+    describe: '上传文件',
+    method: 'upload',
+    url: '/api/files/upload.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}
