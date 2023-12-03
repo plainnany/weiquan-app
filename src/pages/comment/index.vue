@@ -40,6 +40,18 @@
           <view class="comment-page-upload-image" @tap="uploadImage" v-if="canEdit"> + </view>
         </view>
       </view>
+      <view class="comment-page-item">
+        <view class="comment-page-item-label">上传视频凭证 <text style="color: #666">(最多一个视频且时长不长于15s)</text></view>
+        <view class="comment-page-upload">
+          <view class="comment-page-image-item" v-if="videoUrl">
+            <video v-if="videoUrl" :src="videoUrl" :show-play-btn="true"></video>
+          </view>
+          <!-- <video
+            src="https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/2023/12/1701614391987.mp4?Expires=2016974391&OSSAccessKeyId=LTAI5tRyZsjXskyXUBYkyJ2Y&Signature=1EB%2FvOLoHcdCcvjh3TlgwUqNK%2Bo%3D"
+          /> -->
+          <view class="comment-page-upload-image" @tap="uploadVideo" v-if="canEdit"> + </view>
+        </view>
+      </view>
     </view>
     <view class="comment-page-footer" v-if="canEdit">
       <nan-button type="primary" @tap="submit" :disabled="btnDisabled" :loading="btnLoading">提交评价</nan-button>
@@ -76,6 +88,7 @@ export default {
       detailData: {},
       complainCode: '',
       btnLoading: false,
+      videoUrl: '',
     }
   },
   computed: {
@@ -84,7 +97,7 @@ export default {
     },
     btnDisabled() {
       const { description, dictid, number, productCode } = this.form
-      if (!description || !dictid || !number || !productCode || !this.questionImages.length) {
+      if (!description || !dictid || !number || !productCode || !this.questionImages.length || !this.videoUrl) {
         return true
       }
       return false
@@ -194,6 +207,42 @@ export default {
             console.log(err)
           },
         })
+      })
+    },
+    uploadVideo() {
+      Taro.chooseVideo({
+        sourceType: ['album', 'camera'],
+        maxDuration: 60,
+        camera: 'back',
+        success: res => {
+          // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+          const tempFilePath = res.tempFilePath
+          debugger
+          Taro.uploadFile({
+            url: BASE_URL + '/api/files/upload.ns', //仅为示例，非真实的接口地址
+            filePath: tempFilePath,
+            name: 'file',
+            formData: {
+              user: 'test',
+            },
+            success: res => {
+              const response = JSON.parse(res.data)
+              const url = (response.data || [])[0]?.url
+              if (!url) return
+              debugger
+              this.videoUrl = url
+            },
+            fail: err => {
+              console.log(err)
+            },
+          })
+        },
+        fail: function(err) {
+          console.log(`请确保微信权限都已开启,不然无法正常调用相机或相册`, err)
+        },
+        cancel: function(res) {
+          console.log('取消视频选择', res)
+        },
       })
     },
     submit() {
