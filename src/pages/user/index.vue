@@ -12,18 +12,15 @@
           </view>
           <view class="user-mobile">
             <view>ID: {{ userInfo.userId || '未绑定账号' }} </view>
+            <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
+              <text class="user-bind-account" @tap.stop="() => (visible = true)">立即绑定</text>
+            </view>
             <view>{{ accountTypeMap[userInfo.accountType] }}</view>
           </view>
           <view class="user-detail">
             <image :src="arrowRightImg" class="back" mode="" />
           </view>
         </view>
-      </view>
-      <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
-        <text>
-          为确保账号安全，请绑定账号
-        </text>
-        <text class="user-bind-account" @tap="() => (visible = true)">立即绑定</text>
       </view>
     </view>
     <view class="order-all user-card">
@@ -126,7 +123,7 @@ export default {
       ],
       checkedAccountType: '',
       unionId: '',
-      hasGetUserInfo: false,
+      hasGetUserInfo: true,
       // 01：现金客户;02：月结客户;03：预付款客户04：货到付款
       accountTypeMap: {
         '01': '现金客户',
@@ -196,7 +193,6 @@ export default {
   onShow() {
     const sesstionToken = Taro.getStorageSync('token')
     if (this.userInfo.userId && sesstionToken === this.userInfo.token) return
-
     this.$store.dispatch('getUserInfo').finally(() => {
       this.hasGetUserInfo = true
     })
