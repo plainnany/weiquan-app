@@ -2,7 +2,7 @@
   <view class="notice-page">
     <view class="notice-page-item" v-for="(item, key) in messageCenter" :key="key" @tap="handleNav(item, key)">
       <view>
-        <image :src="userInfo.headPic" mode="" />
+        <image :src="iconMap[key]" mode="" />
       </view>
       <view class="info">
         <view class="info-title">
@@ -19,16 +19,28 @@
 import Taro from '@tarojs/taro'
 import './index.less'
 import { setTitle } from '@/utils'
+import orderIcon from '@/images/notice/order.png'
+import systemIcon from '@/images/notice/system.png'
+import postIcon from '@/images/notice/post.png'
 
 export default {
   components: {},
   data() {
     return {
-      messageCenter: {},
+      messageCenter: {
+        System: {},
+        Order: {},
+        Post: {},
+      },
       titleMap: {
         Order: '订单消息',
         System: '系统消息',
         Post: '操作手册/公告',
+      },
+      iconMap: {
+        Order: orderIcon,
+        System: systemIcon,
+        Post: postIcon,
       },
     }
   },
@@ -51,8 +63,9 @@ export default {
     },
     getNotice() {
       this.$API.messageCenter().then(data => {
-        this.messageCenter = data
-        delete this.messageCenter.version
+        ;['System', 'Order', 'Post'].forEach(key => {
+          this.messageCenter[key] = data[key]
+        })
       })
     },
   },
