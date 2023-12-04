@@ -2,6 +2,10 @@
   <view class="user-page">
     <view class="user-info">
       <view class="user-info-wrapper" @tap="handleNav({ path: '/pages/account-manage/index' })">
+        <view class="setting">
+          <image :src="settingImg" mode="" @tap="handleNav({ path: '/pages/setting/index' })" />
+          <image :src="noticeImg" mode="" @tap="handleNav({ path: '/pages/notice/index' })" />
+        </view>
         <view class="user-avatar">
           <image :src="userInfo.headPic" mode="" />
         </view>
@@ -80,14 +84,15 @@ import customServiceImg from '@/images/user/custom-service.png'
 import deleverImg from '@/images/user/delever.png'
 import helpImg from '@/images/user/help.png'
 import manualImg from '@/images/user/manual.png'
-import messageImg from '@/images/user/message.png'
+// import messageImg from '@/images/user/message.png'
 import payImg from '@/images/user/pay.png'
-import settingImg from '@/images/user/setting.png'
+import settingImg from '@/images/user/setting.svg'
 import './index.less'
 import Taro from '@tarojs/taro'
 import { AES } from 'crypto-js'
 import { BASE_URL } from '@/const'
 import arrowRightImg from '@/images/user/arrow-right.png'
+import noticeImg from '@/images/user/notice.svg'
 
 export default {
   name: 'user',
@@ -132,6 +137,8 @@ export default {
         '04': '货到付款',
       },
       arrowRightImg,
+      settingImg,
+      noticeImg,
     }
   },
   computed: {
@@ -176,11 +183,11 @@ export default {
           path: `/pages/web-view/index?url=${BASE_URL}/service.htm`,
           // path: `/pages/web-view/index?url=${this.$store.state.userInfo.helpLink}`,
         },
-        {
-          icon: settingImg,
-          title: '设置',
-          path: '/pages/setting/index',
-        },
+        // {
+        //   icon: settingImg,
+        //   title: '设置',
+        //   path: '/pages/setting/index',
+        // },
       ]
     },
   },
