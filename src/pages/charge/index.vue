@@ -1,5 +1,6 @@
 <template>
   <view class="charge-page">
+    <view class="phone" @tap="contact">客服</view>
     <view class="charge-way">请选择充值方式</view>
     <view class="charge-card">
       <view class="charge-method">
@@ -25,6 +26,7 @@
 import './index.less'
 import wechatIcon from '@/images/wechat.png'
 import Taro from '@tarojs/taro'
+import { setTitle } from '@/utils'
 
 export default {
   name: 'cost',
@@ -38,6 +40,7 @@ export default {
     }
   },
   mounted() {
+    setTitle({ title: '充值' })
     this.$API.getBillCost().then(data => {
       this.balance = data
     })
@@ -71,6 +74,22 @@ export default {
         .finally(() => {
           this.btnLoading = false
         })
+    },
+    contact() {
+      if (!this.$store.state.userInfo.customerService) {
+        Taro.showToast({
+          title: '用户未登录，请先登录',
+          icon: 'none',
+        })
+
+        setTimeout(() => {
+          Taro.navigateTo({ url: '/pages/bind-account/index' })
+        }, 2000)
+        return
+      }
+      Taro.makePhoneCall({
+        phoneNumber: this.$store.state.userInfo.customerService,
+      })
     },
   },
 }

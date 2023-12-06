@@ -29,6 +29,7 @@
 
 <script>
 import './index.less'
+import { setTitle } from '@/utils'
 import Taro from '@tarojs/taro'
 
 export default {
@@ -55,6 +56,7 @@ export default {
     }
   },
   mounted() {
+    setTitle({ title: '余额明细' })
     this.getBillCost()
     this.getChargeList()
   },
