@@ -15,11 +15,14 @@
             <!-- <text class="change-user" @tap="handleNav({ path: '/pages/change-account/index' })" v-if="userInfo.userId">切换账号</text> -->
           </view>
           <view class="user-mobile">
-            <view>ID: {{ userInfo.userId || '未绑定账号' }} </view>
+            <view> ID: {{ userInfo.userId || '未绑定账号' }} </view>
             <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
               <text class="user-bind-account" @tap.stop="() => (visible = true)">立即绑定</text>
             </view>
-            <view>{{ accountTypeMap[userInfo.accountType] }}</view>
+            <view>
+              <image :src="userImg" mode="" class="user-icon" />
+              {{ accountTypeMap[userInfo.accountType] }}</view
+            >
           </view>
           <view class="user-detail">
             <image :src="arrowRightImg" class="back" mode="" />
@@ -93,6 +96,7 @@ import { AES } from 'crypto-js'
 import { BASE_URL } from '@/const'
 import arrowRightImg from '@/images/user/arrow-right.png'
 import noticeImg from '@/images/user/notice.svg'
+import userImg from '@/images/center-user.png'
 
 export default {
   name: 'user',
@@ -139,6 +143,7 @@ export default {
       arrowRightImg,
       settingImg,
       noticeImg,
+      userImg,
     }
   },
   computed: {
