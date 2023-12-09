@@ -100,8 +100,14 @@ const requestAddressList = [
   },
   {
     describe: '获取当天收货列表',
-    method: 'getWaitDelivery',
+    method: 'todayDeliveryOrder',
     url: '/api/v2/delivery/todayDeliveryOrder.ns',
+    type: 'post',
+  },
+  {
+    describe: '获取待发货列表',
+    method: 'getWaitDelivery',
+    url: '/api/order/waitDelivery.ns',
     type: 'post',
   },
   {

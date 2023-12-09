@@ -1,18 +1,20 @@
 <template>
   <view class="order-detail">
     <view class="order-detail-type">
-      <view>{{ STATE_TYPE_TEXT[orderDetail.state] }}</view>
+      <view class="order-detail-type-title">{{ STATE_TYPE_TEXT[orderDetail.state].title }}</view>
+      <view class="order-detail-type-sub-title">{{ STATE_TYPE_TEXT[orderDetail.state].subTitle }}</view>
       <view v-if="orderDetail.state === STATE_TYPE.toPay">9分钟后订单关闭，请及时付款哦</view>
     </view>
     <view class="order-detail-content">
-      <view class="common-card flex-between-center">
+      <view class="common-card">
         <view class="flex-between-center">
           <view class="order-detail-location">
             <image :src="locationIcon" mode="" />
           </view>
           <view class="order-detail-location-info">
+            <view>收货人：{{ userInfo.customerLinkMan }}</view>
             <view>{{ userInfo.customerAddress }} </view>
-            <view>{{ userInfo.customerLinkMan }} {{ userInfo.customerLinkTel }}</view>
+            <view class="phone">{{ userInfo.customerLinkTel }}</view>
           </view>
         </view>
         <!-- <view class="order-detail-nav">
@@ -21,7 +23,6 @@
       </view>
       <view v-for="(product, index) in orderDetail.list" :key="index">
         <view class="common-card">
-          <view>交货时间：{{ product.orderDate }}</view>
           <view class="order-detail-item flex-between-center">
             <view class="flex-between-center">
               <view class="order-detail-image">
@@ -29,10 +30,11 @@
               </view>
               <view class="order-detail-info">
                 <view>{{ product.productName }}</view>
-                <view>{{ product.productSpecs }} {{ product.specifications }}</view>
+                <view class="grey">{{ product.productSpecs }} {{ product.specifications }}</view>
                 <view class="order-detail-tag"
                   ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
                 >
+                <view class="grey">交货时间：{{ product.orderDate }}</view>
               </view>
             </view>
             <view>
@@ -65,13 +67,13 @@
         </view> -->
       </view>
       <view class="common-card">
-        <view class="flex-between-center order-detail-item">
-          <text class="order-detail-color-grey">下单时间</text>
-          <text>{{ orderDetail.createDate }}</text>
+        <view class="order-detail-item">
+          <text class="order-detail-color-grey">下单时间：</text>
+          <text class="order-detail-color-grey">{{ orderDetail.createDate }}</text>
         </view>
-        <view class="flex-between-center order-detail-item">
-          <text class="order-detail-color-grey">订单编号</text>
-          <text>{{ orderDetail.customerOrderCode }}</text>
+        <view class="order-detail-item">
+          <text class="order-detail-color-grey">订单编号：</text>
+          <text class="order-detail-color-grey">{{ orderDetail.customerOrderCode }}</text>
         </view>
         <!-- <view class="flex-between-center order-detail-item">
           <text class="order-detail-color-grey">付款方式</text>
@@ -165,10 +167,32 @@ export default {
       },
       STATE_TYPE_TEXT: {
         '01': '待付款',
-        '02': '待发货',
-        '03': '待发货',
-        '04': '待发货',
+        '02': '等待发货',
+        '03': '等待发货',
+        '04': '等待发货',
         '05': '已完成',
+      },
+      STATE_TYPE_TEXT: {
+        '01': {
+          title: '待付款',
+          subTitle: '待付款',
+        },
+        '02': {
+          title: '等待发货',
+          subTitle: '买家已下单，等待卖家发货',
+        },
+        '03': {
+          title: '等待发货',
+          subTitle: '买家已下单，等待卖家发货',
+        },
+        '04': {
+          title: '等待发货',
+          subTitle: '买家已下单，等待卖家发货',
+        },
+        '05': {
+          title: '已完成',
+          subTitle: '订单已完成',
+        },
       },
       payDialogVisible: false,
       payData: {},

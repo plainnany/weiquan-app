@@ -9,20 +9,16 @@
     font-weight: 400;
     color: #fefffe;
     line-height: 33px;
-    text-align: center;
+    font-size: 28px;
     background: linear-gradient(306deg, #f7522c 0%, #f16b31 100%);
-    padding-top: 80px;
-    padding-bottom: 160px;
-
-    > view:first-child {
-      font-size: 36px;
-      margin-bottom: 16px;
+    padding: 80px 30px 80px 30px;
+    &-title {
+      padding-bottom: 24px;
+      font-size: 32px;
     }
   }
 
   &-content {
-    padding: 0 30px;
-    margin-top: -80px;
   }
 
   &-nav {
@@ -40,16 +36,15 @@
     }
 
     &-info {
-      font-size: 30px;
-      font-weight: 500;
-      color: #333333;
-      line-height: 44px;
-      > view:last-child {
+      flex: 1;
+      font-size: 28px;
+      position: relative;
+
+      .phone {
+        position: absolute;
+        top: 0;
+        right: 0;
         font-size: 24px;
-        font-weight: 400;
-        color: #999999;
-        line-height: 33px;
-        margin-top: 12px;
       }
     }
   }
@@ -77,11 +72,10 @@
   &-info {
     > view {
       margin-bottom: 10px;
-
-      &:nth-child(2) {
-        color: #999999;
-        line-height: 22px;
-      }
+    }
+    .grey {
+      color: #999999;
+      line-height: 22px;
     }
   }
 
@@ -117,7 +111,6 @@
     box-sizing: border-box;
     background: #f8f9fa;
     border-radius: 16px;
-    padding: 12px;
     margin-right: 20px;
     image {
       width: 100%;

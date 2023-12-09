@@ -17,7 +17,7 @@
             <view class="common-card">
               <view class="order-result-title">
                 <text @tap="contact" class="contact">联系配送员</text>
-                <text>当天收货</text>
+                <text class="contact">当日发货</text>
               </view>
               <view
                 class="order-result-content"
@@ -25,7 +25,6 @@
                 :key="pIndex"
                 @tap="viewOrderDetail(product.customerOrderCode)"
               >
-                <view>交货时间 {{ product.deliveryDate }}</view>
                 <view class="flex-between-center order-result-item ">
                   <view class="flex-between-center">
                     <view class="order-result-image">
@@ -40,16 +39,16 @@
                     </view>
                   </view>
                   <view>
-                    <view>订单量 {{ product.productSum }}</view>
+                    <view>{{ product.productSum }}</view>
                   </view>
                 </view>
               </view>
-              <view class="flex-between-center">
+              <view class="flex-between-center order-result-footer">
                 <text>共{{ delivery.length }}件商品</text>
                 <!-- 待支付 -->
                 <view class="flex-between-center">
-                  <nan-button type="plain" @tap="viewLogistics">查看物流</nan-button>
-                  <nan-button type="primary" @tap="confirmDelivery" :loading="confirmBtnLoading">确认收货</nan-button>
+                  <nan-button type="plain" @tap="viewLogistics" class="normal">查看物流</nan-button>
+                  <nan-button type="primary" @tap="confirmDelivery" :loading="confirmBtnLoading" class="normal">确认收货</nan-button>
                 </view>
               </view>
             </view>
@@ -184,14 +183,15 @@ export default {
           method: 'getPendingPayment',
         },
         {
-          title: '当天收货',
-          key: 'to-delivery',
+          title: '待发货',
+          key: 'to-receive',
           method: 'getWaitDelivery',
         },
-        // {
-        //   title: '待收货',
-        //   key: 'to-receive',
-        // },
+        {
+          title: '当天收货',
+          key: 'to-delivery',
+          method: 'todayDeliveryOrder',
+        },
         {
           title: '已完成',
           key: 'done',
