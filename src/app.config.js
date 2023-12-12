@@ -29,6 +29,8 @@ export default defineAppConfig({
     'pages/account-modify/index', // 账户修改
     'pages/notice/index', // 消息中心
     'pages/notice/detail', // 消息详情
+    'pages/order-notice/index', // 下单提醒
+    'pages/order-notice/edit', // 编辑下单提醒
   ],
   tabBar: {
     color: '#666666',

@@ -332,6 +332,24 @@ const requestAddressList = [
     url: '/api/applet/updateHeadPic.ns',
     type: 'post',
   },
+  {
+    describe: '下单提醒列表',
+    method: 'getNoticeList',
+    url: '/api/notice/list.ns',
+    type: 'post',
+  },
+  {
+    describe: '编辑通知',
+    method: 'editNotice',
+    url: '/api/notice/edit.ns',
+    type: 'post',
+  },
+  {
+    describe: '删除通知',
+    method: 'deleteNotice',
+    url: '/api/notice/del.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}

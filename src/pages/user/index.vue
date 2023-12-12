@@ -96,6 +96,7 @@ import { AES } from 'crypto-js'
 import { BASE_URL } from '@/const'
 import arrowRightImg from '@/images/user/arrow-right.png'
 import noticeImg from '@/images/user/notice.svg'
+import notice2Img from '@/images/user/notice.png'
 import userImg from '@/images/center-user.png'
 
 export default {
@@ -160,6 +161,11 @@ export default {
     },
     items2() {
       return [
+        {
+          icon: notice2Img,
+          title: '下单提醒',
+          path: '/pages/order-notice/index',
+        },
         {
           icon: complainImg,
           title: '查看客诉',
