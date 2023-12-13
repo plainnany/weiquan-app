@@ -12,9 +12,22 @@
             <image :src="locationIcon" mode="" />
           </view>
           <view class="order-detail-location-info">
-            <view>收货人：{{ userInfo.customerLinkMan }}</view>
-            <view>{{ userInfo.customerAddress }} </view>
+            <view>
+              <view>收货人：{{ userInfo.customerLinkMan }}</view>
+              <view>{{ userInfo.customerAddress }} </view>
+            </view>
             <view class="phone">{{ userInfo.customerLinkTel }}</view>
+          </view>
+        </view>
+        <view class="flex-between-center">
+          <view class="order-detail-location">
+            <image :src="driverIcon" mode="" class="driver" />
+          </view>
+          <view class="order-detail-location-info">
+            <view>配送员：{{ orderDetail.driverName || '' }}</view>
+            <view class="phone" @tap="contact">
+              <image :src="drivePhoneIcon" mode="" />
+            </view>
           </view>
         </view>
         <!-- <view class="order-detail-nav">
@@ -34,7 +47,7 @@
                 <view class="order-detail-tag"
                   ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
                 >
-                <view class="grey">交货时间：{{ product.orderDate }}</view>
+                <view class="grey">交货时间：{{ product.deliveryDate }}</view>
               </view>
             </view>
             <view>
@@ -42,6 +55,7 @@
                 >¥ <text>{{ product.price }}</text></view
               >
               <view>订单量 {{ product.productSum }}</view>
+              <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
             </view>
           </view>
         </view>
@@ -68,12 +82,12 @@
       </view>
       <view class="common-card">
         <view class="order-detail-item">
-          <text class="order-detail-color-grey">下单时间：</text>
-          <text class="order-detail-color-grey">{{ orderDetail.createDate }}</text>
-        </view>
-        <view class="order-detail-item">
           <text class="order-detail-color-grey">订单编号：</text>
           <text class="order-detail-color-grey">{{ orderDetail.customerOrderCode }}</text>
+        </view>
+        <view class="order-detail-item">
+          <text class="order-detail-color-grey">下单时间：</text>
+          <text class="order-detail-color-grey">{{ orderDetail.createDate }}</text>
         </view>
         <!-- <view class="flex-between-center order-detail-item">
           <text class="order-detail-color-grey">付款方式</text>
@@ -139,6 +153,8 @@ import Taro from '@tarojs/taro'
 import wechatIcon from '@/images/wechat.png'
 import weipocketIcon from '@/images/wei-pocket.png'
 import closeIcon from '@/images/close.png'
+import driverIcon from '@/images/driver.png'
+import drivePhoneIcon from '@/images/drive-phone.png'
 
 export default {
   components: {},
@@ -149,6 +165,8 @@ export default {
       closeIcon,
       wechatIcon,
       weipocketIcon,
+      driverIcon,
+      drivePhoneIcon,
       ORDER_TYPE: {
         '01': '正常单',
         '02': '样品单',
@@ -306,6 +324,22 @@ export default {
     hideModal() {
       this.payMethod = ''
       this.payDialogVisible = false
+    },
+    contact() {
+      if (!this.$store.state.userInfo.customerService) {
+        Taro.showToast({
+          title: '用户未登录，请先登录',
+          icon: 'none',
+        })
+
+        setTimeout(() => {
+          Taro.navigateTo({ url: '/pages/bind-account/index' })
+        }, 2000)
+        return
+      }
+      Taro.makePhoneCall({
+        phoneNumber: this.orderDetail.driverTel,
+      })
     },
   },
 }

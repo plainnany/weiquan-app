@@ -14,7 +14,7 @@
               >编号： <text>{{ item.complainCode }}</text></view
             >
             <view>{{ item.complainDate }}</view>
-            <view class="custom-comment-status">已处理</view>
+            <view class="custom-comment-status" v-if="active === 'done'">已处理</view>
           </view>
         </view>
       </scroll-view>

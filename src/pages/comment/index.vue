@@ -108,10 +108,15 @@ export default {
   },
   mounted() {
     setTitle({ title: '评价' })
-    const { code } = this.$instance.router.params
+    const { code, productName } = this.$instance.router.params
+    this.productName = productName
     if (code) {
       this.complainCode = code
       this.getComplaintDetail()
+    } else if (productName) {
+      this.checkedProduct = productName
+      this.getProductList()
+      this.getComplainType()
     } else {
       this.getProductList()
       this.getComplainType()
@@ -158,6 +163,9 @@ export default {
         .then(data => {
           data = data || []
           this.questions = data
+          if (this.productName) {
+            this.checkedQuestion = data[0].dictname
+          }
         })
     },
     questionChange(e) {

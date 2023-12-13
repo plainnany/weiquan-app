@@ -29,22 +29,36 @@
   }
 
   &-location {
+    padding: 16px 0;
     image {
       width: 48px;
       height: 48px;
       margin-right: 20px;
     }
 
+    .driver {
+      width: 30px;
+      height: 36px;
+      margin: 0 30px 0 10px;
+    }
+
     &-info {
       flex: 1;
       font-size: 28px;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
       .phone {
-        position: absolute;
-        top: 0;
-        right: 0;
+        // position: absolute;
+        // top: 0;
+        // right: 0;
         font-size: 24px;
+        image {
+          width: 200px;
+          height: 50px;
+        }
       }
     }
   }

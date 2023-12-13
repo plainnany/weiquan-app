@@ -16,7 +16,10 @@
           <view class="order-result-list" v-if="activeTab === 'to-delivery'">
             <view class="common-card">
               <view class="order-result-title">
-                <text @tap="contact" class="contact">联系配送员</text>
+                <view @tap="contact" class="contact"
+                  >联系配送员
+                  <image :src="phoneCallIcon" class="phone-call" mode="" />
+                </view>
                 <text class="contact">当日发货</text>
               </view>
               <view
@@ -84,12 +87,13 @@
                         <view class="order-result-tag"
                           ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
                         >
-                        <view class="order-date">交货时间 {{ order.orderDate }}</view>
+                        <view class="order-date">交货时间 {{ product.deliveryDate }}</view>
                       </view>
                     </view>
                     <view>
                       <view>订单量 {{ product.productSum }}</view>
-                      <view class="order-result-type">{{ STATE_TYPE[order.state] }}</view>
+                      <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
+                      <view class="order-result-type">{{ STATE_TYPE[product.state] }}</view>
                     </view>
                   </view>
                 </view>
@@ -110,6 +114,11 @@
                     <nan-button type="plain">取消订单</nan-button>
                     <nan-button type="primary">提醒发货</nan-button>
                   </view> -->
+                  <!--  -->
+                  <view>
+                    <view class="btn-plain" @tap="buyAgain">再来一单</view>
+                    <view v-if="order.state === '05'" class="btn-primary" @tap="addQuestion(order)">问题反馈</view>
+                  </view>
                 </view>
               </view>
             </view>
@@ -165,6 +174,7 @@ import Taro from '@tarojs/taro'
 import wechatIcon from '@/images/wechat.png'
 import weipocketIcon from '@/images/wei-pocket.png'
 import closeIcon from '@/images/close.png'
+import phoneCallIcon from '@/images/phone-call.png'
 
 export default {
   components: {},
@@ -200,6 +210,7 @@ export default {
       ],
       orderList: [],
       orderEmptyIcon,
+      phoneCallIcon,
       carIcon,
       backIcon,
       closeIcon,
@@ -398,7 +409,7 @@ export default {
       })
     },
     contact() {
-      Taro.makePhoneCall({
+      Taro.makephoneCallIcon({
         phoneNumber: this.phone,
       })
     },
@@ -424,6 +435,13 @@ export default {
         .finally(() => {
           this.confirmBtnLoading = false
         })
+    },
+    buyAgain() {
+      Taro.switchTab({ url: '/pages/shop/index' })
+    },
+    addQuestion(order) {
+      const { productName } = order.orderListViews[0] || {}
+      Taro.navigateTo({ url: `/pages/comment/index?productName=${productName}` })
     },
   },
 }
