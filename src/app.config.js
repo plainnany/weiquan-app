@@ -31,6 +31,7 @@ export default defineAppConfig({
     'pages/notice/detail', // 消息详情
     'pages/order-notice/index', // 下单提醒
     'pages/order-notice/edit', // 编辑下单提醒
+    'pages/query/index', // 查询&修改
   ],
   tabBar: {
     color: '#666666',

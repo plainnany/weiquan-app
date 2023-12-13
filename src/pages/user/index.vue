@@ -112,7 +112,7 @@ export default {
       // ],
       orderList: [
         { icon: payImg, title: '待付款', path: '/pages/order/index?type=to-pay' },
-        { icon: deleverImg, title: '查询&修改', path: '/pages/order/index' },
+        { icon: deleverImg, title: '查询&修改', path: '/pages/query/index' },
         { icon: toReceiveImg, title: '当天收货', path: '/pages/order/index?type=to-delivery' },
         { icon: commentsImg, title: '已完成', path: '/pages/order/index?type=done' },
         { icon: customServiceImg, title: '我的订单', path: '/pages/order/index' },

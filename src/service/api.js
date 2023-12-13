@@ -350,6 +350,12 @@ const requestAddressList = [
     url: '/api/notice/del.ns',
     type: 'post',
   },
+  {
+    describe: '查询修改列表',
+    method: 'listSetOrder',
+    url: '//api/order/listSetOrder.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}
