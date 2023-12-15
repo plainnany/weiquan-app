@@ -91,6 +91,28 @@ export default {
       product.productSum = parseInt(product.productSum)
     },
     handleChange() {
+      const list = this.orderList
+        .flatMap(v => v.orderViews)
+        .map(v => ({
+          amount: v.productSum,
+          orderCode: v.orderCode,
+        }))
+      const params = {
+        flg: '01',
+        json: JSON.stringify(list),
+      }
+
+      this.$API
+        .updateOrder(params)
+        .then(res => {
+          Taro.switchTab({ url: '/pages/user/index' })
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'error',
+          })
+        })
       // todo
     },
   },

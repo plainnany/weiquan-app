@@ -21,6 +21,9 @@
     <view class="quality-search" v-if="qualityIndex === 1">
       <nan-button type="primary" @tap="onSearch()">查询</nan-button>
     </view>
+    <view>
+      <image class="quality-img" src="http://foodservice-main.oss-cn-hangzhou.aliyuncs.com/old/zjbg.png" mode=""></image>
+    </view>
     <view class="quality-result">
       <view class="quality-list">
         <view class="quality-list-item" v-for="(item, index) in qualityList" :key="index">

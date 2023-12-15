@@ -1,60 +1,126 @@
 <template>
   <view class="comment-page">
-    <view class="comment-card">
-      <view class="comment-page-item">
-        <view class="comment-page-item-label">问题原因</view>
-        <view class="input-wrapper">
-          <picker mode="selector" :range="questions" @change="questionChange" range-key="dictname">
-            <text v-if="checkedQuestion">{{ checkedQuestion }}</text>
-            <text v-else>请选择问题原因</text>
-          </picker>
-        </view>
-      </view>
-      <view class="comment-page-item">
-        <view class="comment-page-item-label">问题产品</view>
-        <view class="input-wrapper">
-          <picker mode="selector" :range="productList" @change="productChange" range-key="productName">
-            <text v-if="checkedProduct">{{ checkedProduct }}</text>
-            <text v-else>请选择问题产品</text>
-          </picker>
-        </view>
-      </view>
-      <view class="comment-page-item">
-        <view class="comment-page-item-label">产品数量</view>
-        <view class="input-wrapper">
-          <input v-model="form.number" placeholder="请输入异常数量" />
-        </view>
-      </view>
-      <view class="comment-page-item">
-        <view class="comment-page-item-label">问题说明</view>
-        <view class="input-wrapper">
-          <textarea v-model="form.description" placeholder="请输入问题说明" />
-        </view>
-      </view>
-      <view class="comment-page-item">
-        <view class="comment-page-item-label">上传凭证 <text style="color: #666">(请拍摄产品生产日期和异常图片)</text></view>
-        <view class="comment-page-upload">
-          <view class="comment-page-image-item" v-for="(image, index) in questionImages" :key="index">
-            <image :src="image" mode="" />
+    <view v-if="type === 'done'" class="comment-page-done">
+      <view class="done-card">
+        <view class="comment-done-item">
+          <view class="comment-done-label">
+            处理情况
           </view>
-          <view class="comment-page-upload-image" @tap="uploadImage" v-if="canEdit"> + </view>
+          <view class="comment-done-text green">
+            已处理
+          </view>
+        </view>
+        <view class="comment-done-item">
+          <view class="comment-done-label">
+            处理措施
+          </view>
+          <view class="comment-done-text">
+            {{ detailData.resolveSolution }}
+          </view>
+        </view>
+        <view class="comment-done-item">
+          <view class="comment-done-label">
+            处理时间
+          </view>
+          <view class="comment-done-text">
+            {{ detailData.resolveTime }}
+          </view>
         </view>
       </view>
-      <view class="comment-page-item">
-        <view class="comment-page-item-label">上传视频凭证 <text style="color: #666">(最多一个视频且时长不长于15s)</text></view>
-        <view class="comment-page-upload">
-          <view class="comment-page-image-item" v-if="videoUrl">
-            <video v-if="videoUrl" :src="videoUrl" :show-play-btn="true"></video>
+      <view class="done-card">
+        <view class="comment-done-item">
+          <view class="comment-done-label">
+            客诉单号
           </view>
-          <!-- <video
-            src="https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/2023/12/1701614391987.mp4?Expires=2016974391&OSSAccessKeyId=LTAI5tRyZsjXskyXUBYkyJ2Y&Signature=1EB%2FvOLoHcdCcvjh3TlgwUqNK%2Bo%3D"
-          /> -->
-          <view class="comment-page-upload-image" @tap="uploadVideo" v-if="canEdit"> + </view>
+          <view class="comment-done-text">
+            {{ detailData.complainCode }}
+          </view>
+        </view>
+        <view class="comment-done-item">
+          <view class="comment-done-label">
+            客诉图片
+          </view>
+          <view class="comment-done-image">
+            <image class="done-image" :src="item" v-for="item in detailData.imageUrl" :key="item"></image>
+          </view>
+        </view>
+        <view class="comment-done-item">
+          <view class="comment-done-label">
+            客诉时间
+          </view>
+          <view class="comment-done-text">
+            {{ detailData.complainDate }}
+          </view>
         </view>
       </view>
     </view>
-    <view class="comment-page-footer" v-if="canEdit">
-      <nan-button type="primary" @tap="submit" :disabled="btnDisabled" :loading="btnLoading">提交评价</nan-button>
+    <view class="comment-page-edit" v-else>
+      <view class="comment-card">
+        <view class="comment-page-item">
+          <view class="comment-page-item-label">问题原因</view>
+          <view class="input-wrapper">
+            <picker mode="selector" :range="questions" @change="questionChange" range-key="dictname">
+              <text v-if="checkedQuestion">{{ checkedQuestion }}</text>
+              <text v-else>请选择问题原因</text>
+            </picker>
+          </view>
+        </view>
+        <view class="comment-page-item">
+          <view class="comment-page-item-label">问题产品</view>
+          <view class="input-wrapper">
+            <picker mode="selector" :range="productList" @change="productChange" range-key="productName">
+              <text v-if="checkedProduct">{{ checkedProduct }}</text>
+              <text v-else>请选择问题产品</text>
+            </picker>
+          </view>
+        </view>
+        <view class="comment-page-item">
+          <view class="comment-page-item-label">产品数量</view>
+          <view class="input-wrapper">
+            <input v-model="form.number" placeholder="请输入异常数量" />
+          </view>
+        </view>
+        <view class="comment-page-item">
+          <view class="comment-page-item-label">问题说明</view>
+          <view class="input-wrapper">
+            <textarea v-model="form.description" placeholder="请输入问题说明" />
+          </view>
+        </view>
+        <view class="comment-page-item">
+          <view class="comment-page-item-label">上传凭证 <text style="color: #666">(请拍摄产品生产日期和异常图片)</text></view>
+          <view class="comment-page-upload">
+            <view class="comment-page-image-item" v-for="(image, index) in questionImages" :key="index">
+              <image :src="image" mode="" />
+              <view class="comment-page-image-delete" @tap="deleteImage(index)">
+                <image :src="deleteIcon" mode="" />
+              </view>
+            </view>
+            <view class="comment-page-upload-image" @tap="uploadImage"> + </view>
+          </view>
+          <view class="comment-page-upload-tip">最多三张</view>
+        </view>
+        <view class="comment-page-item">
+          <view class="comment-page-item-label">上传视频凭证 <text style="color: #666">(最多一个视频且时长不长于15s)</text></view>
+          <view class="comment-page-upload">
+            <view class="comment-page-image-item" v-if="videoUrl">
+              <video v-if="videoUrl" subtitles="视频" descriptions="描述">
+                <source :src="videoUrl" type="video/mp4" />
+              </video>
+              <view class="comment-page-image-delete" @tap="deleteVideo">
+                <image :src="deleteIcon" mode="" />
+              </view>
+            </view>
+            <view class="comment-page-upload-image" @tap="uploadVideo"> + </view>
+          </view>
+        </view>
+      </view>
+      <view class="comment-page-footer padding" v-if="type === 'add'">
+        <nan-button type="primary" @tap="submit" :disabled="btnDisabled" :loading="btnLoading">提交评价</nan-button>
+      </view>
+      <view class="comment-page-footer" v-if="type === 'todo'">
+        <view class="action-btn btn-delete" @tap="handleDelete">删除</view>
+        <view class="action-btn" @tap="submit">保存</view>
+      </view>
     </view>
   </view>
 </template>
@@ -65,6 +131,7 @@ import './index.less'
 import { setTitle } from '@/utils'
 import locationIcon from '@/images/location.png'
 import backIcon from '@/images/user/back.png'
+import deleteIcon from '@/images/delete.svg'
 import { BASE_URL } from '@/const'
 
 export default {
@@ -89,6 +156,8 @@ export default {
       complainCode: '',
       btnLoading: false,
       videoUrl: '',
+      deleteIcon,
+      type: '',
     }
   },
   computed: {
@@ -97,7 +166,7 @@ export default {
     },
     btnDisabled() {
       const { description, dictid, number, productCode } = this.form
-      if (!description || !dictid || !number || !productCode || !this.questionImages.length || !this.videoUrl) {
+      if (!description || !dictid || !number || !productCode || !this.questionImages.length) {
         return true
       }
       return false
@@ -107,8 +176,9 @@ export default {
     this.$instance = Taro.getCurrentInstance()
   },
   mounted() {
-    setTitle({ title: '评价' })
-    const { code, productName } = this.$instance.router.params
+    setTitle({ title: '问题反馈' })
+    const { code, productName, type } = this.$instance.router.params
+    this.type = type // 已处理、未处理
     this.productName = productName
     if (code) {
       this.complainCode = code
@@ -148,11 +218,17 @@ export default {
           this.checkedProduct = data.productName
           this.form.description = data.complainDetail
           this.form.number = data.num
+          this.form.dictid = data.dictid
+          this.form.productCode = data.productCode
         })
     },
     getProductList() {
       this.$API.getComplaintProductList().then(data => {
         this.productList = data
+        if (this.type === 'add') {
+          this.checkedProduct = data[0]?.productName
+          this.form.productCode = data[0]?.productCode
+        }
       })
     },
     getComplainType() {
@@ -163,7 +239,7 @@ export default {
         .then(data => {
           data = data || []
           this.questions = data
-          if (this.productName) {
+          if (this.productName || this.type === 'add') {
             this.checkedQuestion = data[0].dictname
           }
         })
@@ -180,7 +256,7 @@ export default {
     },
     uploadImage() {
       Taro.chooseImage({
-        count: 9, // 默认9
+        count: 3, // 默认9
         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有，在H5浏览器端支持使用 `user` 和 `environment`分别指定为前后摄像头
         success: res => {
@@ -225,7 +301,6 @@ export default {
         success: res => {
           // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
           const tempFilePath = res.tempFilePath
-          debugger
           Taro.uploadFile({
             url: BASE_URL + '/api/files/upload.ns', //仅为示例，非真实的接口地址
             filePath: tempFilePath,
@@ -237,7 +312,6 @@ export default {
               const response = JSON.parse(res.data)
               const url = (response.data || [])[0]?.url
               if (!url) return
-              debugger
               this.videoUrl = url
             },
             fail: err => {
@@ -253,13 +327,20 @@ export default {
         },
       })
     },
+    deleteImage(index) {
+      this.questionImages.splice(index, 1)
+    },
+    deleteVideo() {
+      this.videoUrl = ''
+    },
     submit() {
+      if (this.btnLoading) return
       const { description, dictid, number, productCode } = this.form
       this.btnLoading = true
       this.$API
         .submitComplain({
           complainDetail: description,
-          imgUrl: this.questionImages,
+          imgUrl: this.questionImages.join(','),
           dictid,
           num: number,
           productCode,
@@ -271,6 +352,20 @@ export default {
         })
         .finally(() => {
           this.btnLoading = false
+        })
+    },
+    handleDelete() {
+      if (this.deleteStatus) return
+      this.deleteStatus = true
+      this.$API
+        .deleteComplain({
+          complainCode: this.complainCode,
+        })
+        .then(re => {
+          Taro.navigateTo({ url: '/pages/custom-comment/index' })
+        })
+        .finally(() => {
+          this.deleteStatus = false
         })
     },
   },

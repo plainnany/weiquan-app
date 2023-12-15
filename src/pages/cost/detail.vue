@@ -9,12 +9,12 @@
       <view class="charge-list">
         <view class="charge-list-item" v-for="(item, index) in chargeList" :key="index">
           <view class="charge-list-item-title">
-            <text>现金充值</text>
+            <text>{{ active === 'charge' ? '充值' : '消费' }}</text>
             <text class="charge-list-item-date">{{ item.billDate }}</text>
           </view>
           <view class="charge-list-item-content">
             <view>
-              <view class="charge-list-item-remain">余额 {{ item.accountBalance }}</view>
+              <view class="charge-list-item-remain">余额: {{ item.accountBalance }}</view>
             </view>
             <view class="charge-list-item-number"
               ><text>{{ active === 'charge' ? '+' : '-' }}</text

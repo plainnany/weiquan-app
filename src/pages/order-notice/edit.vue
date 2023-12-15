@@ -11,12 +11,12 @@
           <view>请输入时间</view>
           <view class="time-detail">
             <view class="hour">
-              <input :placeholder="3" v-model="hour" />
+              <input v-model="hour" />
               <view>点</view>
             </view>
             <view>:</view>
             <view class="min">
-              <input :placeholder="3" v-model="min" />
+              <input v-model="min" />
               <view>分</view>
             </view>
           </view>
@@ -260,7 +260,7 @@ export default {
     color: #797979;
 
     input {
-      width: 56px;
+      width: 100px;
       height: 48px;
       border-bottom: 1px solid #797979;
       margin-bottom: 12px;

@@ -353,7 +353,19 @@ const requestAddressList = [
   {
     describe: '查询修改列表',
     method: 'listSetOrder',
-    url: '//api/order/listSetOrder.ns',
+    url: '/api/order/listSetOrder.ns',
+    type: 'post',
+  },
+  {
+    describe: '查询修改-提交',
+    method: 'updateOrder',
+    url: '/api/order/updateOrder.ns',
+    type: 'post',
+  },
+  {
+    describe: '删除客诉',
+    method: 'deleteComplain',
+    url: '/api/complain/undo.ns',
     type: 'post',
   },
 ]

@@ -92,9 +92,9 @@ export default {
     },
     handleClick(item) {
       if (item.complainCode) {
-        Taro.navigateTo({ url: `/pages/comment/index?code=${item.complainCode}` })
+        Taro.navigateTo({ url: `/pages/comment/index?code=${item.complainCode}&type=${this.active}` })
       } else {
-        Taro.navigateTo({ url: `/pages/comment/index` })
+        Taro.navigateTo({ url: `/pages/comment/index?type=add` })
       }
     },
   },

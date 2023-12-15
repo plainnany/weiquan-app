@@ -38,7 +38,7 @@
           </view>
           <view class="confirm-order-price">
             <view
-              >¥ <text>{{ product.total }}</text></view
+              >¥ <text>{{ Number(product.total).toFixed(2) }}</text></view
             >
             <view>X {{ product.productUnitConvertRule }}</view>
           </view>
