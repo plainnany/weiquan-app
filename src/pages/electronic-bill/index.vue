@@ -4,14 +4,14 @@
       <picker mode="date" @change="startDateChane">
         <image :src="dateIcon" class="date" mode="" />
         <text>
-          {{ startDate || defaultDate }}
+          {{ startDate }}
         </text>
         <image :src="arrowIcon" class="arrow" mode="" />
       </picker>
       <text class="electronic-date-seperator"></text>
       <picker mode="date" @change="endDateChange" :start="startDate">
         <image :src="dateIcon" class="date" mode="" />
-        {{ endDate || defaultDate }}
+        {{ endDate }}
         <image :src="arrowIcon" class="arrow" mode="" />
       </picker>
     </view>
@@ -28,11 +28,14 @@
         <view class="electronic-list-row">
           <view>
             <text class="electronic-list-icon active"></text>
-            <!-- {{ bill.product }}
-            {{ bill.volume }} -->
+            共
             {{ bill.num }}
+            单
           </view>
-          <view class="electronic-list-action" @tap="handleMore(bill)">更多</view>
+          <view class="electronic-list-action" @tap="handleMore(bill)"
+            >更多
+            <image :src="arrowIcon" class="arrow" :class="bill.expand ? 'arrow-up' : 'arrow-down'" mode="" />
+          </view>
         </view>
         <view v-if="bill.expand">
           <view class="electronic-list-extra" v-for="(item, subIndex) in bill.list" :key="subIndex">
@@ -44,18 +47,23 @@
             </view>
             <view>规格: {{ item.productUnitConvertRule }}</view>
             <view>单价: {{ item.productPrice }}</view>
-            <view>{{ typeMap[item.type] }}数量: {{ item.num }}</view>
-            <view>订单类型: {{ typeMap[item.type] }}单</view>
-            <view>原始发货单: {{ item.deliveryCode }}</view>
-            <view>原始交货日: {{ item.deliveryDate }}</view>
+            <view>数量: {{ item.num }}</view>
+            <view
+              >订单类型: <text class="yellow"> {{ typeMap[item.type] }}单</text></view
+            >
+            <!-- <view>原始发货单: {{ item.deliveryCode }}</view>
+            <view>原始交货日: {{ item.deliveryDate }}</view> -->
           </view>
         </view>
       </view>
+      <view v-if="showEmpty" class="empty">
+        暂无数据
+      </view>
     </view>
     <view class="electronic-total">
-      <text style="color: #f93a4a;">{{ billData.num || '-' }}</text>
+      <text style="color: #f93a4a;">{{ billData.num || '0' }}</text>
       <text>个订单，</text>
-      <text style="color: red">{{ billData.amount || '-' }}</text
+      <text style="color: red">{{ billData.amount || '0' }}</text
       >元
     </view>
   </view>
@@ -79,6 +87,9 @@ export default {
 
       return `${year}-${month}-${day}`
     },
+    showEmpty() {
+      return !this.billData?.list?.length && this.hasGetOrder
+    },
   },
   data() {
     return {
@@ -90,7 +101,7 @@ export default {
         list: [],
       },
       typeMap: {
-        '01': '领货',
+        '01': '发货',
         '02': '退货',
       },
       billList: [
@@ -118,6 +129,8 @@ export default {
     }
   },
   mounted() {
+    this.startDate = this.defaultDate
+    this.endDate = this.defaultDate
     this.getBillList()
     setTitle({
       title: '电子对账单',
@@ -132,6 +145,7 @@ export default {
         })
         .then(data => {
           this.billData = data
+          this.hasGetOrder = true
         })
     },
     handleMore(bill) {

@@ -20,7 +20,7 @@
               <text class="user-bind-account" @tap.stop="() => (visible = true)">立即绑定</text>
             </view>
             <view>
-              <image :src="userImg" mode="" class="user-icon" />
+              <image :src="userImg" mode="" class="user-icon" v-if="userInfo.userId" />
               {{ accountTypeMap[userInfo.accountType] }}</view
             >
           </view>
