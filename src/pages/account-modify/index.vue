@@ -49,7 +49,7 @@ export default {
     const { title, key } = Taro.getCurrentInstance().router.params
     this.key = key
     this.title = title
-    this.innerValue = this.userInfo[key]
+    this.innerValue = this.userInfo[key] || ''
     if (key === 'customerLinkTel') {
       setTitle({ title: `重置手机号` })
     } else {
@@ -72,7 +72,6 @@ export default {
           customerLinkMan: 'updateCustomerLinkMan', // 修改联系人
           consigneeLink: 'updateConsigneeLink', // 修改收货人
         }[this.key]
-        debugger
 
         const params = {
           [this.key]: this.innerValue,

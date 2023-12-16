@@ -1,6 +1,9 @@
 <template>
   <view class="change-password">
-    <view class="change-password-title">店长密码设置</view>
+    <view class="change-password-title">
+      <text class="img"></text>
+      <text>店长密码设置</text>
+    </view>
     <view class="common-card">
       <input v-model.trim="originManagerPassword" placeholder="原密码（6-13位数字+字母）" />
     </view>
@@ -11,7 +14,10 @@
       <input v-model.trim="confirmManagerPassword" type="password" placeholder="确认新密码" />
     </view>
     <view class="error-tip" v-if="validatePassword('manager')">{{ managerErrorTip }}</view>
-    <view class="change-password-title">店员密码设置</view>
+    <view class="change-password-title">
+      <text class="img"></text>
+      <text>店员密码设置</text>
+    </view>
     <view class="common-card">
       <input v-model.trim="originAssistantPassword" placeholder="原密码（6-13位数字+字母）" />
     </view>
@@ -22,7 +28,7 @@
       <input v-model.trim="confirmAssistantPassword" type="password" placeholder="确认新密码" />
     </view>
     <view class="error-tip" v-if="validatePassword('assistant')">{{ assistantErrorTip }}</view>
-    <nan-button type="primary" :loading="loading" :disabled="disabled" @tap="onConfirm">确认修改</nan-button>
+    <nan-button type="primary" :loading="loading" @tap="onConfirm">确认修改</nan-button>
   </view>
 </template>
 
@@ -77,6 +83,14 @@ export default {
     },
 
     onConfirm() {
+      if (this.disabled) {
+        Taro.showToast({
+          title: '密码不能为空',
+          icon: 'error',
+        })
+        return
+      }
+
       this.loading = true
       this.$API
         .updateRecieveCode({
@@ -110,6 +124,8 @@ export default {
   &-title {
     color: #666;
     margin: 36px 0;
+    display: flex;
+    align-items: center;
   }
 
   .error-tip {
@@ -121,6 +137,14 @@ export default {
   button {
     margin-top: 50px;
     font-size: 32px;
+  }
+
+  .img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    margin-right: 12px;
   }
 }
 </style>

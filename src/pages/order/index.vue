@@ -36,9 +36,10 @@
                     <view class="order-result-info">
                       <view>{{ product.productName }}</view>
                       <view>{{ product.productSpecs }} {{ product.specifications }}</view>
-                      <view class="order-result-tag"
-                        ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
-                      >
+                      <view class="order-result-tag">
+                        <text>{{ ORDER_TYPE[product.orderType] }}</text>
+                        <text class="green" v-if="product.deliveryRepair === '01'">补验收</text>
+                      </view>
                     </view>
                   </view>
                   <view>
@@ -84,9 +85,10 @@
                       <view class="order-result-info">
                         <view>{{ product.productName }}</view>
                         <view>{{ product.productSpecs }} {{ product.specifications }}</view>
-                        <view class="order-result-tag"
-                          ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
-                        >
+                        <view class="order-result-tag">
+                          <text>{{ ORDER_TYPE[product.orderType] }}</text>
+                          <text class="green" v-if="product.deliveryRepair === '01'">补验收</text>
+                        </view>
                         <view class="order-date">交货时间 {{ product.deliveryDate }}</view>
                       </view>
                     </view>

@@ -6,6 +6,7 @@
   box-sizing: border-box;
 
   &-type {
+    position: relative;
     font-weight: 400;
     color: #fefffe;
     line-height: 33px;
@@ -15,6 +16,16 @@
     &-title {
       padding-bottom: 24px;
       font-size: 32px;
+    }
+  }
+
+  &-status {
+    position: absolute;
+    right: 30px;
+    top: calc(50% - 48px);
+    image {
+      width: 96px;
+      height: 96px;
     }
   }
 
@@ -95,11 +106,19 @@
 
   &-tag {
     text {
+      font-size: 20px;
       padding: 0 10px;
       border-radius: 2px;
-      color: #0091ff;
+      color: rgb(84, 130, 211);
       line-height: 32px;
-      border: 1px solid #26a1ff;
+      background-color: rgb(206, 221, 235);
+      margin-right: 12px;
+
+      &.green {
+        color: rgb(49, 164, 118);
+        background-color: rgb(198, 232, 220);
+        border: 1px solid rgb(198, 232, 220);
+      }
     }
   }
 

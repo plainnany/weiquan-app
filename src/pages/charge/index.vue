@@ -1,6 +1,9 @@
 <template>
   <view class="charge-page">
-    <view class="phone" @tap="contact">客服</view>
+    <view class="phone" @tap="contact">
+      <image :src="phoneIcon" mode="" />
+      客服</view
+    >
     <view class="charge-way">请选择充值方式</view>
     <view class="charge-card">
       <view class="charge-method">
@@ -25,6 +28,7 @@
 <script>
 import './index.less'
 import wechatIcon from '@/images/wechat.png'
+import phoneIcon from '@/images/phone.svg'
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
 
@@ -37,6 +41,7 @@ export default {
       wechatIcon,
       balance: '',
       btnLoading: false,
+      phoneIcon,
     }
   },
   mounted() {

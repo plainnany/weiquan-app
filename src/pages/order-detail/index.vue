@@ -3,6 +3,7 @@
     <view class="order-detail-type">
       <view class="order-detail-type-title">{{ STATE_TYPE_TEXT[orderDetail.state].title }}</view>
       <view class="order-detail-type-sub-title">{{ STATE_TYPE_TEXT[orderDetail.state].subTitle }}</view>
+      <view class="order-detail-status"> <image :src="STATE_TYPE_TEXT[orderDetail.state].icon" mode=""/></view>
       <view v-if="orderDetail.state === STATE_TYPE.toPay">9分钟后订单关闭，请及时付款哦</view>
     </view>
     <view class="order-detail-content">
@@ -45,8 +46,9 @@
                 <view>{{ product.productName }}</view>
                 <view class="grey">{{ product.productSpecs }} {{ product.specifications }}</view>
                 <view class="order-detail-tag"
-                  ><text>{{ ORDER_TYPE[product.orderType] }}</text></view
-                >
+                  ><text>{{ ORDER_TYPE[product.orderType] }}</text>
+                  <text class="green" v-if="product.deliveryRepair === '01'">补验收</text>
+                </view>
                 <view class="grey">交货时间：{{ product.deliveryDate }}</view>
               </view>
             </view>
@@ -155,6 +157,9 @@ import weipocketIcon from '@/images/wei-pocket.png'
 import closeIcon from '@/images/close.png'
 import driverIcon from '@/images/driver.png'
 import drivePhoneIcon from '@/images/drive-phone.png'
+import orderDetailIcon from '@/images/order-detail.png'
+import orderDetailEndIcon from '@/images/order-detail-end.png'
+import orderDetailPayIcon from '@/images/order-detail-pay.png'
 
 export default {
   components: {},
@@ -184,32 +189,30 @@ export default {
         done: '05',
       },
       STATE_TYPE_TEXT: {
-        '01': '待付款',
-        '02': '等待发货',
-        '03': '等待发货',
-        '04': '等待发货',
-        '05': '已完成',
-      },
-      STATE_TYPE_TEXT: {
         '01': {
           title: '待付款',
           subTitle: '待付款',
+          icon: orderDetailPayIcon,
         },
         '02': {
           title: '等待发货',
           subTitle: '买家已下单，等待卖家发货',
+          icon: orderDetailIcon,
         },
         '03': {
           title: '等待发货',
           subTitle: '买家已下单，等待卖家发货',
+          icon: orderDetailIcon,
         },
         '04': {
           title: '等待发货',
           subTitle: '买家已下单，等待卖家发货',
+          icon: orderDetailIcon,
         },
         '05': {
           title: '已完成',
           subTitle: '订单已完成',
+          icon: orderDetailEndIcon,
         },
       },
       payDialogVisible: false,

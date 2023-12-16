@@ -342,8 +342,10 @@ export default {
           complainDetail: description,
           imgUrl: this.questionImages.join(','),
           dictid,
+          dictname: this.checkedQuestion,
           num: number,
           productCode,
+          complainKind: '01',
         })
         .then(data => {
           if (data) {

@@ -62,7 +62,7 @@
   .order-result {
     margin-top: 104px;
     box-sizing: border-box;
-    height: 100%;
+    height: calc(100vh - 104px);
     position: relative;
     font-size: 24px;
 
@@ -71,7 +71,7 @@
     }
 
     scroll-view {
-      height: 100%;
+      height: calc(100vh - 104px);
     }
 
     &-title {
@@ -174,9 +174,16 @@
         font-size: 20px;
         padding: 0 10px;
         border-radius: 2px;
-        color: #0091ff;
+        color: rgb(84, 130, 211);
         line-height: 32px;
-        border: 1px solid #26a1ff;
+        background-color: rgb(206, 221, 235);
+        margin-right: 12px;
+
+        &.green {
+          color: rgb(49, 164, 118);
+          background-color: rgb(198, 232, 220);
+          border: 1px solid rgb(198, 232, 220);
+        }
       }
     }
 
