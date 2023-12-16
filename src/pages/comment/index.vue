@@ -347,10 +347,8 @@ export default {
           productCode,
           complainKind: '01',
         })
-        .then(data => {
-          if (data) {
-            Taro.navigateTo({ url: '/pages/custom-comment/index' })
-          }
+        .then(() => {
+          Taro.navigateTo({ url: '/pages/custom-comment/index' })
         })
         .finally(() => {
           this.btnLoading = false
