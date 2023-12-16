@@ -58,7 +58,7 @@ export default {
       categoryList: [
         {
           classCode: 'special',
-          productClass: '可定品项',
+          productClass: '可订品项',
         },
       ],
       productList: [],
@@ -79,7 +79,7 @@ export default {
     this.categoryList = [
       {
         classCode: 'special',
-        productClass: '可定品项',
+        productClass: '可订品项',
       },
     ]
     this.categoryIndex = this.$store.state.switchCategoryTab

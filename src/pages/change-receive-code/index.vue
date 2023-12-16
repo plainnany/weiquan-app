@@ -4,7 +4,7 @@
     <view class="common-card">
       <input v-model="code" placeholder="新收货码(6位数字)" />
     </view>
-    <nan-button type="primary" :loading="loading" :disabled="disabled" @tap="onConfirm">确认修改</nan-button>
+    <nan-button type="primary" :loading="loading" @tap="onConfirm">确认修改</nan-button>
   </view>
 </template>
 
@@ -32,6 +32,14 @@ export default {
   },
   methods: {
     onConfirm() {
+      if (this.disabled) {
+        Taro.showToast({
+          title: '密码不能为空',
+          icon: 'error',
+        })
+
+        return
+      }
       this.loading = true
       this.$API
         .updateRecieveCode({

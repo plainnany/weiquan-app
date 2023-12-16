@@ -74,6 +74,21 @@
             </picker>
           </view>
         </view>
+        <view class="comment-page-item" v-if="form.dictid === '2.03'">
+          <view class="comment-page-item-label">是否退回</view>
+          <view class="input-wrapper">
+            <picker mode="selector" :range="returnFlgRange" @change="returnFlgChange" range-key="label">
+              <text v-if="form.returnFlg">{{ form.returnFlg === '01' ? '是' : '否' }}</text>
+              <text v-else>是否退回</text>
+            </picker>
+          </view>
+        </view>
+        <view class="comment-page-item" v-if="form.dictid === '2.03'">
+          <view class="comment-page-item-label">批次号</view>
+          <view class="input-wrapper">
+            <input v-model="form.batchCode" placeholder="请输入批次号" />
+          </view>
+        </view>
         <view class="comment-page-item">
           <view class="comment-page-item-label">产品数量</view>
           <view class="input-wrapper">
@@ -115,7 +130,7 @@
         </view>
       </view>
       <view class="comment-page-footer padding" v-if="type === 'add'">
-        <nan-button type="primary" @tap="submit" :disabled="btnDisabled" :loading="btnLoading">提交评价</nan-button>
+        <nan-button type="primary" @tap="submit" :loading="btnLoading">提交评价</nan-button>
       </view>
       <view class="comment-page-footer" v-if="type === 'todo'">
         <view class="action-btn btn-delete" @tap="handleDelete">删除</view>
@@ -144,6 +159,7 @@ export default {
         description: '',
         dictid: '',
         productCode: '',
+        returnFlg: '',
       },
       questions: [],
       checkedQuestion: '',
@@ -158,6 +174,16 @@ export default {
       videoUrl: '',
       deleteIcon,
       type: '',
+      returnFlgRange: [
+        {
+          label: '是',
+          key: '01',
+        },
+        {
+          label: '否',
+          key: '02',
+        },
+      ],
     }
   },
   computed: {
@@ -220,6 +246,8 @@ export default {
           this.form.number = data.num
           this.form.dictid = data.dictid
           this.form.productCode = data.productCode
+          this.form.returnFlg = data.returnFlg
+          this.form.batchCode = data.batchCode
         })
     },
     getProductList() {
@@ -253,6 +281,10 @@ export default {
       const { productName, productCode } = this.productList[e.detail.value]
       this.checkedProduct = productName
       this.form.productCode = productCode
+    },
+    returnFlgChange(e) {
+      const { key } = this.returnFlgRange[e.detail.value]
+      this.form.returnFlg = key
     },
     uploadImage() {
       Taro.chooseImage({
@@ -334,19 +366,30 @@ export default {
       this.videoUrl = ''
     },
     submit() {
+      if (this.btnDisabled) {
+        Taro.showToast({
+          title: '请填写完整',
+          icon: 'error',
+        })
+      }
       if (this.btnLoading) return
       const { description, dictid, number, productCode } = this.form
       this.btnLoading = true
+      const params = {
+        complainDetail: description,
+        imgUrl: this.questionImages.join(','),
+        dictid,
+        dictname: this.checkedQuestion,
+        num: number,
+        productCode,
+        complainKind: '01',
+      }
+      if (this.form.dictid === '2.03') {
+        params.returnFlg = this.form.returnFlg // 是否退回
+        params.batchCode = this.form.batchCode // 批次号
+      }
       this.$API
-        .submitComplain({
-          complainDetail: description,
-          imgUrl: this.questionImages.join(','),
-          dictid,
-          dictname: this.checkedQuestion,
-          num: number,
-          productCode,
-          complainKind: '01',
-        })
+        .submitComplain(params)
         .then(() => {
           Taro.navigateTo({ url: '/pages/custom-comment/index' })
         })
