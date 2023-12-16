@@ -28,7 +28,7 @@
         <view class="electronic-list-row">
           <view>
             <text class="electronic-list-icon active"></text>
-            共
+            味全产品 共
             {{ bill.num }}
             单
           </view>
