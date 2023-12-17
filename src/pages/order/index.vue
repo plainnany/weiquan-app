@@ -102,10 +102,7 @@
                 <view class="flex-between-center order-result-footer">
                   <text>共{{ order.orderListViews.length }}件商品</text>
                   <!-- 待支付 -->
-                  <view class="flex-between-center" v-if="order.state === '01'">
-                    <nan-button type="plain" @tap="cancelOrder(order)">取消订单</nan-button>
-                    <nan-button type="primary" @tap="handlePay(order)">去支付</nan-button>
-                  </view>
+
                   <!-- 已付款 -->
                   <!-- <view class="flex-between-center" v-if="order.state === '02'">
                     <nan-button type="plain">取消订单</nan-button>
@@ -117,8 +114,12 @@
                     <nan-button type="primary">提醒发货</nan-button>
                   </view> -->
                   <!--  -->
-                  <view>
-                    <view class="btn-plain" @tap="buyAgain">再来一单</view>
+                  <view class="flex-between-center">
+                    <view class="btn-plain" @tap="buyAgain">再下一单</view>
+                    <view class="flex-between-center" v-if="order.state === '01'">
+                      <view class="btn-plain" @tap="cancelOrder(order)">取消订单</view>
+                      <view class="btn-primary" @tap="handlePay(order)">立即支付</view>
+                    </view>
                     <view v-if="order.state === '05'" class="btn-primary" @tap="addQuestion(order)">问题反馈</view>
                   </view>
                 </view>

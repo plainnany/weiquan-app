@@ -30,7 +30,7 @@
             <view class="confirm-order-info">
               <view>{{ product.productName }}</view>
               <view>规格：{{ product.productSpecs }} </view>
-              <view>单位：{{ product.productUnitConvertRule }} / {{ product.productUnitMax }}</view>
+              <view>单位：1 {{ product.productUnitMax }} / 数量：{{ product.productUnitConvertRule }}</view>
               <!-- <view class="confirm-order-tag"
               ><text>{{ product.type }}</text></view
             > -->

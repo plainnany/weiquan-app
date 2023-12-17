@@ -1,10 +1,13 @@
 <template>
   <view class="order-detail">
     <view class="order-detail-type">
-      <view class="order-detail-type-title">{{ STATE_TYPE_TEXT[orderDetail.state].title }}</view>
-      <view class="order-detail-type-sub-title">{{ STATE_TYPE_TEXT[orderDetail.state].subTitle }}</view>
-      <view class="order-detail-status"> <image :src="STATE_TYPE_TEXT[orderDetail.state].icon" mode=""/></view>
-      <view v-if="orderDetail.state === STATE_TYPE.toPay">9分钟后订单关闭，请及时付款哦</view>
+      <view class="order-detail-type-title"
+        >{{ STATE_TYPE_TEXT[orderDetail.state]?.title }}
+        <text v-if="orderDetail.state === STATE_TYPE.toPay && countDown">还剩下{{ countDown }}支付</text>
+      </view>
+      <view class="order-detail-type-sub-title">{{ STATE_TYPE_TEXT[orderDetail.state]?.subTitle }}</view>
+      <view class="order-detail-status"> <image :src="STATE_TYPE_TEXT[orderDetail.state]?.icon" mode=""/></view>
+      <view v-if="orderDetail.state === STATE_TYPE.toPay">若未支付订单将取消</view>
     </view>
     <view class="order-detail-content">
       <view class="common-card">
@@ -35,8 +38,8 @@
           <image :src="backIcon" mode="" />
         </view> -->
       </view>
-      <view v-for="(product, index) in orderDetail.list" :key="index">
-        <view class="common-card">
+      <view class="common-card">
+        <view v-for="(product, index) in orderDetail.list" :key="index">
           <view class="order-detail-item flex-between-center">
             <view class="flex-between-center">
               <view class="order-detail-image">
@@ -60,8 +63,7 @@
               <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
             </view>
           </view>
-        </view>
-        <!-- <view class="common-card">
+          <!-- <view class="common-card">
           <view class="flex-between-center">
             <text class="order-detail-color-grey">商品小计</text>
             <view class="order-detail-sum"
@@ -81,7 +83,14 @@
             >
           </view>
         </view> -->
+        </view>
+
+        <view class="flex-between-center">
+          <text>订单合计金额</text>
+          <text class="order-detail-total">¥ {{ total }}</text>
+        </view>
       </view>
+
       <view class="common-card">
         <view class="order-detail-item">
           <text class="order-detail-color-grey">订单编号：</text>
@@ -104,8 +113,9 @@
     <view class="order-detail-footer flex-between-center" v-if="orderDetail.state === STATE_TYPE.toPay">
       <view></view>
       <view class="flex-between-center">
+        <nan-button type="plain" @tap="buyAgain">再下一单</nan-button>
         <nan-button type="plain" @tap="cancelOrder">取消订单</nan-button>
-        <nan-button type="primary" @tap="handlePay">去支付</nan-button>
+        <nan-button type="primary" @tap="handlePay">立即支付</nan-button>
       </view>
     </view>
     <view v-if="payDialogVisible" class="order-pay-modal">
@@ -191,7 +201,7 @@ export default {
       STATE_TYPE_TEXT: {
         '01': {
           title: '待付款',
-          subTitle: '待付款',
+          subTitle: '',
           icon: orderDetailPayIcon,
         },
         '02': {
@@ -231,11 +241,15 @@ export default {
         },
       ],
       btnLoading: false,
+      countDown: '',
     }
   },
   computed: {
     userInfo() {
       return this.$store.state.userInfo
+    },
+    total() {
+      return this.orderDetail.list.reduce((prev, cur) => prev + parseFloat(cur.amount), 0)
     },
   },
   mounted() {
@@ -257,8 +271,53 @@ export default {
         })
         .then(data => {
           this.orderDetail = data
-          console.log(data)
+          this.handleCountDown()
         })
+    },
+    handleCountDown() {
+      if (!this.orderDetail.createDate) return
+      const endTime = this.getEndTime()
+      const currentTime = new Date().getTime()
+      const timeDifference = endTime - currentTime
+
+      const minutes = Math.floor(timeDifference / (1000 * 60))
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000)
+      this.minutes = Number(minutes)
+      this.seconds = Number(seconds)
+      if (this.minutes && this.seconds) {
+        this.seconds -= 1
+        if (this.seconds === 0) {
+          this.minutes -= 1
+        }
+        if (this.minutes === 0 && this.seconds === 0) {
+          return
+        }
+        this.countDown = `${this.minutes}:${this.seconds <= 9 ? '0' + this.seconds : this.seconds}`
+        this.setCountDown()
+      }
+    },
+    getEndTime() {
+      const now = new Date(this.orderDetail.createDate)
+      return now.getTime() + 15 * 60 * 1000 // 15分钟后
+    },
+
+    setCountDown() {
+      this.timer = setTimeout(() => {
+        if (this.seconds === 0) {
+          this.seconds = 60
+          this.minutes -= 1
+        }
+        this.seconds -= 1
+
+        if (this.minutes === 0 && this.seconds === 0) {
+          clearTimeout(this.timer)
+          this.countDown = ''
+          Taro.navigateTo({ url: '/pages/order/index' })
+        } else {
+          this.countDown = `${this.minutes}:${this.seconds <= 9 ? '0' + this.seconds : this.seconds}`
+          this.setCountDown()
+        }
+      }, 1000)
     },
     viewDeliver() {},
     cancelOrder() {
@@ -343,6 +402,9 @@ export default {
       Taro.makePhoneCall({
         phoneNumber: this.orderDetail.driverTel,
       })
+    },
+    buyAgain() {
+      Taro.switchTab({ url: '/pages/shop/index' })
     },
   },
 }
