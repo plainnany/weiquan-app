@@ -21,7 +21,10 @@
             <view class="product-list-item" @tap="viewDetail(product)" v-for="(product, index) in productList" :key="index">
               <view class="product-list-image"><image :src="product.productImage" mode=""/></view>
               <view class="product-list-detail">
-                <view class="product-list-title">{{ product.productName }}</view>
+                <view class="product-list-title">
+                  <text class="sell" v-if="product.sell">订</text>
+                  {{ product.productName }}</view
+                >
                 <!-- <view class="product-list-info">规格: {{ product.productSpecs }} | 单位: {{ product.productUnitRule }}</view>
               <view style="display:flex; justify-content:space-between;align-items: center;">
                 <view>

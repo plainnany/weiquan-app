@@ -27,7 +27,7 @@
           <view class="order-detail-location">
             <image :src="driverIcon" mode="" class="driver" />
           </view>
-          <view class="order-detail-location-info">
+          <view class="order-detail-location-info" style="align-items: center">
             <view>配送员：{{ orderDetail.driverName || '' }}</view>
             <view class="phone" @tap="contact">
               <image :src="drivePhoneIcon" mode="" />
@@ -53,7 +53,7 @@
                   <text class="green" v-if="product.deliveryRepair === '01'">补验收</text>
                 </view>
                 <view class="grey">{{ product.state === '05' ? '签收' : '交货' }}时间 {{ product.deliveryDate }}</view>
-                <view class="grey" v-if="product.state === '05'">原始日期 {{ product.originDeliveryData }}</view>
+                <view class="grey" v-if="product.originDeliveryData">原始日期 {{ product.originDeliveryData }}</view>
               </view>
             </view>
             <view>
@@ -87,7 +87,7 @@
         </view> -->
         </view>
 
-        <view class="flex-between-center">
+        <view class="flex-between-center" v-if="orderDetail.state === '01'">
           <text>订单合计金额</text>
           <text class="order-detail-total">¥ {{ total }}</text>
         </view>

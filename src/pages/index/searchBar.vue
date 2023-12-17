@@ -1,14 +1,15 @@
 <template>
   <view class="search-bar-wrapper">
-    <view class="search-bar">
-      <icon class="search-icon" type="search" size="16" />
-      <input type="text" @focus="focus" placeholder="喝出美好生活" placeholder-class="placeholder-style" />
+    <view class="search-bar" @tap="focus">
+      <icon class="search-icon" type="search" size="12" />
+      <text class="input">商品搜索</text>
     </view>
   </view>
 </template>
 
 <script>
 import Taro from '@tarojs/taro'
+import './index.less'
 
 export default {
   name: 'searchBar',
@@ -24,25 +25,3 @@ export default {
   },
 }
 </script>
-
-<style lang="less">
-.search-bar {
-  &-wrapper {
-    width: 100%;
-    background-color: #fff;
-    padding-bottom: 20px;
-  }
-
-  display: flex;
-  align-items: center;
-  border-radius: 40px;
-  background: #edeff2;
-  padding: 12px 24px;
-  font-size: 28px;
-
-  icon {
-    margin-right: 30px;
-    margin-left: 20px;
-  }
-}
-</style>

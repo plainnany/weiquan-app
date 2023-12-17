@@ -45,7 +45,7 @@ export default {
             text: '问题反馈',
             icon: warningIcon,
             showBack: true,
-            path: '/pages/comment/index',
+            path: '/pages/comment/index?type=add',
           },
         ],
         [

@@ -8,7 +8,7 @@
     <view class="custom-add-btn" @tap="handleClick({})">+</view>
     <view class="custom-record">
       <scroll-view :scroll-y="true" @scrolltolower="toLower">
-        <view class="custom-list">
+        <view class="custom-list" v-if="complainList.length > 0">
           <view class="custom-list-item" v-for="(item, index) in complainList" :key="index" @tap="handleClick(item)">
             <view
               >编号： <text>{{ item.complainCode }}</text></view
@@ -17,6 +17,7 @@
             <view class="custom-comment-status" v-if="active === 'done'">已处理</view>
           </view>
         </view>
+        <view class="empty">暂无数据</view>
       </scroll-view>
     </view>
   </view>

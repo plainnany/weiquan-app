@@ -9,7 +9,7 @@
           {{ titleMap[key] }}
           <view v-if="item.createDtae || item.createTime" class="extra">{{ item.createDtae || item.createTime }}</view>
         </view>
-        <view class="info-tip">{{ key === 'Post' ? item.postTitle : item.message }}</view>
+        <view class="info-tip">{{ key === 'Post' ? item.postTitle : item.message || '暂时没有新的消息' }}</view>
       </view>
     </view>
   </view>
@@ -64,7 +64,7 @@ export default {
     getNotice() {
       this.$API.messageCenter().then(data => {
         ;['System', 'Order', 'Post'].forEach(key => {
-          this.messageCenter[key] = data[key]
+          this.messageCenter[key] = data[key] || {}
         })
       })
     },

@@ -5,22 +5,27 @@
         +
       </text>
     </view>
-    <view class="notice-item" v-for="(item, index) in noticeList" :key="index" @tap="editNotice(item)">
-      <view class="notice-item-main">
-        <view class="day">
-          <text class="date">{{ getLabelTime(item.noticeTime) }}</text>
-          <text class="time">{{ item.noticeTime }}</text>
+    <view v-if="noticeList.length > 0">
+      <view class="notice-item" v-for="(item, index) in noticeList" :key="index" @tap="editNotice(item)">
+        <view class="notice-item-main">
+          <view class="day">
+            <text class="date">{{ getLabelTime(item.noticeTime) }}</text>
+            <text class="time">{{ item.noticeTime }}</text>
+          </view>
+          <view class="remark">
+            {{ item.remarks }}
+            <text class="notice-day">
+              {{ getNoticeDay(item.noticeDate) }}
+            </text>
+          </view>
         </view>
-        <view class="remark">
-          {{ item.remarks }}
-          <text class="notice-day">
-            {{ getNoticeDay(item.noticeDate) }}
-          </text>
+        <view class="notice-item-switch" @tap.stop="() => {}">
+          <switch color="#43D95C" :checked="item.checked" @change="e => changeSwitch(e, item)"></switch>
         </view>
       </view>
-      <view class="notice-item-switch" @tap.stop="() => {}">
-        <switch color="#43D95C" :checked="item.checked" @change="e => changeSwitch(e, item)"></switch>
-      </view>
+    </view>
+    <view class="empty" v-else>
+      暂无数据
     </view>
   </view>
 </template>

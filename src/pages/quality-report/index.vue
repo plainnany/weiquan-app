@@ -1,20 +1,21 @@
 <template>
   <view class="quality-page">
     <view class="quality-selection">
+      <picker mode="selector" :range="qualityTypes" @change="qualityTypeChange" range-key="label">
+        <text>{{ qualityTypes[qualityIndex].label }}</text>
+      </picker>
+      <image class="arrow" :src="arrowIcon" />
+    </view>
+    <view class="quality-selection">
       <picker mode="selector" :range="productList" @change="productChange" range-key="productName">
         <text v-if="productList[productIndex]">{{ productList[productIndex].productName }}</text>
         <text v-else>请选择商品</text>
       </picker>
     </view>
-    <view class="quality-selection">
-      <picker mode="selector" :range="qualityTypes" @change="qualityTypeChange" range-key="label">
-        <text>{{ qualityTypes[qualityIndex].label }}</text>
-      </picker>
-    </view>
     <view class="quality-search" v-if="qualityIndex === 0">
       <view class="flex-between-center">
         <icon class="search-icon" type="search" size="16" />
-        <input v-model="batchCode" placeholder="请输入批次号" />
+        <input v-model="batchCode" placeholder="请输入商品批次号" />
       </view>
       <view class="search-btn" @tap="onSearch">查询</view>
     </view>
@@ -39,11 +40,13 @@
 import './index.less'
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
+import arrowIcon from '@/images/arrow-down.png'
 
 export default {
   components: {},
   data() {
     return {
+      arrowIcon,
       qualityTypes: [
         {
           label: '出厂检验报告',

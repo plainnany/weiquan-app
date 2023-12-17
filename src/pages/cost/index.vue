@@ -1,9 +1,10 @@
 <template>
   <view class="remain-page">
-    <view class="remain-info" v-if="userInfo.accountType !== '02'">
+    <view class="remain-info">
       <view class="remain-title">
         账户余额(元)
       </view>
+
       <view class="remain-money">
         <view class="remain-num">
           <text>{{ balance }}</text>
@@ -11,14 +12,14 @@
       </view>
     </view>
     <view class="remain-item" @tap="handleCharge" v-if="userInfo.accountType !== '02'">
-      <view class="remain-item-icon"> </view>
+      <image :src="icon1" class="icon" mode="" />
       <view>
         充值
       </view>
       <view class="remain-item-arrow">></view>
     </view>
     <view class="remain-item" @tap="handleDetail">
-      <view class="remain-item-icon"> </view>
+      <image :src="icon2" class="icon" mode="" />
       <view>
         查看明细
       </view>
@@ -30,12 +31,16 @@
 <script>
 import './index.less'
 import Taro from '@tarojs/taro'
+import icon1 from '@/images/account_acc.png'
+import icon2 from '@/images/account_up.png'
 
 export default {
   name: 'cost',
   components: {},
   data() {
     return {
+      icon1,
+      icon2,
       active: 'charge',
       balance: '',
       tabs: [
@@ -106,6 +111,9 @@ export default {
       }
       this.pageNo++
       this.getChargeList('loadMore')
+    },
+    handleNav(item) {
+      Taro.navigateTo({ url: `${item.path}` })
     },
   },
 }

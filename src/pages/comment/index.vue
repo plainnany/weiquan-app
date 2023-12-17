@@ -63,6 +63,7 @@
               <text v-if="checkedQuestion">{{ checkedQuestion }}</text>
               <text v-else>请选择问题原因</text>
             </picker>
+            <image class="arrow" :src="arrowIcon" />
           </view>
         </view>
         <view class="comment-page-item">
@@ -73,6 +74,7 @@
               <text v-else>请选择问题产品</text>
             </picker>
           </view>
+          <image class="arrow" :src="arrowIcon" />
         </view>
         <view class="comment-page-item" v-if="form.dictid === '2.03'">
           <view class="comment-page-item-label">是否退回</view>
@@ -102,7 +104,7 @@
           </view>
         </view>
         <view class="comment-page-item">
-          <view class="comment-page-item-label">上传凭证 <text style="color: #666">(请拍摄产品生产日期和异常图片)</text></view>
+          <view class="comment-page-item-label">上传凭证 <text style="color: #666">(请拍摄产品生产日期和异常情况图片上传)</text></view>
           <view class="comment-page-upload">
             <view class="comment-page-image-item" v-for="(image, index) in questionImages" :key="index">
               <image :src="image" mode="" />
@@ -115,7 +117,7 @@
           <view class="comment-page-upload-tip">最多三张</view>
         </view>
         <view class="comment-page-item">
-          <view class="comment-page-item-label">上传视频凭证 <text style="color: #666">(最多一个视频且时长不长于15s)</text></view>
+          <view class="comment-page-item-label">上传视频凭证 <text style="color: #666">(最多一个视频且时长不长于15秒)</text></view>
           <view class="comment-page-upload">
             <view class="comment-page-image-item" v-if="videoUrl">
               <video v-if="videoUrl" subtitles="视频" descriptions="描述">
@@ -130,7 +132,7 @@
         </view>
       </view>
       <view class="comment-page-footer padding" v-if="type === 'add'">
-        <nan-button type="primary" @tap="submit" :loading="btnLoading">提交评价</nan-button>
+        <nan-button type="primary" @tap="submit" :loading="btnLoading">确认提交</nan-button>
       </view>
       <view class="comment-page-footer" v-if="type === 'todo'">
         <view class="action-btn btn-delete" @tap="handleDelete">删除</view>
@@ -148,11 +150,13 @@ import locationIcon from '@/images/location.png'
 import backIcon from '@/images/user/back.png'
 import deleteIcon from '@/images/delete.svg'
 import { BASE_URL } from '@/const'
+import arrowIcon from '@/images/arrow-down.png'
 
 export default {
   components: {},
   data() {
     return {
+      arrowIcon,
       form: {
         question: '',
         number: '',

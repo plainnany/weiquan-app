@@ -3,7 +3,7 @@
     <view class="search-bar">
       <view class="search-wrap">
         <icon class="search-icon" type="search" size="16" />
-        <input placeholder="喝出美好生活" :value="keyword" @confirm="onSearch" />
+        <input placeholder="请输入商品名称搜索" :value="keyword" @confirm="onSearch" />
       </view>
       <image class="delete-icon" v-if="keyword" @tap="deleteKeyword" :src="deleteIcon" mode="" />
     </view>

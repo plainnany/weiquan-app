@@ -126,6 +126,7 @@ export default {
     setTitle({ title: '产品详情' })
   },
   onShow() {
+    this.$store.dispatch('getUserInfo')
     this.getProduct()
   },
   methods: {
@@ -154,9 +155,18 @@ export default {
     },
     addShop() {
       if (!this.product.sell) {
-        Taro.showToast({
-          title: '当前商品不支持购买',
+        Taro.showModal({
+          title: '提示',
+          content: `该商品暂不可订,如有需要可联系负责业务或致电服务电话咨询${this.$store.state.userInfo?.customerService || ''},感谢!`,
+          confirmColor: '#f55726',
+          cancelColor: '#f55726',
+          confirmText: '确认',
+          cancelText: '拨打',
           icon: 'none',
+          success: res => {
+            this.contact()
+          },
+          fail: () => {},
         })
         return
       }

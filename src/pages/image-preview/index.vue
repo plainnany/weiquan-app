@@ -37,6 +37,7 @@ export default {
             Taro.saveImageToPhotosAlbum({
               filePath: localFilePath,
               success() {
+                debugger
                 Taro.showToast({
                   title: '保存成功',
                   icon: 'success',
@@ -44,6 +45,7 @@ export default {
                 })
               },
               fail(err) {
+                debugger
                 Taro.showToast({
                   title: '保存失败',
                   icon: 'none',
