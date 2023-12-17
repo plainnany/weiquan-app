@@ -257,6 +257,11 @@ export default {
           name: '微信支付',
           icon: wechatIcon,
         },
+        {
+          method: 'weixin-2',
+          name: '微信好友代付',
+          icon: wechatIcon,
+        },
       ],
       wrapAnimate: 'wrapAnimate',
       frameAnimate: 'frameAnimate',
@@ -397,6 +402,14 @@ export default {
         Taro.navigateTo({
           url: `/pages/web-view/index?url=${this.payData.wechatUrl}`,
         })
+      } else if (this.payMethod === 'weixin-2') {
+        Taro.showToast({
+          title: '正在改造招商微信支付！',
+          icon: 'error',
+        })
+        // Taro.navigateTo({
+        //   url: `/pages/web-view/index?url=${this.payData.wechatUrl}`,
+        // })
       }
     },
 

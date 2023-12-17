@@ -230,7 +230,8 @@ export default {
           oid: this.deleteOid,
         })
         .then(() => {
-          this.productList = this.productList.filter(v => this.deleteOid.indexOf(v.oid) === -1)
+          this.getProduct()
+          // this.productList = this.productList.filter(v => this.deleteOid.indexOf(v.oid) === -1)
           Taro.showToast({ title: '删除成功', icon: 'success' })
           this.visible = false
         })

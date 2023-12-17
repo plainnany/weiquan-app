@@ -62,8 +62,8 @@
             <picker mode="selector" :range="questions" @change="questionChange" range-key="dictname">
               <text v-if="checkedQuestion">{{ checkedQuestion }}</text>
               <text v-else>请选择问题原因</text>
+              <image class="arrow" :src="arrowIcon" />
             </picker>
-            <image class="arrow" :src="arrowIcon" />
           </view>
         </view>
         <view class="comment-page-item">
@@ -72,9 +72,9 @@
             <picker mode="selector" :range="productList" @change="productChange" range-key="productName">
               <text v-if="checkedProduct">{{ checkedProduct }}</text>
               <text v-else>请选择问题产品</text>
+              <image class="arrow" :src="arrowIcon" />
             </picker>
           </view>
-          <image class="arrow" :src="arrowIcon" />
         </view>
         <view class="comment-page-item" v-if="form.dictid === '2.03'">
           <view class="comment-page-item-label">是否退回</view>

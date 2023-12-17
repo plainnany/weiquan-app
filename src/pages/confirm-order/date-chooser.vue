@@ -154,15 +154,17 @@ export default {
     },
     onConfirm() {
       let query = ''
+      let weekStr = ''
       if (this.isBatchOrder) {
-        query = this.chosenDates.map(v => `${v.year}-${v.month}-${v.day}`).join(',')
+        // query = this.chosenDates.map(v => `${v.year}-${v.month}-${v.day}`).join(',')
+        query = this.chosenDates
       } else {
         if (this.chosenDate) {
-          query = `${this.chosenDate.year}-${this.chosenDate.month}-${this.chosenDate.day}`
+          query = [this.chosenDate]
         }
       }
       if (query) {
-        this.$emit('confirm', query)
+        this.$emit('confirm', query, weekStr)
       } else {
         Taro.showToast({
           title: '请选择配送时间',

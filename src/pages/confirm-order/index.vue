@@ -24,7 +24,7 @@
             <image :src="backIcon" mode="" />
           </view>
         </view>
-        <view class="delivery-date-item" v-for="item in (product.deliverTime || '').split(',')" :key="item">
+        <view class="delivery-date-item" v-for="item in product.weekStr || []" :key="item">
           {{ item }}
         </view>
         <view class="confirm-order-item flex">
@@ -122,12 +122,15 @@ export default {
       this.dateChooseVisible = true
       setTitle({ title: '日期' })
     },
-    confirmDate(deliverTime) {
+    confirmDate(params) {
+      const deliverTime = params.map(v => `${v.year}-${v.month}-${v.day}`).join(',')
+      const weekStr = params.map(v => v.weekStr)
       this.deliverTime = deliverTime
       this.productList.forEach(product => {
         if (product.productCode === this.productCode) {
           product.deliverTime = deliverTime
           this.$set(product, 'deliverTime', deliverTime)
+          this.$set(product, 'weekStr', weekStr)
         }
       })
       this.dateChooseVisible = false

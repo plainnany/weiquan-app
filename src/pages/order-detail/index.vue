@@ -112,12 +112,12 @@
         </view> -->
       </view>
     </view>
-    <view class="order-detail-footer flex-between-center" v-if="orderDetail.state === STATE_TYPE.toPay">
+    <view class="order-detail-footer flex-between-center">
       <view></view>
       <view class="flex-between-center">
         <nan-button type="plain" @tap="buyAgain">再下一单</nan-button>
-        <nan-button type="plain" @tap="cancelOrder">取消订单</nan-button>
-        <nan-button type="primary" @tap="handlePay">立即支付</nan-button>
+        <nan-button type="plain" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="cancelOrder">取消订单</nan-button>
+        <nan-button type="primary" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="handlePay">立即支付</nan-button>
       </view>
     </view>
     <view v-if="payDialogVisible" class="order-pay-modal">
@@ -413,7 +413,7 @@ export default {
     buyAgain() {
       this.$API
         .anotherOne({
-          orderNumber: this.orderDetail.orderNumber,
+          orderNumber: this.orderDetail.customerOrderCode,
         })
         .then(() => {
           Taro.switchTab({ url: '/pages/shop/index' })
