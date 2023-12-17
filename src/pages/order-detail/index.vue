@@ -115,7 +115,7 @@
     <view class="order-detail-footer flex-between-center">
       <view></view>
       <view class="flex-between-center">
-        <nan-button type="plain" @tap="buyAgain">再下一单</nan-button>
+        <nan-button type="plain" @tap="buyAgain" v-if="orderDetail.state === STATE_TYPE.done">再下一单</nan-button>
         <nan-button type="plain" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="cancelOrder">取消订单</nan-button>
         <nan-button type="primary" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="handlePay">立即支付</nan-button>
       </view>

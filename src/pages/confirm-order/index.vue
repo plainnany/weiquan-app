@@ -51,6 +51,7 @@
       </view>
     </view>
     <view class="confirm-order-footer">
+      <view class="total">¥ {{ totalFee }}</view>
       <view class="confirm-order-btn" @tap="confirmOrder">立即结算</view>
     </view>
     <view>
@@ -84,6 +85,11 @@ export default {
       isBatchOrder: false,
       currentProduct: null,
     }
+  },
+  computed: {
+    totalFee() {
+      return this.productList.reduce((prev, cur) => prev + parseFloat(cur.total), 0)
+    },
   },
   mounted() {
     setTitle({ title: '确认订单' })
