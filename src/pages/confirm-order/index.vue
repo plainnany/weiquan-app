@@ -17,10 +17,15 @@
     <view v-for="product in productList" :key="product.productId">
       <view class="common-card">
         <view class="delivery-date" @tap="chooseDate(product)">
-          <view style="color: #666">{{ product.deliverTime || '配送时间' }}</view>
+          <view style="color: #666">
+            配送时间
+          </view>
           <view class="confirm-order-nav">
             <image :src="backIcon" mode="" />
           </view>
+        </view>
+        <view class="delivery-date-item" v-for="item in (product.deliverTime || '').split(',')" :key="item">
+          {{ item }}
         </view>
         <view class="confirm-order-item flex">
           <view class="flex">
@@ -40,7 +45,7 @@
             <view
               >¥ <text>{{ Number(product.total).toFixed(2) }}</text></view
             >
-            <view>X {{ product.productUnitConvertRule }}</view>
+            <view>X {{ product.amount }}</view>
           </view>
         </view>
       </view>
@@ -50,7 +55,7 @@
     </view>
     <view>
       <nan-modal :visible="dateChooseVisible" v-if="dateChooseVisible" fullScreen>
-        <DateChooser :productCode="productCode" :isBatchOrder="isBatchOrder" @confirm="confirmDate" @cancel="cancelDate" />
+        <DateChooser :productCode="productCode" :isBatchOrder="isBatchOrder || true" @confirm="confirmDate" @cancel="cancelDate" />
       </nan-modal>
     </view>
   </view>
