@@ -3,7 +3,7 @@
     <view class="query-page-tip">
       温馨提示: 在线支付客户操作订单减少, 货款会立即退还至您的账户余额, 如需操作订单增加,请重新下单支付.
     </view>
-    <view class="order-wrapper" v-if="orderList.length">
+    <view class="order-wrapper" v-if="orderList.length > 0">
       <view v-for="(order, index) in orderList" :key="index" class="order-item">
         <view class="order-item-date"> 交货日期: {{ order.deliveryDate }} </view>
         <view class="product-item" v-for="(product, i) in order.orderViews || []" :key="i">
@@ -35,7 +35,7 @@
       </view>
     </view>
     <view class="empty">暂无数据</view>
-    <view class="order-item-footer" v-if="orderList.length" @tap="handleChange">
+    <view class="order-item-footer" v-if="orderList.length > 0" @tap="handleChange">
       完成修改
     </view>
   </view>
