@@ -1,6 +1,6 @@
 <template>
   <view class="remain-page">
-    <view class="remain-info">
+    <view class="remain-info" v-if="userInfo.accountType !== '02'">
       <view class="remain-title">
         账户余额(元)
       </view>
@@ -10,7 +10,7 @@
         </view>
       </view>
     </view>
-    <view class="remain-item" @tap="handleCharge">
+    <view class="remain-item" @tap="handleCharge" v-if="userInfo.accountType !== '02'">
       <view class="remain-item-icon"> </view>
       <view>
         充值
@@ -53,6 +53,11 @@ export default {
       complete: false,
       pageNo: 1,
     }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo
+    },
   },
   mounted() {
     this.getBillCost()

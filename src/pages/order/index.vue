@@ -37,7 +37,7 @@
                       <view>{{ product.productName }}</view>
                       <view>{{ product.productSpecs }} {{ product.specifications }}</view>
                       <view class="order-result-tag">
-                        <text>{{ ORDER_TYPE[product.orderType] }}</text>
+                        <text :class="colorMap[product.orderType]">{{ ORDER_TYPE[product.orderType] }}</text>
                         <text class="green" v-if="product.deliveryRepair === '01'">补验收</text>
                       </view>
                     </view>
@@ -86,7 +86,7 @@
                         <view>{{ product.productName }}</view>
                         <view>{{ product.productSpecs }} {{ product.specifications }}</view>
                         <view class="order-result-tag">
-                          <text>{{ ORDER_TYPE[product.orderType] }}</text>
+                          <text :class="colorMap[product.orderType]">{{ ORDER_TYPE[product.orderType] }}</text>
                           <text class="green" v-if="product.deliveryRepair === '01'">补验收</text>
                         </view>
                         <view class="order-date">交货时间 {{ product.deliveryDate }}</view>
@@ -221,6 +221,11 @@ export default {
         '01': '正常单',
         '02': '样品单',
         '03': '搭赠单',
+      },
+      colorMap: {
+        '01': '',
+        '02': 'sample',
+        '03': 'gift',
       },
       // "state":"01待付款;02,03,04:待发货05:已完成",
       //

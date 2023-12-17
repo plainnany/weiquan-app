@@ -23,7 +23,7 @@
             <view class="phone">{{ userInfo.customerLinkTel }}</view>
           </view>
         </view>
-        <view class="flex-between-center">
+        <view class="flex-between-center" v-if="orderDetail.state !== '01'">
           <view class="order-detail-location">
             <image :src="driverIcon" mode="" class="driver" />
           </view>
@@ -49,10 +49,11 @@
                 <view>{{ product.productName }}</view>
                 <view class="grey">{{ product.productSpecs }} {{ product.specifications }}</view>
                 <view class="order-detail-tag"
-                  ><text>{{ ORDER_TYPE[product.orderType] }}</text>
+                  ><text :class="colorMap[product.orderType]">{{ ORDER_TYPE[product.orderType] }}</text>
                   <text class="green" v-if="product.deliveryRepair === '01'">补验收</text>
                 </view>
-                <view class="grey">交货时间：{{ product.deliveryDate }}</view>
+                <view class="grey">{{ product.state === '05' ? '签收' : '交货' }}时间 {{ product.deliveryDate }}</view>
+                <view class="grey" v-if="product.state === '05'">原始日期 {{ product.originDeliveryData }}</view>
               </view>
             </view>
             <view>
@@ -61,6 +62,7 @@
               >
               <view>订单量 {{ product.productSum }}</view>
               <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
+              <view class="order-detail-done-status" v-if="product.state === '05'">已完成</view>
             </view>
           </view>
           <!-- <view class="common-card">
@@ -240,6 +242,11 @@ export default {
           icon: wechatIcon,
         },
       ],
+      colorMap: {
+        '01': '',
+        '02': 'sample',
+        '03': 'gift',
+      },
       btnLoading: false,
       countDown: '',
     }

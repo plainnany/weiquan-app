@@ -5,6 +5,7 @@
         <view class="label">{{ item.name }}</view>
         <view v-if="item.key === 'headPic'">
           <image :src="userInfo.headPic" v-if="userInfo.headPic" mode="" />
+          <image :src="item.icon" mode="" />
         </view>
         <view v-else class="right">
           {{ userInfo[item.key] }}
@@ -32,6 +33,7 @@ export default {
             name: '头像',
             key: 'headPic',
             needChange: true,
+            icon: backImg,
           },
         ],
         [
