@@ -55,7 +55,7 @@
     </view>
     <view>
       <nan-modal :visible="dateChooseVisible" v-if="dateChooseVisible" fullScreen>
-        <DateChooser :productCode="productCode" :isBatchOrder="isBatchOrder || true" @confirm="confirmDate" @cancel="cancelDate" />
+        <DateChooser :productCode="productCode" :isBatchOrder="isBatchOrder" @confirm="confirmDate" @cancel="cancelDate" />
       </nan-modal>
     </view>
   </view>
