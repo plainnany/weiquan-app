@@ -103,12 +103,10 @@ export default {
             out_trade_no: this.tradeNumber,
             orderNumber: this.orderNumber,
           })
-          .then(data => {
-            if (data) {
-              Taro.navigateTo({
-                url: `/pages/order-detail/index?order=${this.orderNumber}`,
-              })
-            }
+          .then(() => {
+            Taro.navigateTo({
+              url: `/pages/order-detail/index?order=${this.orderNumber}`,
+            })
           })
           .catch(err => {
             Taro.showToast({
