@@ -117,10 +117,10 @@
                   <view class="flex-between-center">
                     <view class="btn-plain" @tap.stop="handleDelivery(order, '01')" v-if="order.deliveryFlg === '01'">收货单</view>
                     <view class="btn-plain" @tap.stop="handleDelivery(order, '02')" v-if="order.returnFlg === '01'">退货单</view>
-                    <view class="btn-plain" @tap="buyAgain(order)">再下一单</view>
+                    <view class="btn-plain" @tap.stop="buyAgain(order)">再下一单</view>
                     <view class="flex-between-center" v-if="order.state === '01'">
-                      <view class="btn-plain" @tap="cancelOrder(order)">取消订单</view>
-                      <view class="btn-primary" @tap="handlePay(order)">立即支付</view>
+                      <view class="btn-plain" @tap.stop="cancelOrder(order)">取消订单</view>
+                      <view class="btn-primary" @tap.stop="handlePay(order)">立即支付</view>
                     </view>
                     <view v-if="order.state === '05'" class="btn-primary" @tap="addQuestion(order)">问题反馈</view>
                   </view>
