@@ -63,6 +63,12 @@ const requestAddressList = [
     type: 'post',
   },
   {
+    describe: '编辑购物车列表',
+    method: 'editShopCar',
+    url: '/api/shopcar/editShopCar.ns',
+    type: 'post',
+  },
+  {
     describe: '充值记录',
     method: 'rechargeRecord',
     url: '/api/bill/rechargeRecord.ns',

@@ -176,7 +176,25 @@ export default {
       this.updateProduct(product)
     },
     updateProduct(product) {
-      console.log('updateProduct')
+      const params = {
+        json: JSON.stringify([
+          {
+            amount: product.amount,
+            shopCarId: product.oid,
+          },
+        ]),
+      }
+      this.$API
+        .editShopCar(params)
+        .then(() => {
+          console.log('updateProduct')
+        })
+        .catch(res => {
+          Taro.showToast({
+            title: res.msg,
+            icon: 'none',
+          })
+        })
     },
   },
 }
