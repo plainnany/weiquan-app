@@ -374,6 +374,13 @@ const requestAddressList = [
     url: '/api/complain/undo.ns',
     type: 'post',
   },
+  {
+    describe: '查看收货单、退货单',
+    method: 'getDT',
+    url: '/api/v2/delivery/getDT.ns',
+    type: 'post',
+  },
+  // 点击查看 调用 /api/v2/delivery/getDT.ns?orderNumber=20231212163155972194840001&type=01
 ]
 
 const API = {}

@@ -115,6 +115,8 @@
                   </view> -->
                   <!--  -->
                   <view class="flex-between-center">
+                    <view class="btn-plain" @tap.stop="handleDelivery(order, '01')" v-if="order.deliveryFlg === '01'">收货单</view>
+                    <view class="btn-plain" @tap.stop="handleDelivery(order, '02')" v-if="order.returnFlg === '01'">退货单</view>
                     <view class="btn-plain" @tap="buyAgain">再下一单</view>
                     <view class="flex-between-center" v-if="order.state === '01'">
                       <view class="btn-plain" @tap="cancelOrder(order)">取消订单</view>
@@ -262,6 +264,7 @@ export default {
       delivery: [], // 当日收货订单列表
       phone: '', // 当前收货的手机号
       confirmBtnLoading: false,
+      previewImg: '',
     }
   },
   computed: {
@@ -450,6 +453,18 @@ export default {
     addQuestion(order) {
       const { productName } = order.orderListViews[0] || {}
       Taro.navigateTo({ url: `/pages/comment/index?productName=${productName}` })
+    },
+    // 收货单 01，退货单 02
+    handleDelivery(item, type) {
+      this.$API
+        .getDT({
+          orderNumber: item.orderNumber,
+          type,
+        })
+        .then(data => {
+          this.previewImg = data.imgUrl
+          Taro.navigateTo({ url: `/pages/image-preview/index?imageUrl=${data.imgUrl}` })
+        })
     },
   },
 }

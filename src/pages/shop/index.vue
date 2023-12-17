@@ -1,6 +1,7 @@
 <template>
   <view class="shop-page" :class="{ empty: productList.length === 0 }">
     <scroll-view v-if="productList.length" class="shop-product-wrapper" scroll-y="true" @scrolltolower="toLower">
+      <view class="edit">编辑/完成</view>
       <view v-for="(product, index) in productList" :key="index" class="shop-product-item">
         <view class="border">
           <checkbox :checked="product.checked" @tap.stop="change(product, index)"></checkbox>

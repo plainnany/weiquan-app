@@ -19,8 +19,8 @@
             <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
               <text class="user-bind-account" @tap.stop="() => (visible = true)">立即绑定</text>
             </view>
-            <view>
-              <image :src="userImg" mode="" class="user-icon" v-if="userInfo.userId" />
+            <view v-if="userInfo.userId">
+              <image :src="userImg" mode="" class="user-icon" />
               {{ accountTypeMap[userInfo.accountType] }}</view
             >
           </view>
