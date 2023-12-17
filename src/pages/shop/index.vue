@@ -31,7 +31,7 @@
             </view>
             <view class="shop-product-price">
               <view class="shop-product-detail-price" v-show="product.price"
-                >¥ <text>{{ product.priceSum }}</text></view
+                >¥ <text>{{ (Number(product.price) * Number(product.amount)).toFixed(2) }}</text></view
               >
               <view class="shop-product-detail-number">
                 <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)">-</view>

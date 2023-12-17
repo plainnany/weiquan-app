@@ -30,6 +30,9 @@
           </view>
         </label>
       </radio-group>
+      <view class="tips"
+        >注:选择好友代付后，请于15分钟内支付。若支付不成功或超时支付，请前往“账户余额及充值查询退款记录，或联系客服查询。感谢!</view
+      >
     </view>
     <view class="order-settle-footer">
       <nan-button type="primary" @tap="confirmPay">确认支付</nan-button>
@@ -63,6 +66,11 @@ export default {
         {
           method: 'weixin',
           name: '微信支付',
+          icon: wechatIcon,
+        },
+        {
+          method: 'weixin-2',
+          name: '微信好友支付',
           icon: wechatIcon,
         },
       ],
@@ -109,8 +117,17 @@ export default {
             })
           })
       } else if (this.payMethod === 'weixin') {
-        Taro.navigateTo({
-          url: `/pages/web-view/index?url=${this.wechatUrl}`,
+        Taro.showToast({
+          title: '正在升级招商微信支付中。',
+          icon: 'error',
+        })
+        // Taro.navigateTo({
+        //   url: `/pages/web-view/index?url=${this.wechatUrl}`,
+        // })
+      } else if (this.payMethod === 'weixin-2') {
+        Taro.showToast({
+          title: '正在升级招商微信支付中。',
+          icon: 'error',
         })
       }
     },
