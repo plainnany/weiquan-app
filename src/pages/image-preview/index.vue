@@ -73,7 +73,7 @@ export default {
   .image {
     image {
       width: 100%;
-      height: 600px;
+      height: calc(100vh - 150px);
     }
   }
 }

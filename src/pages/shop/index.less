@@ -4,7 +4,8 @@
   background: #f8f9fa;
   position: relative;
   .edit {
-    width: 100%;
+    padding: 0 24px 24px;
+    font-size: 24px;
     text-align: right;
   }
 
@@ -76,6 +77,32 @@
         // color: #f55726;
         // line-height: 28px;
         font-size: 30px;
+      }
+
+      &-edit {
+        flex: 1;
+        text-align: center;
+        font-size: 32px;
+        .product-delete {
+          padding: 12px 0;
+          background-color: rgb(235, 235, 235);
+          border-top: 2px solid #fff;
+        }
+      }
+
+      &-edit-number {
+        padding: 12px 0;
+        display: flex;
+        background-color: rgb(235, 235, 235);
+
+        .product-edit-action-btn {
+          width: 100px;
+          background-color: rgb(235, 235, 235);
+        }
+        input {
+          border-left: 2px solid #fff;
+          border-right: 2px solid #fff;
+        }
       }
 
       &-number {
@@ -192,7 +219,7 @@
   .shop-empty {
     text-align: center;
     padding: 60px 0;
-    background-color: #fff;
+    // background-color: #fff;
 
     &-title {
       font-size: 32px;

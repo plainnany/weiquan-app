@@ -381,6 +381,12 @@ const requestAddressList = [
     type: 'post',
   },
   // 点击查看 调用 /api/v2/delivery/getDT.ns?orderNumber=20231212163155972194840001&type=01
+  {
+    describe: '删除购物车',
+    method: 'delByOid',
+    url: '/api/shopcar/delByOid.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}
