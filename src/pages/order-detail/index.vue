@@ -411,7 +411,13 @@ export default {
       })
     },
     buyAgain() {
-      Taro.switchTab({ url: '/pages/shop/index' })
+      this.$API
+        .anotherOne({
+          orderNumber: this.orderDetail.orderNumber,
+        })
+        .then(() => {
+          Taro.switchTab({ url: '/pages/shop/index' })
+        })
     },
   },
 }

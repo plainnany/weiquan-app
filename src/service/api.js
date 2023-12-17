@@ -387,6 +387,12 @@ const requestAddressList = [
     url: '/api/shopcar/delByOid.ns',
     type: 'post',
   },
+  {
+    describe: '再来一单',
+    method: 'anotherOne',
+    url: '/api/order/anotherOne.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}
