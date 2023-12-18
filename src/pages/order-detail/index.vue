@@ -117,7 +117,6 @@
       <view class="to-delivery" v-else>
         <view class="order-detail-item">
           <text class="order-detail-color-grey">预计到货：{{ orderDetail.deliveryDate }}</text>
-          <text class="order-detail-color-grey">{{ orderDetail.customerOrderCode }}</text>
         </view>
         <view class="to-delivery-btn">
           <nan-button type="primary" @tap="viewLogistics">查看物流</nan-button>
