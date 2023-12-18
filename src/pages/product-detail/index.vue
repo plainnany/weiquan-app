@@ -26,7 +26,7 @@
                 @tap.stop="() => {}"
                 @focus.stop="() => {}"
                 @blur.stop="onBlur(product)"
-                placeholder="请输入数量"
+                placeholder=""
               />
             </view>
 
@@ -137,9 +137,10 @@ export default {
       const params = this.$instance.router.params
       this.$API
         .getProductDetail({
-          productId: params.id || '2387238237',
+          productId: params.id,
         })
         .then(data => {
+          data.minOrderQuantity = data.minOrderQuantity || 0
           this.product = data
           this.productUnitRule = parseInt(this.product.productUnitRule)
           this.minOrderQuantity = parseInt(this.product.minOrderQuantity)

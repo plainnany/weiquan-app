@@ -34,7 +34,7 @@
         </view>
       </view>
     </view>
-    <view class="empty">暂无数据</view>
+    <view class="empty" v-else>暂无数据</view>
     <view class="order-item-footer" v-if="orderList.length > 0" @tap="handleChange">
       完成修改
     </view>

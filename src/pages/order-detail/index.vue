@@ -23,7 +23,7 @@
             <view class="phone">{{ userInfo.customerLinkTel }}</view>
           </view>
         </view>
-        <view class="flex-between-center" v-if="orderDetail.state !== '01'">
+        <view class="flex-between-center" v-if="orderDetail.state !== '01' && !this.isTodayDelivery">
           <view class="order-detail-location">
             <image :src="driverIcon" mode="" class="driver" />
           </view>
@@ -52,7 +52,9 @@
                   ><text :class="colorMap[product.orderType]">{{ ORDER_TYPE[product.orderType] }}</text>
                   <text class="green" v-if="product.deliveryRepair === '01'">补验收</text>
                 </view>
-                <view class="grey">{{ product.state === '05' ? '签收' : '交货' }}时间 {{ product.deliveryDate }}</view>
+                <view class="grey" v-if="!isTodayDelivery"
+                  >{{ product.state === '05' ? '签收' : '交货' }}时间 {{ product.deliveryDate }}</view
+                >
                 <view class="grey" v-if="product.originDeliveryData">原始日期 {{ product.originDeliveryData }}</view>
               </view>
             </view>
@@ -60,10 +62,10 @@
               <view class="order-detail-price" v-if="product.price"
                 >¥ <text>{{ product.price }}</text></view
               >
-              <view>订单量 {{ product.productSum }}</view>
+              <view>{{ isTodayDelivery ? 'X' : '订单量' }} {{ product.productSum }}</view>
               <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
               <view class="order-detail-done-status" v-if="product.state === '05'">已完成</view>
-              <view class="order-detail-done-status" v-if="/02|03|04/.test(product.state)">当天收货</view>
+              <view class="order-detail-done-status" v-if="/02|03/.test(product.state)">当天收货</view>
             </view>
           </view>
           <!-- <view class="common-card">
@@ -94,7 +96,7 @@
         </view>
       </view>
 
-      <view class="common-card">
+      <view class="common-card" v-if="!isTodayDelivery">
         <view class="order-detail-item">
           <text class="order-detail-color-grey">订单编号：</text>
           <text class="order-detail-color-grey">{{ orderDetail.customerOrderCode }}</text>
@@ -112,13 +114,23 @@
           <text>183772889499495885993884</text>
         </view> -->
       </view>
+      <view class="to-delivery" v-else>
+        <view class="order-detail-item">
+          <text class="order-detail-color-grey">预计到货：{{ orderDetail.deliveryDate }}</text>
+          <text class="order-detail-color-grey">{{ orderDetail.customerOrderCode }}</text>
+        </view>
+        <view class="to-delivery-btn">
+          <nan-button type="primary" @tap="viewLogistics">查看物流</nan-button>
+        </view>
+      </view>
     </view>
     <view class="order-detail-footer flex-between-center">
       <view></view>
       <view class="flex-between-center">
-        <nan-button type="plain" @tap="buyAgain" v-if="/02|03|04|05/.test(orderDetail.state)">再下一单</nan-button>
+        <nan-button type="plain" @tap="buyAgain" v-if="/02|03|05/.test(orderDetail.state)">再下一单</nan-button>
         <nan-button type="plain" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="cancelOrder">取消订单</nan-button>
         <nan-button type="primary" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="handlePay">立即支付</nan-button>
+        <nan-button type="primary" v-if="isTodayDelivery" @tap="confirmDelivery">确认订单</nan-button>
       </view>
     </view>
     <view v-if="payDialogVisible" class="order-pay-modal">
@@ -201,7 +213,62 @@ export default {
         toDeliver: '04',
         done: '05',
       },
-      STATE_TYPE_TEXT: {
+      payDialogVisible: false,
+      payData: {},
+      payMethod: '',
+      payList: [
+        {
+          method: 'weixin-pocket',
+          name: '余额支付',
+          icon: weipocketIcon,
+        },
+        {
+          method: 'weixin',
+          name: '微信支付',
+          icon: wechatIcon,
+        },
+      ],
+      colorMap: {
+        '01': '',
+        '02': 'sample',
+        '03': 'gift',
+      },
+      btnLoading: false,
+      countDown: '',
+      orderType: '',
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo
+    },
+    total() {
+      return this.orderDetail.list.reduce((prev, cur) => prev + parseFloat(cur.amount), 0)
+    },
+    isTodayDelivery() {
+      return this.orderType === 'to-delivery'
+    },
+    STATE_TYPE_TEXT() {
+      if (this.isTodayDelivery) {
+        return {
+          '02': {
+            title: '卖家已发货',
+            subTitle: '送达后，请及时配合收货人员做当前签收',
+            icon: orderDetailIcon,
+          },
+          '03': {
+            title: '卖家已发货',
+            subTitle: '送达后，请及时配合收货人员做当前签收',
+            icon: orderDetailIcon,
+          },
+          '04': {
+            title: '卖家已发货',
+            subTitle: '送达后，请及时配合收货人员做当前签收',
+            icon: orderDetailIcon,
+          },
+        }
+      }
+      return {
         '01': {
           title: '待付款',
           subTitle: '',
@@ -227,44 +294,15 @@ export default {
           subTitle: '订单已完成',
           icon: orderDetailEndIcon,
         },
-      },
-      payDialogVisible: false,
-      payData: {},
-      payMethod: '',
-      payList: [
-        {
-          method: 'weixin-pocket',
-          name: '余额支付',
-          icon: weipocketIcon,
-        },
-        {
-          method: 'weixin',
-          name: '微信支付',
-          icon: wechatIcon,
-        },
-      ],
-      colorMap: {
-        '01': '',
-        '02': 'sample',
-        '03': 'gift',
-      },
-      btnLoading: false,
-      countDown: '',
-    }
-  },
-  computed: {
-    userInfo() {
-      return this.$store.state.userInfo
-    },
-    total() {
-      return this.orderDetail.list.reduce((prev, cur) => prev + parseFloat(cur.amount), 0)
+      }
     },
   },
   mounted() {
     setTitle({ title: '我的订单' })
   },
   onShow() {
-    const { order } = Taro.getCurrentInstance().router.params
+    const { order, type } = Taro.getCurrentInstance().router.params
+    this.orderType = type // to-delivery: 当天收货
     this.getOrder(order)
   },
   methods: {
@@ -327,7 +365,6 @@ export default {
         }
       }, 1000)
     },
-    viewDeliver() {},
     cancelOrder() {
       this.$API
         .deleteOrder({
@@ -418,6 +455,29 @@ export default {
         })
         .then(() => {
           Taro.switchTab({ url: '/pages/shop/index' })
+        })
+    },
+    // 查看物流
+    viewLogistics() {
+      Taro.navigateTo({ url: `/pages/web-view/index?url=${this.$store.state.userInfo.mapUrl}` })
+    },
+    confirmDelivery() {
+      if (this.confirmBtnLoading) return
+      this.confirmBtnLoading = true
+      const json = this.orderDetail?.list?.map(v => ({ orderCode: v.orderCode, amount: v.productSum, minOrderQuantity: v.configSum }))
+      this.$API
+        .confirmReceipt({ json: JSON.stringify(json) })
+        .then(() => {
+          this.getOrder()
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'error',
+          })
+        })
+        .finally(() => {
+          this.confirmBtnLoading = false
         })
     },
   },

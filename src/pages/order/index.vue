@@ -428,8 +428,9 @@ export default {
       // }, 400)
     },
     viewOrderDetail(orderNumber) {
+      // 区分一下当天收货
       Taro.navigateTo({
-        url: `/pages/order-detail/index?order=${orderNumber}`,
+        url: `/pages/order-detail/index?order=${orderNumber}&type=${this.activeTab}`,
       })
     },
     contact() {
