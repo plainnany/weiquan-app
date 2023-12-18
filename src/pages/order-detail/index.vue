@@ -65,7 +65,7 @@
               <view>{{ isTodayDelivery ? 'X' : '订单量' }} {{ product.productSum }}</view>
               <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
               <view class="order-detail-done-status" v-if="product.state === '05'">已完成</view>
-              <view class="order-detail-done-status" v-if="/02|03/.test(product.state)">当天收货</view>
+              <view class="order-detail-done-status" v-if="/02|03|04/.test(product.state) && !isTodayDelivery">当天收货</view>
             </view>
           </view>
           <!-- <view class="common-card">
@@ -105,6 +105,10 @@
           <text class="order-detail-color-grey">下单时间：</text>
           <text class="order-detail-color-grey">{{ orderDetail.createDate }}</text>
         </view>
+        <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && orderType === 'all'">
+          <text class="order-detail-color-grey">付款时间：</text>
+          <text class="order-detail-color-grey">{{ orderDetail.payDate }}</text>
+        </view>
         <!-- <view class="flex-between-center order-detail-item">
           <text class="order-detail-color-grey">付款方式</text>
           <text>支付宝</text>
@@ -126,7 +130,7 @@
     <view class="order-detail-footer flex-between-center">
       <view></view>
       <view class="flex-between-center">
-        <nan-button type="plain" @tap="buyAgain" v-if="/02|03|05/.test(orderDetail.state)">再下一单</nan-button>
+        <nan-button type="plain" @tap="buyAgain" v-if="!isTodayDelivery">再下一单</nan-button>
         <nan-button type="plain" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="cancelOrder">取消订单</nan-button>
         <nan-button type="primary" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="handlePay">立即支付</nan-button>
         <nan-button type="primary" v-if="isTodayDelivery" @tap="confirmDelivery">确认订单</nan-button>

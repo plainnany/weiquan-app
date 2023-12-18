@@ -44,7 +44,7 @@ export default {
     }
   },
   mounted() {
-    setTitle({ title: '绑定账户' })
+    setTitle({ title: '登录' })
     try {
       const unionId = Taro.getStorageSync('unionId')
       this.unionId = unionId

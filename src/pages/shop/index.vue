@@ -59,7 +59,7 @@
         <button @tap="go">去逛逛</button>
       </view> -->
     </view>
-    <view class="shop-product-footer" v-if="productList.length">
+    <view class="shop-product-footer">
       <view class="left">
         <checkbox :checked="checkAll" @tap="handleCheckAll">全选</checkbox>
       </view>
