@@ -393,6 +393,18 @@ const requestAddressList = [
     url: '/api/order/anotherOne.ns',
     type: 'post',
   },
+  {
+    describe: '发送短信验证码',
+    method: 'sendCode',
+    url: '/api/sms/sendCode.ns',
+    type: 'post',
+  },
+  {
+    describe: '修改密码',
+    method: 'missPass',
+    url: '/api/customer/missPass.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}
@@ -411,5 +423,7 @@ requestAddressList.forEach(item => {
     return http[item.type](url || item.url, requestParams, requestOptions)
   }
 })
+
+// API.missPass = () => Promise.resolve({ data: null })
 
 export default API

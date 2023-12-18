@@ -21,6 +21,7 @@ export default defineAppConfig({
     'pages/comment/index', // 问题反馈
     'pages/web-view/index', // 内嵌h5页面
     'pages/bind-account/index', // 绑定账户
+    'pages/bind-account/forget', // 忘记密码
     'pages/custom-comment/index', // 客诉列表
     'pages/quality-report/index', // 质检报告
     'pages/change-receive-code/index', // 修改门店收货码

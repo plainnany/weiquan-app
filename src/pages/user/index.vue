@@ -17,7 +17,7 @@
           <view class="user-mobile">
             <view> ID: {{ userInfo.userId || '未绑定账号' }} </view>
             <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
-              <text class="user-bind-account" @tap.stop="() => (visible = true)">立即绑定</text>
+              <text class="user-bind-account" @tap.stop="login">立即绑定</text>
             </view>
             <view v-if="userInfo.userId">
               <image :src="userImg" mode="" class="user-icon" />
@@ -284,6 +284,11 @@ export default {
         Taro.navigateTo({
           url: `/pages/notice/detail?title=${item.title}&key=Post&post=${data.postTitle}&date=${data.createTime}&postUrl=${data.postUrl}`,
         })
+      })
+    },
+    login() {
+      Taro.navigateTo({
+        url: `/pages/bind-account/index`,
       })
     },
   },

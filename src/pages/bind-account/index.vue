@@ -8,11 +8,18 @@
         </label>
       </radio-group>
     </view>
-    <input v-model="customerCode" placeholder-style="color:#a89e9e" placeholder="账户" />
-    <input v-model="customerPassword" type="password" placeholder-style="color:#a89e9e" placeholder="密码" />
+    <view class="account-item">
+      <image :src="accountIcon" mode="" />
+      <input v-model="customerCode" placeholder-style="color:#a89e9e" placeholder="账户" />
+    </view>
+    <view class="account-item">
+      <image :src="pwdIcon" mode="" />
+      <input v-model="customerPassword" type="password" placeholder-style="color:#a89e9e" placeholder="密码" />
+    </view>
     <view class="footer">
       <nan-button type="primary" @tap="bindAccount">确定</nan-button>
     </view>
+    <view class="footer-tip" @tap="forgetPassword"> 忘记密码？点击找回</view>
   </view>
 </template>
 
@@ -21,12 +28,17 @@ import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
 import crypto from 'crypto-js'
 import './index.less'
+import accountIcon from '@/images/user/account.png'
+import pwdIcon from '@/images/user/pwd.png'
+import './index.less'
 
 export default {
   name: 'user',
   components: {},
   data() {
     return {
+      accountIcon,
+      pwdIcon,
       customerCode: '',
       customerPassword: '',
       userType: '1',
@@ -40,7 +52,6 @@ export default {
           userType: '2',
         },
       ],
-      checkedAccountType: '',
       unionId: '',
     }
   },
@@ -56,7 +67,7 @@ export default {
       this.userType = e.detail.value
     },
     bindAccount() {
-      if (!this.customerCode || !this.customerPassword || !this.checkedAccountType) {
+      if (!this.customerCode || !this.customerPassword) {
         return Taro.showToast({
           title: '请将内容填写完整',
           icon: 'none',
@@ -86,8 +97,10 @@ export default {
         })
     },
     accountTypeChange(e) {
-      this.checkedAccountType = this.accountTypes[e.detail.value].label
       this.userType = this.accountTypes[e.detail.value].userType
+    },
+    forgetPassword() {
+      Taro.navigateTo({ url: '/pages/bind-account/forget' })
     },
   },
 }
