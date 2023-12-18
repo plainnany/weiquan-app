@@ -1,15 +1,15 @@
 <template>
   <view class="bind-account">
-    <view class="form-item">选择身份</view>
     <view class="form-item-wrapper">
-      <picker mode="selector" :range="accountTypes" @change="accountTypeChange" range-key="label">
-        <text v-if="checkedAccountType">{{ checkedAccountType }}</text>
-        <text v-else>请选择身份</text>
-      </picker>
+      <radio-group @change="onChange">
+        <label class="order-pay-item" v-for="(item, index) in accountTypes" :key="index">
+          <radio :value="item.userType" :checked="item.userType === userType" color="#fa4a2d" />
+          <text class="a">{{ item.label }}</text>
+        </label>
+      </radio-group>
     </view>
-    <view class="form-item">账户密码</view>
-    <input v-model="customerCode" placeholder-style="color:#a89e9e" placeholder="请输入账户" />
-    <input v-model="customerPassword" type="password" placeholder-style="color:#a89e9e" placeholder="请输入密码" />
+    <input v-model="customerCode" placeholder-style="color:#a89e9e" placeholder="账户" />
+    <input v-model="customerPassword" type="password" placeholder-style="color:#a89e9e" placeholder="密码" />
     <view class="footer">
       <nan-button type="primary" @tap="bindAccount">确定</nan-button>
     </view>
@@ -20,6 +20,7 @@
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
 import crypto from 'crypto-js'
+import './index.less'
 
 export default {
   name: 'user',
@@ -28,7 +29,7 @@ export default {
     return {
       customerCode: '',
       customerPassword: '',
-      userType: '',
+      userType: '1',
       accountTypes: [
         {
           label: '店长',
@@ -51,6 +52,9 @@ export default {
     } catch (e) {}
   },
   methods: {
+    onChange(e) {
+      this.userType = e.detail.value
+    },
     bindAccount() {
       if (!this.customerCode || !this.customerPassword || !this.checkedAccountType) {
         return Taro.showToast({
@@ -88,40 +92,3 @@ export default {
   },
 }
 </script>
-
-<style lang="less">
-.bind-account {
-  padding: 20px 30px;
-
-  .form-item {
-    font-size: 26px;
-    font-weight: 400;
-    color: #333333;
-    line-height: 37px;
-    margin: 40px 0;
-
-    &-wrapper {
-      background: #f8f9fa;
-      border-radius: 15px;
-      padding: 22px 34px;
-      line-height: 36px;
-      font-size: 26px;
-      color: #a89e9e;
-    }
-  }
-
-  input {
-    background-color: #ccc;
-    background: #f8f9fa;
-    border-radius: 15px;
-    padding: 22px 34px;
-    line-height: 36px;
-    font-size: 26px;
-    margin-bottom: 16px;
-  }
-
-  .footer {
-    margin-top: 80px;
-  }
-}
-</style>
