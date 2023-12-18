@@ -4,13 +4,13 @@
       <picker mode="selector" :range="qualityTypes" @change="qualityTypeChange" range-key="label">
         <text>{{ qualityTypes[qualityIndex].label }}</text>
       </picker>
-      <image class="arrow" :src="arrowIcon" />
     </view>
     <view class="quality-selection">
       <picker mode="selector" :range="productList" @change="productChange" range-key="productName">
         <text v-if="productList[productIndex]">{{ productList[productIndex].productName }}</text>
         <text v-else>请选择商品</text>
       </picker>
+      <image class="arrow" :src="arrowIcon" />
     </view>
     <view class="quality-search" v-if="qualityIndex === 0">
       <view class="flex-between-center">
@@ -93,6 +93,9 @@ export default {
     getProductList() {
       this.$API.getComplaintProductList().then(data => {
         this.productList = data
+        if (data.length > 0) {
+          this.productIndex = 0
+        }
       })
     },
     getQualityList() {

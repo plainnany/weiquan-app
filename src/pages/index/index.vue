@@ -3,9 +3,9 @@
     <view class="home-info">
       <SearchBar />
       <view class="banner">
-        <swiper :indicator-dots="false" :autoplay="false">
+        <swiper :indicator-dots="true" :autoplay="true">
           <swiper-item v-for="(banner, index) in banners" :key="index" @tap="handleLink(banner.jumpLink)">
-            <image :src="banner.fileUrl" />
+            <image :src="banner.imageUrl" />
           </swiper-item>
         </swiper>
       </view>
@@ -132,7 +132,7 @@ export default {
     getData() {
       this.$API.getHomeData().then(data => {
         data = data || {}
-        this.banners = data.banner ? [data.banner] : []
+        this.banners = Array.isArray(data.banner) ? data.banner : [data.banner]
         this.gif = data.gif
         this.video = data.video
         this.category = data.classList || []
@@ -162,6 +162,7 @@ export default {
       }
     },
     handleLink(link) {
+      if (!link) return
       if (!this.$store.state.userInfo.userId) {
         return Taro.showToast({
           title: '用户未登录，请先绑定用户',

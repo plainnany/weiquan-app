@@ -56,13 +56,14 @@
                 <view class="grey" v-if="product.originDeliveryData">原始日期 {{ product.originDeliveryData }}</view>
               </view>
             </view>
-            <view>
+            <view class="order-detail-right">
               <view class="order-detail-price" v-if="product.price"
                 >¥ <text>{{ product.price }}</text></view
               >
               <view>订单量 {{ product.productSum }}</view>
               <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
               <view class="order-detail-done-status" v-if="product.state === '05'">已完成</view>
+              <view class="order-detail-done-status" v-if="/02|03|04/.test(product.state)">当天收货</view>
             </view>
           </view>
           <!-- <view class="common-card">

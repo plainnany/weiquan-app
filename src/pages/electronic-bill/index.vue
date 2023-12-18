@@ -85,7 +85,11 @@ export default {
       const month = date.getMonth() + 1
       const day = date.getDate()
 
-      return `${year}-${month}-${day}`
+      return {
+        year,
+        month,
+        day,
+      }
     },
     showEmpty() {
       return !this.billData?.list?.length && this.hasGetOrder
@@ -132,8 +136,9 @@ export default {
     }
   },
   mounted() {
-    this.startDate = this.defaultDate
-    this.endDate = this.defaultDate
+    const { year, month, day } = this.defaultDate
+    this.startDate = `${year}-${month}-01`
+    this.endDate = `${year}-${month}-${day}`
     this.getBillList()
     setTitle({
       title: '电子对账单',

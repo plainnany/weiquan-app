@@ -51,7 +51,7 @@
       </view>
     </view>
     <view class="confirm-order-footer">
-      <view class="total">¥ {{ totalFee }}</view>
+      <view class="total">¥ {{ deliverTime ? totalFee : 0 }}</view>
       <view class="confirm-order-btn" @tap="confirmOrder">立即结算</view>
     </view>
     <view>

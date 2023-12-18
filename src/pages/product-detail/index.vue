@@ -14,7 +14,7 @@
           <view class="product-box"> 规格: {{ product.productSpecs }} </view>
           <view class="product-box"> 单位: {{ product.productUnitMax }} </view>
         </view>
-        <view class="product-number product-box" v-if="product.sell">
+        <view class="product-number product-box">
           <view>购买数量</view>
           <view class="product-number-action">
             <view class="product-action-btn" @tap="decrease">-</view>
@@ -57,11 +57,11 @@
           </view>
           <view class="product-content-row">
             <view class="product-content-col">下单截止</view>
-            <view class="product-content-col"></view>
+            <view class="product-content-col">{{ product.orderEndTime }}</view>
           </view>
           <view class="product-content-row">
             <view class="product-content-col">配送规则</view>
-            <view class="product-content-col"></view>
+            <view class="product-content-col">{{ product.ruleStr }}</view>
           </view>
           <view class="product-content-img" v-for="(imageUrl, index) in product.images" :key="index">
             <image :src="imageUrl" mode="" />
@@ -153,7 +153,7 @@ export default {
       if (this.product.minOrderQuantity <= this.minOrderQuantity) return
       this.product.minOrderQuantity = parseInt(this.product.minOrderQuantity) - parseInt(this.productUnitRule)
     },
-    addShop() {
+    checkAddShop() {
       if (!this.product.sell) {
         Taro.showModal({
           title: '提示',
@@ -164,12 +164,19 @@ export default {
           cancelText: '拨打',
           icon: 'none',
           success: res => {
-            this.contact()
+            if (res.cancel) {
+              this.contact()
+            }
           },
           fail: () => {},
         })
-        return
+        return false
       }
+
+      return true
+    },
+    addShop() {
+      if (!this.checkAddShop()) return
       this.$API
         .addToShopcar({
           productId: this.product.productId,
@@ -189,14 +196,7 @@ export default {
         })
     },
     batchOrder() {
-      if (!this.product.sell) {
-        Taro.showToast({
-          title: '当前商品不支持购买',
-          icon: 'none',
-        })
-        return
-      }
-
+      if (!this.checkAddShop()) return
       Taro.navigateTo({
         url: `/pages/confirm-order/index?type=batch&productId=${this.product.productId}&sum=${this.product.productUnitRule}`,
       })

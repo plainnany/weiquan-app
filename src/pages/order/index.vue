@@ -29,7 +29,7 @@
                 @tap="viewOrderDetail(product.customerOrderCode)"
               >
                 <view class="flex-between-center order-result-item ">
-                  <view class="flex-between-center">
+                  <view class="flex-between-center product-item">
                     <view class="order-result-image">
                       <image :src="product.productImage" mode="" />
                     </view>
@@ -77,7 +77,7 @@
                 </view>
               </view> -->
                 <view class="order-result-item ">
-                  <view class="flex-between-center" v-for="(product, pIndex) in order.orderListViews" :key="pIndex">
+                  <view class="flex-between-center product-item" v-for="(product, pIndex) in order.orderListViews" :key="pIndex">
                     <view class="flex-between-center">
                       <view class="order-result-image">
                         <image :src="product.productImage" mode="" />
@@ -92,7 +92,7 @@
                         <view class="order-date">交货时间 {{ product.deliveryDate }}</view>
                       </view>
                     </view>
-                    <view>
+                    <view class="order-result-number">
                       <view>订单量 {{ product.productSum }}</view>
                       <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
                       <view class="order-result-type">{{ STATE_TYPE[product.state] }}</view>
@@ -433,7 +433,8 @@ export default {
       })
     },
     contact() {
-      Taro.makephoneCallIcon({
+      if (!this.phone) return
+      Taro.makePhoneCall({
         phoneNumber: this.phone,
       })
     },

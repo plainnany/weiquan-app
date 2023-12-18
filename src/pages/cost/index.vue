@@ -77,7 +77,7 @@ export default {
     },
     getBillCost() {
       this.$API.getBillCost().then(data => {
-        this.balance = data
+        this.balance = Number(data).toFixed(2)
       })
     },
     handleCharge() {

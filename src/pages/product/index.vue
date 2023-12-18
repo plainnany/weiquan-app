@@ -95,6 +95,8 @@ export default {
   methods: {
     getCategory() {
       API.getCategory().then(data => {
+        // 过滤掉600212和600213,产品说不需要显示
+        data = data.filter(v => v.classCode !== '600212' && v.classCode !== '600213')
         this.categoryList = this.categoryList.concat(data)
         this.$nextTick(() => {
           this.scrollId = `product-id-${this.activeIndex}`
