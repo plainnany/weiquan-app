@@ -246,23 +246,6 @@ export default {
       payDialogVisible: false,
       payData: {},
       payMethod: '',
-      payList: [
-        {
-          method: 'weixin-pocket',
-          name: '余额支付',
-          icon: weipocketIcon,
-        },
-        {
-          method: 'weixin',
-          name: '微信支付',
-          icon: wechatIcon,
-        },
-        {
-          method: 'weixin-2',
-          name: '微信好友代付',
-          icon: wechatIcon,
-        },
-      ],
       wrapAnimate: 'wrapAnimate',
       frameAnimate: 'frameAnimate',
       btnLoading: false,
@@ -275,6 +258,34 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.userInfo
+    },
+    payList() {
+      if (this.userInfo.accountType === '02') {
+        return [
+          {
+            method: 'weixin-2',
+            name: '微信好友支付',
+            icon: wechatIcon,
+          },
+        ]
+      }
+      return [
+        {
+          method: 'weixin-pocket',
+          name: '余额支付',
+          icon: weipocketIcon,
+        },
+        {
+          method: 'weixin',
+          name: '微信支付',
+          icon: wechatIcon,
+        },
+        {
+          method: 'weixin-2',
+          name: '微信好友支付',
+          icon: wechatIcon,
+        },
+      ]
     },
     showEmpty() {
       if (this.activeTab === 'to-delivery') {

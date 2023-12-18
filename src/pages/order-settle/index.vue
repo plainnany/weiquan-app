@@ -57,7 +57,22 @@ export default {
       totalFee: '',
       alipayIcon,
       wechatIcon,
-      payList: [
+      payMethod: 'weixin-pocket',
+    }
+  },
+  computed: {
+    payList() {
+      if (this.userInfo.accountType === '02') {
+        this.payMethod = 'weixin-2'
+        return [
+          {
+            method: 'weixin-2',
+            name: '微信好友支付',
+            icon: wechatIcon,
+          },
+        ]
+      }
+      return [
         {
           method: 'weixin-pocket',
           name: '余额支付',
@@ -73,11 +88,8 @@ export default {
           name: '微信好友支付',
           icon: wechatIcon,
         },
-      ],
-      payMethod: 'weixin-pocket',
-    }
-  },
-  computed: {
+      ]
+    },
     userInfo() {
       return this.$store.state.userInfo
     },
