@@ -42,7 +42,7 @@
             </view>
           </view>
           <view class="confirm-order-price">
-            <view
+            <view v-show="userInfo.accountType !== '02'"
               >¥ <text>{{ Number(product.total).toFixed(2) }}</text></view
             >
             <view>X {{ product.amount }}</view>

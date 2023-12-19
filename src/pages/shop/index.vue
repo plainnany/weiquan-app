@@ -32,7 +32,7 @@
               >
             </view>
             <view class="shop-product-price">
-              <view class="shop-product-detail-price" v-show="product.price"
+              <view class="shop-product-detail-price" v-show="product.price && userInfo.accountType !== '02'"
                 >¥ <text>{{ (Number(product.price) * Number(product.amount)).toFixed(2) }}</text></view
               >
               <view class="shop-product-detail-number">
@@ -100,7 +100,9 @@ export default {
   components: {
     Modal,
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch('getUserInfo')
+  },
   computed: {
     total() {
       const total = this.productList.filter(v => v.checked).reduce((prev, cur) => prev + parseFloat(cur.price) * parseInt(cur.amount), 0)
@@ -109,6 +111,9 @@ export default {
     },
     checkedNum() {
       return this.productList.filter(v => v.checked).length
+    },
+    userInfo() {
+      return this.$store.state.userInfo
     },
   },
 
