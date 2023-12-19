@@ -134,7 +134,7 @@ export default {
     getData() {
       this.$API.getHomeData().then(data => {
         data = data || {}
-        this.count = data.count > 99 ? '99+' : data.count
+        this.count = data.count > 99 ? '99+' : Number(data.count)
         this.banners = Array.isArray(data.banner) ? data.banner : [data.banner]
         this.gif = data.gif
         this.video = data.video

@@ -67,6 +67,8 @@
               <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
               <view class="order-detail-done-status" v-if="product.state === '05'">已完成</view>
               <view class="order-detail-done-status" v-if="/02|03|04/.test(product.state) && !isTodayDelivery">当天收货</view>
+              <!-- 只有现金用户有待付款 -->
+              <view class="order-detail-done-status" v-if="/01/.test(product.state) && userInfo.accountType === '01'">待付款</view>
             </view>
           </view>
           <!-- <view class="common-card">
@@ -104,7 +106,8 @@
         </view>
         <view class="order-detail-item">
           <text class="order-detail-color-grey">下单时间：</text>
-          <text class="order-detail-color-grey">{{ orderDetail.createDate }}</text>
+          <text class="order-detail-color-grey" v-if="userInfo.accountType === '02'">{{ orderDetail.createDate?.split(' ')[0] }}</text>
+          <text class="order-detail-color-grey" v-else>{{ orderDetail.createDate }}</text>
         </view>
         <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && orderType === 'all'">
           <text class="order-detail-color-grey">付款时间：</text>

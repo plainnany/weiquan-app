@@ -46,7 +46,7 @@
               <view class="electronic-list-sum">{{ item.price }}</view>
             </view>
             <view>规格: {{ item.productUnitConvertRule }}</view>
-            <view v-if="userInfo.accountType !== '02'">单价: {{ item.productPrice }}</view>
+            <view>单价: {{ userInfo.accountType !== '02' ? item.productPrice : '' }}</view>
             <view>数量: {{ item.num }}</view>
             <view
               >订单类型: <text class="yellow"> {{ typeMap[item.type] }}单</text></view

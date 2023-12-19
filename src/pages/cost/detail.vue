@@ -5,7 +5,7 @@
         {{ tab.name }}</view
       >
     </view>
-    <scroll-view :scroll-y="true" @scrolltolower="toLower">
+    <scroll-view :scroll-y="true" @scrolltolower="toLower" v-if="chargeList.length">
       <view class="charge-list">
         <view class="charge-list-item" v-for="(item, index) in chargeList" :key="index">
           <view class="charge-list-item-title">
@@ -24,6 +24,7 @@
         </view>
       </view>
     </scroll-view>
+    <view class="empty" v-else>暂无数据</view>
   </view>
 </template>
 

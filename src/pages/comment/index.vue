@@ -46,14 +46,13 @@
           </view>
           <view class="comment-done-text">
             {{ detailData.complainDesc }}
-            <image class="done-image" :src="item" v-for="item in detailData.imageUrl" :key="item"></image>
           </view>
         </view>
         <view class="comment-done-item" v-if="detailData.imageUrl?.length">
           <view class="comment-done-label">
             客诉图片
           </view>
-          <view class="comment-done-text">
+          <view class="comment-done-image">
             <image class="done-image" :src="item" v-for="item in detailData.imageUrl" :key="item"></image>
           </view>
         </view>

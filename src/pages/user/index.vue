@@ -5,6 +5,7 @@
         <view class="setting">
           <image :src="settingImg" mode="" @tap.stop="handleNav({ path: '/pages/setting/index' })" />
           <image :src="noticeImg" class="notice" mode="" @tap.stop="handleNav({ path: '/pages/notice/index' })" />
+          <view class="dot" v-if="userInfo.total > 0">{{ userInfo.total > 99 ? '99+' : userInfo.total }}</view>
         </view>
         <view class="user-avatar">
           <image :src="userInfo.headPic" mode="" />
@@ -38,6 +39,9 @@
         <view>
           {{ order.title }}
         </view>
+      </view>
+      <view class="line">
+        <image :src="lineImg" class="back" mode="" />
       </view>
     </view>
     <view class="user-action user-card">
@@ -98,6 +102,7 @@ import arrowRightImg from '@/images/user/arrow-right.png'
 import noticeImg from '@/images/user/notice.svg'
 import notice2Img from '@/images/user/notice.png'
 import userImg from '@/images/center-user.png'
+import lineImg from '@/images/line.png'
 
 export default {
   name: 'user',
@@ -105,6 +110,7 @@ export default {
   data() {
     return {
       backImg,
+      lineImg,
       // tabs: [
       //   { icon: chargeImg, title: '余额及充值', path: '/pages/cost/index' },
       //   { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },

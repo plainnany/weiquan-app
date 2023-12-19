@@ -51,7 +51,7 @@
       </view>
     </view>
     <view class="confirm-order-footer">
-      <view class="total">¥ {{ deliverTime ? totalFee : 0 }}</view>
+      <view class="total" v-if="userInfo.accountType !== '02'">¥ {{ deliverTime ? totalFee : 0 }}</view>
       <view class="confirm-order-btn" @tap="confirmOrder">立即结算</view>
     </view>
     <view>
@@ -129,7 +129,7 @@ export default {
       setTitle({ title: '日期' })
     },
     confirmDate(params) {
-      const deliverTime = params.map(v => `${v.year}-${v.month}-${v.day}`).join(',')
+      const deliverTime = params.map(v => v.weekStr.split(' ')[0]).join(',')
       const weekStr = params.map(v => v.weekStr)
       this.deliverTime = deliverTime
       this.productList.forEach(product => {
