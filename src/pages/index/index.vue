@@ -27,6 +27,7 @@
             <view @tap="handleNav('notice')" class="nav-item">
               <image :src="noticeImg" mode="" />
               <view>重要消息</view>
+              <view class="dot" v-if="count">{{ count }}</view>
             </view>
             <!-- <view class="invite" @tap="handleLink(inviteLink)">
             <image :src="inviteImg" mode="" />
@@ -108,6 +109,7 @@ export default {
       category: '',
       message: '',
       imgUrl: '',
+      count: '',
     }
   },
   onShow() {
@@ -132,6 +134,7 @@ export default {
     getData() {
       this.$API.getHomeData().then(data => {
         data = data || {}
+        this.count = data.count > 99 ? '99+' : data.count
         this.banners = Array.isArray(data.banner) ? data.banner : [data.banner]
         this.gif = data.gif
         this.video = data.video

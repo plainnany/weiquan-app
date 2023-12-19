@@ -8,7 +8,9 @@
       <view class="order-detail-type-sub-title">{{ STATE_TYPE_TEXT[orderDetail.state]?.subTitle }}</view>
       <view class="order-detail-status"> <image :src="STATE_TYPE_TEXT[orderDetail.state]?.icon" mode=""/></view>
       <view v-if="orderDetail.state === STATE_TYPE.toPay">若未支付订单将取消</view>
-      <view v-if="orderDetail.state === STATE_TYPE.done" class="add-question" @tap="addQuestion(orderDetail)">问题反馈</view>
+      <view v-if="orderDetail.state === STATE_TYPE.done || isTodayDelivery" class="add-question" @tap="addQuestion(orderDetail)"
+        >问题反馈</view
+      >
     </view>
     <view class="order-detail-content">
       <view class="common-card">
@@ -19,12 +21,12 @@
           <view class="order-detail-location-info">
             <view>
               <view>收货人：{{ userInfo.customerLinkMan }}</view>
-              <view>{{ userInfo.customerAddress }} </view>
+              <view>{{ userInfo.customerAddress }}</view>
             </view>
             <view class="phone">{{ userInfo.customerLinkTel }}</view>
           </view>
         </view>
-        <view class="flex-between-center" v-if="orderDetail.state !== '01' && !this.isTodayDelivery">
+        <view class="flex-between-center" v-if="orderDetail.state !== '01' && !isTodayDelivery">
           <view class="order-detail-location">
             <image :src="driverIcon" mode="" class="driver" />
           </view>
@@ -187,6 +189,7 @@ import closeIcon from '@/images/close.png'
 import driverIcon from '@/images/driver.png'
 import drivePhoneIcon from '@/images/drive-phone.png'
 import orderDetailIcon from '@/images/order-detail.png'
+import orderDetail2Icon from '@/images/order-detail-2.png'
 import orderDetailEndIcon from '@/images/order-detail-end.png'
 import orderDetailPayIcon from '@/images/order-detail-pay.png'
 
@@ -281,17 +284,17 @@ export default {
         '02': {
           title: '等待发货',
           subTitle: '买家已下单，等待卖家发货',
-          icon: orderDetailIcon,
+          icon: orderDetail2Icon,
         },
         '03': {
           title: '等待发货',
           subTitle: '买家已下单，等待卖家发货',
-          icon: orderDetailIcon,
+          icon: orderDetail2Icon,
         },
         '04': {
           title: '等待发货',
           subTitle: '买家已下单，等待卖家发货',
-          icon: orderDetailIcon,
+          icon: orderDetail2Icon,
         },
         '05': {
           title: '已完成',
