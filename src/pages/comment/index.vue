@@ -46,7 +46,15 @@
           </view>
           <view class="comment-done-text">
             {{ detailData.complainDesc }}
-            <!-- <image class="done-image" :src="item" v-for="item in detailData.imageUrl" :key="item"></image> -->
+            <image class="done-image" :src="item" v-for="item in detailData.imageUrl" :key="item"></image>
+          </view>
+        </view>
+        <view class="comment-done-item" v-if="detailData.imageUrl?.length">
+          <view class="comment-done-label">
+            客诉图片
+          </view>
+          <view class="comment-done-text">
+            <image class="done-image" :src="item" v-for="item in detailData.imageUrl" :key="item"></image>
           </view>
         </view>
         <view class="comment-done-item">
@@ -157,7 +165,7 @@ import backIcon from '@/images/user/back.png'
 import deleteIcon from '@/images/delete.svg'
 import { BASE_URL } from '@/const'
 import arrowIcon from '@/images/arrow-down.png'
-import phoneIcon from '@/images/phone.svg'
+import phoneIcon from '@/images/drive_phone.png'
 
 export default {
   components: {},
