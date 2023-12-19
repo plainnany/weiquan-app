@@ -17,7 +17,7 @@
             <view class="custom-comment-status" v-if="active === 'done'">已处理</view>
           </view>
         </view>
-        <view class="empty">暂无数据</view>
+        <view class="empty" v-else>暂无数据</view>
       </scroll-view>
     </view>
   </view>

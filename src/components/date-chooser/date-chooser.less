@@ -1,0 +1,63 @@
+.date-chooser {
+  font-size: 28px;
+  .weeks {
+    display: flex;
+    padding: 24px 0;
+    border-bottom: 1px solid #ececec;
+  }
+
+  .week-item {
+    padding: 0 12px;
+    box-sizing: border-box;
+    width: 14.3%;
+    text-align: center;
+  }
+
+  .month {
+    text-align: center;
+    padding: 24px 0;
+    border-bottom: 1px solid #ececec;
+  }
+
+  .date-row {
+    display: flex;
+  }
+
+  .date-col {
+    padding: 24px 0;
+    box-sizing: border-box;
+    width: 14.3%;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    &.disabled {
+      cursor: not-allowed;
+      color: #999;
+    }
+
+    &.checked {
+      color: #fff;
+      &::after {
+        position: absolute;
+        content: '';
+        display: block;
+        width: 48px;
+        height: 48px;
+        background-color: #fa4a2d;
+        border-radius: 50%;
+        top: 18px;
+        z-index: -1;
+        left: 29px;
+      }
+    }
+  }
+
+  .footer {
+    margin: 24px;
+    display: flex;
+
+    .nan-button {
+      width: 45%;
+    }
+  }
+}

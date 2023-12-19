@@ -3,6 +3,7 @@
     <view class="notice-page-item" v-for="(item, key) in messageCenter" :key="key" @tap="handleNav(item, key)">
       <view>
         <image :src="iconMap[key]" mode="" />
+        <view class="dot" v-if="item.count">{{ item.count }}</view>
       </view>
       <view class="info">
         <view class="info-title">

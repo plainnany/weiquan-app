@@ -4,6 +4,7 @@
       <picker mode="selector" :range="qualityTypes" @change="qualityTypeChange" range-key="label">
         <text>{{ qualityTypes[qualityIndex].label }}</text>
       </picker>
+      <image class="arrow" :src="arrowIcon" />
     </view>
     <view class="quality-selection">
       <picker mode="selector" :range="productList" @change="productChange" range-key="productName">
@@ -66,7 +67,7 @@ export default {
     }
   },
   mounted() {
-    setTitle({ title: '质检报告' })
+    setTitle({ title: '检验报告单' })
     this.getProductList()
   },
   methods: {

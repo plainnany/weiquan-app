@@ -2,8 +2,11 @@
   <view class="search-page">
     <view class="search-bar">
       <view class="search-wrap">
-        <icon class="search-icon" type="search" size="16" />
-        <input placeholder="请输入商品名称搜索" :value="keyword" @confirm="onSearch" />
+        <view class="search-input">
+          <icon class="search-icon" type="search" size="16" />
+          <input placeholder="请输入商品名称搜索" :value="keyword" @confirm="onSearch" />
+        </view>
+        <view class="cancel-btn" @tap="onCancel">取消</view>
       </view>
       <image class="delete-icon" v-if="keyword" @tap="deleteKeyword" :src="deleteIcon" mode="" />
     </view>
@@ -140,6 +143,9 @@ export default {
       }
       this.searchPageNum++
       this.searchProduct({ pageNo: this.searchPageNum, keyword: this.keyword, type: 'loadMore' })
+    },
+    onCancel() {
+      Taro.switchTab({ url: '/pages/index/index' })
     },
   },
 }

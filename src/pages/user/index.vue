@@ -3,8 +3,8 @@
     <view class="user-info">
       <view class="user-info-wrapper" @tap="handleNav({ path: '/pages/account-manage/index' })">
         <view class="setting">
-          <image :src="settingImg" mode="" @tap="handleNav({ path: '/pages/setting/index' })" />
-          <image :src="noticeImg" class="notice" mode="" @tap="handleNav({ path: '/pages/notice/index' })" />
+          <image :src="settingImg" mode="" @tap.stop="handleNav({ path: '/pages/setting/index' })" />
+          <image :src="noticeImg" class="notice" mode="" @tap.stop="handleNav({ path: '/pages/notice/index' })" />
         </view>
         <view class="user-avatar">
           <image :src="userInfo.headPic" mode="" />

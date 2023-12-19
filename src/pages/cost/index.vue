@@ -12,14 +12,14 @@
       </view>
     </view>
     <view class="remain-item" @tap="handleCharge" v-if="userInfo.accountType !== '02'">
-      <image :src="icon1" class="icon" mode="" />
+      <image :src="icon2" class="icon" mode="" />
       <view>
         充值
       </view>
       <view class="remain-item-arrow">></view>
     </view>
     <view class="remain-item" @tap="handleDetail">
-      <image :src="icon2" class="icon" mode="" />
+      <image :src="icon1" class="icon" mode="" />
       <view>
         查看明细
       </view>

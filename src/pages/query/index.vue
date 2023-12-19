@@ -1,5 +1,6 @@
 <template>
   <view class="query-page" :class="{ empty: orderList.length === 0 }">
+    <view class="query-action" @tap="chooseDate">{{ date || '全部' }}</view>
     <view class="query-page-tip">
       温馨提示: 在线支付客户操作订单减少, 货款会立即退还至您的账户余额, 如需操作订单增加,请重新下单支付.
     </view>
@@ -38,6 +39,11 @@
     <view class="order-item-footer" @tap="handleChange">
       完成修改
     </view>
+    <view>
+      <nan-modal :visible="dateChooseVisible" v-if="dateChooseVisible" fullScreen>
+        <DateChooser :dateList="dateList" @confirm="confirmDate" @cancel="cancelDate" />
+      </nan-modal>
+    </view>
   </view>
 </template>
 
@@ -45,15 +51,21 @@
 import './index.less'
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
+import DateChooser from './date-chooser.vue'
 
 export default {
   data() {
     return {
       productList: [],
       orderList: [],
+      date: '',
+      dateChooseVisible: false,
+      dateList: [],
     }
   },
-  components: {},
+  components: {
+    DateChooser,
+  },
   mounted() {
     setTitle({ title: '查询&修改' })
   },
@@ -66,7 +78,9 @@ export default {
     getProduct(type) {
       this.loading = true
       this.$API
-        .listSetOrder()
+        .listSetOrder({
+          deliveryDate: this.date,
+        })
         .then(data => {
           this.orderList = data || []
         })
@@ -76,6 +90,20 @@ export default {
     },
     go() {
       Taro.switchTab({ url: '/pages/product/index' })
+    },
+    chooseDate() {
+      setTitle({ title: '选择日期' })
+      this.dateChooseVisible = true
+    },
+    cancelDate() {
+      this.dateChooseVisible = false
+      setTitle({ title: '查询&修改' })
+    },
+    confirmDate(params) {
+      this.date = params.map(v => v.weekStr.split(' ')[0]).join(',')
+      this.dateChooseVisible = false
+      this.getProduct()
+      setTitle({ title: '查询&修改' })
     },
     addProduct(product) {
       product.productSum = parseInt(product.productSum) + parseInt(product.minOrderQuantity)

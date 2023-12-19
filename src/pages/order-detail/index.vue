@@ -8,6 +8,7 @@
       <view class="order-detail-type-sub-title">{{ STATE_TYPE_TEXT[orderDetail.state]?.subTitle }}</view>
       <view class="order-detail-status"> <image :src="STATE_TYPE_TEXT[orderDetail.state]?.icon" mode=""/></view>
       <view v-if="orderDetail.state === STATE_TYPE.toPay">若未支付订单将取消</view>
+      <view v-if="orderDetail.state === STATE_TYPE.done" class="add-question" @tap="addQuestion(orderDetail)">问题反馈</view>
     </view>
     <view class="order-detail-content">
       <view class="common-card">
@@ -482,6 +483,10 @@ export default {
         .finally(() => {
           this.confirmBtnLoading = false
         })
+    },
+    addQuestion(order) {
+      const { productName } = order.list[0] || {}
+      Taro.navigateTo({ url: `/pages/comment/index?productName=${productName}` })
     },
   },
 }

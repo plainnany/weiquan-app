@@ -27,7 +27,9 @@
             <view class="shop-product-content" @tap="onClick(product)">
               <view class="shop-product-detail-title">{{ product.productName }}</view>
               <view class="shop-product-detail-info">规格: {{ product.productSpecs }}</view>
-              <view class="shop-product-detail-info">单位: {{ 1 }}{{ product.productUnitMax }}/数量:{{ product.amount }}</view>
+              <view class="shop-product-detail-info"
+                >单位: {{ 1 }}{{ product.productUnitMax }}/数量:{{ product.productUnitConvertRule }}</view
+              >
             </view>
             <view class="shop-product-price">
               <view class="shop-product-detail-price" v-show="product.price"

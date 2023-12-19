@@ -38,10 +38,11 @@
         </view>
         <view class="comment-done-item">
           <view class="comment-done-label">
-            客诉图片
+            客诉说明
           </view>
-          <view class="comment-done-image">
-            <image class="done-image" :src="item" v-for="item in detailData.imageUrl" :key="item"></image>
+          <view class="comment-done-text">
+            {{ detailData.complainDesc }}
+            <!-- <image class="done-image" :src="item" v-for="item in detailData.imageUrl" :key="item"></image> -->
           </view>
         </view>
         <view class="comment-done-item">
@@ -100,7 +101,8 @@
         <view class="comment-page-item">
           <view class="comment-page-item-label">问题说明</view>
           <view class="input-wrapper">
-            <textarea v-model="form.description" placeholder="请输入问题说明" />
+            <textarea v-model="form.description" :maxlength="maxlength" placeholder="请输入问题说明" />
+            <view class="counter">{{ form.description.length || 0 }}/{{ maxlength }}</view>
           </view>
         </view>
         <view class="comment-page-item">
@@ -188,6 +190,7 @@ export default {
           key: '02',
         },
       ],
+      maxlength: 200,
     }
   },
   computed: {
@@ -206,9 +209,9 @@ export default {
     this.$instance = Taro.getCurrentInstance()
   },
   mounted() {
-    setTitle({ title: '问题反馈' })
     const { code, productName, type } = this.$instance.router.params
     this.type = type // 已处理、未处理
+    setTitle({ title: type === 'done' ? '客诉详情' : '问题反馈' })
     this.productName = productName
     if (code) {
       this.complainCode = code
