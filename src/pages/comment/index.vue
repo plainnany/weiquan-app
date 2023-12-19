@@ -1,6 +1,10 @@
 <template>
   <view class="comment-page">
     <view v-if="type === 'done'" class="comment-page-done">
+      <view class="phone" @tap="contact">
+        <image :src="phoneIcon" mode="" />
+        客服</view
+      >
       <view class="done-card">
         <view class="comment-done-item">
           <view class="comment-done-label">
@@ -153,12 +157,14 @@ import backIcon from '@/images/user/back.png'
 import deleteIcon from '@/images/delete.svg'
 import { BASE_URL } from '@/const'
 import arrowIcon from '@/images/arrow-down.png'
+import phoneIcon from '@/images/phone.svg'
 
 export default {
   components: {},
   data() {
     return {
       arrowIcon,
+      phoneIcon,
       form: {
         question: '',
         number: '',
@@ -417,6 +423,22 @@ export default {
         .finally(() => {
           this.deleteStatus = false
         })
+    },
+    contact() {
+      if (!this.$store.state.userInfo.customerService) {
+        Taro.showToast({
+          title: '用户未登录，请先登录',
+          icon: 'none',
+        })
+
+        setTimeout(() => {
+          Taro.navigateTo({ url: '/pages/bind-account/index' })
+        }, 2000)
+        return
+      }
+      Taro.makePhoneCall({
+        phoneNumber: this.$store.state.userInfo.customerService,
+      })
     },
   },
 }
