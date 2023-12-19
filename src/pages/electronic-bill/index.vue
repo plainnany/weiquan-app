@@ -23,7 +23,7 @@
             {{ bill.time }}
             {{ bill.week }}
           </view>
-          <view class="electronic-list-sum" v-show="userInfo.accountType !== '02'">{{ bill.amount }}</view>
+          <view class="electronic-list-sum" v-show="!isMonthUser">{{ bill.amount }}</view>
         </view>
         <view class="electronic-list-row">
           <view>
@@ -46,7 +46,7 @@
               <view class="electronic-list-sum">{{ item.price }}</view>
             </view>
             <view>规格: {{ item.productUnitConvertRule }}</view>
-            <view>单价: {{ userInfo.accountType !== '02' ? item.productPrice : '' }}</view>
+            <view>单价: {{ !isMonthUser ? item.productPrice : '' }}</view>
             <view>数量: {{ item.num }}</view>
             <view
               >订单类型: <text class="yellow"> {{ typeMap[item.type] }}单</text></view
@@ -60,11 +60,14 @@
         暂无数据
       </view>
     </view>
-    <view class="electronic-total" v-show="userInfo.accountType !== '02'">
+    <view class="electronic-total">
       <text style="color: #f93a4a;">{{ billData.num || '0' }}</text>
-      <text>个订单，</text>
-      <text style="color: red">{{ billData.amount || '0' }}</text
-      >元
+      <text>个订单</text>
+      <text v-if="!isMonthUser">
+        ，
+        <text style="color: red">{{ billData.amount || '0' }}</text
+        >元
+      </text>
     </view>
   </view>
 </template>
@@ -96,6 +99,9 @@ export default {
     },
     userInfo() {
       return this.$store.state.userInfo
+    },
+    isMonthUser() {
+      return this.userInfo.accountType === '02'
     },
   },
   data() {
