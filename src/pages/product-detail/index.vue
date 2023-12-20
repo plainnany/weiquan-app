@@ -1,11 +1,12 @@
 <template>
   <view class="product-detail">
     <view class="product-banner">
-      <swiper :autoplay="false" :indicator-active-color="swiperOptions.indicatorColor">
+      <swiper :autoplay="false" @change="onSwiperChange" :indicator-active-color="swiperOptions.indicatorColor">
         <swiper-item v-for="(imageUrl, index) in product.images" :key="index">
           <image :src="imageUrl" />
         </swiper-item>
       </swiper>
+      <view class="swiper-indicator">{{ currentImage }}/{{ product.images?.length }}</view>
     </view>
     <view class="product-wrapper">
       <view class="product-card">
@@ -115,6 +116,7 @@ export default {
       },
       $instance: null,
       productUnitRule: 0,
+      currentImage: 1,
     }
   },
   computed: {},
@@ -133,6 +135,9 @@ export default {
     handleNav(url) {
       Taro.switchTab({ url })
     },
+    onSwiperChange(e) {
+      this.currentImage = e.detail.current + 1
+    },
     getProduct() {
       const params = this.$instance.router.params
       this.$API
@@ -141,6 +146,7 @@ export default {
         })
         .then(data => {
           data.minOrderQuantity = data.minOrderQuantity || 0
+          data.images = (data.images || []).concat(data.images)
           this.product = data
           this.productUnitRule = parseInt(this.product.productUnitRule)
           this.minOrderQuantity = parseInt(this.product.minOrderQuantity)

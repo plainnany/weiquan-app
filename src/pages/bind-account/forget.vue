@@ -11,7 +11,7 @@
       <input type="text" v-model="form.userId" placeholder="门店编码（手机号未绑定多家门店可不填）" />
     </view>
     <view class="form-item">
-      <input type="password" v-model="form.password" placeholder="新密码" />
+      <input type="password" v-model="form.password" placeholder="新密码（6-13位数字+字母）" />
     </view>
     <view class="form-item">
       <input type="password" v-model="form.confirmPassword" placeholder="确认新密码" />

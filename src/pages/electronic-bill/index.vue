@@ -23,7 +23,7 @@
             {{ bill.time }}
             {{ bill.week }}
           </view>
-          <view class="electronic-list-sum" v-show="!isMonthUser">{{ bill.amount }}</view>
+          <view class="electronic-list-sum" v-show="!isMonthUser">{{ bill.amount }}元</view>
         </view>
         <view class="electronic-list-row">
           <view>

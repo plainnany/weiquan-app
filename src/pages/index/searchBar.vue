@@ -1,7 +1,7 @@
 <template>
   <view class="search-bar-wrapper">
     <view class="search-bar" @tap="focus">
-      <icon class="search-icon" type="search" size="12" />
+      <icon class="search-icon" type="search" size="12" color="#fff" />
       <text class="input">商品搜索</text>
     </view>
   </view>
