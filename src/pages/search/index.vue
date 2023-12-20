@@ -59,6 +59,7 @@ export default {
       searchLoading: false,
       searchPageNum: 1,
       searchComplete: false,
+      redirect: '',
     }
   },
   onShow() {
@@ -68,6 +69,8 @@ export default {
     setTitle({
       title: '搜索',
     })
+    const { redirect } = Taro.getCurrentInstance().router.params
+    this.redirect = redirect
   },
   methods: {
     addShop(product) {
@@ -145,7 +148,8 @@ export default {
       this.searchProduct({ pageNo: this.searchPageNum, keyword: this.keyword, type: 'loadMore' })
     },
     onCancel() {
-      Taro.switchTab({ url: '/pages/index/index' })
+      const path = this.redirect || 'index'
+      Taro.switchTab({ url: `/pages/${path}/index` })
     },
   },
 }

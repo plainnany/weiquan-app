@@ -10,7 +10,7 @@
         <view class="notice-item-main">
           <view class="day">
             <text class="date">{{ getLabelTime(item.noticeTime) }}</text>
-            <text class="time">{{ item.noticeTime }}</text>
+            <text class="time">{{ getNoticeTime(item.noticeTime) }}</text>
           </view>
           <view class="remark">
             {{ item.remarks }}
@@ -71,12 +71,20 @@ export default {
         })
     },
     getLabelTime(time) {
+      time = time || ''
       const hours = Number(time.split(':')[0])
       return hours >= 12 ? '下午' : '上午'
     },
+    getNoticeTime(time) {
+      time = time || ''
+      const [hours, min] = time.split(':')
+      const hour = hours > 12 ? hours - 12 : hours
+      return `${hour}:${min}`
+    },
     getNoticeDay(date) {
+      date = date || ''
       if (date === '0') return '永不'
-      if (date.split(',').length == 7) return '每天'
+      if (date?.split(',').length == 7) return '每天'
       const dayMap = {
         1: '周一',
         2: '周二',

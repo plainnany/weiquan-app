@@ -1,5 +1,6 @@
 <template>
   <view class="product-page">
+    <icon class="search-icon" type="search" size="12" @tap="goSearch" />
     <view class="product-items">
       <scroll-view :scroll-x="true" :key="scrollViewKey" :scroll-into-view="scrollId">
         <view
@@ -86,6 +87,7 @@ export default {
       },
     ]
     this.categoryIndex = this.$store.state.switchCategoryTab
+    debugger
     this.activeIndex = this.categoryIndex || 0
     this.searchPageNum = 1
     this.searchComplete = false
@@ -178,6 +180,11 @@ export default {
       }
       this.searchPageNum++
       this.getProductByCategory('loadMore')
+    },
+    goSearch() {
+      Taro.navigateTo({
+        url: '/pages/search/index?redirect=product',
+      })
     },
   },
 }
