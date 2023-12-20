@@ -146,7 +146,7 @@ export default {
         })
         .then(data => {
           data.minOrderQuantity = data.minOrderQuantity || 0
-          data.images = (data.images || []).concat(data.images)
+          data.images = data.images || []
           this.product = data
           this.productUnitRule = parseInt(this.product.productUnitRule)
           this.minOrderQuantity = parseInt(this.product.minOrderQuantity)
