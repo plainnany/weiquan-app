@@ -124,7 +124,7 @@
                       <view class="btn-plain" @tap.stop="cancelOrder(order)">取消订单</view>
                       <view class="btn-primary" @tap.stop="handlePay(order)">立即支付</view>
                     </view>
-                    <view v-if="order.state === '05'" class="btn-primary" @tap="addQuestion(order)">问题反馈</view>
+                    <view v-if="order.state === '05'" class="btn-primary" @tap.stop="addQuestion(order)">问题反馈</view>
                   </view>
                 </view>
               </view>

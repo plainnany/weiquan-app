@@ -31,15 +31,15 @@
           </picker>
         </view>
       </view>
-      <view class="card">
+      <view class="card" @tap="handleDate">
         <view class="card-item">重复</view>
-        <view class="card-item grey" @tap="handleDate"> {{ repeatDate }} <image :src="backImg" mode="" /> </view>
+        <view class="card-item grey"> {{ repeatDate }} <image :src="backImg" mode="" /> </view>
       </view>
-      <view class="card">
+      <view class="card" @tap="addLabel">
         <view class="card-item">标签</view>
         <view class="card-item grey"
-          >下单提醒
-          <!-- <image :src="backImg" mode=""/> -->
+          >{{ remarks || '下单提醒' }}
+          <image class="arrow" :src="backImg" mode="" />
         </view>
       </view>
     </view>
@@ -59,6 +59,15 @@
         </view>
       </view>
     </nan-modal>
+    <view class="order-edit-label" v-if="labelVisible">
+      <view class="input-wrap">
+        <input type="text" v-model="remarks" placeholder="请输入标签" />
+        <image class="close" :src="closeImg" @tap="() => (this.remarks = '')" />
+      </view>
+      <view class="back" @tap="() => (this.labelVisible = false)">
+        <image :src="backImg" />
+      </view>
+    </view>
   </view>
 </template>
 <script>
@@ -66,6 +75,7 @@ import { setTitle } from '@/utils'
 import Taro from '@tarojs/taro'
 import backImg from '@/images/user/back.png'
 import checkedImg from '@/images/checked.svg'
+import closeImg from '@/images/close.png'
 
 const weekMap = {
   1: '周一',
@@ -80,6 +90,7 @@ const weekMap = {
 export default {
   data() {
     return {
+      closeImg,
       backImg,
       checkedImg,
       hour: '', // 时
@@ -98,7 +109,9 @@ export default {
       timeTypeIndex: 0,
       repeatDate: '永不',
       noticeData: {},
+      remarks: '',
       dateChooseVisible: false,
+      labelVisible: false,
       weeks: Object.keys(weekMap).map(key => ({
         label: weekMap[key],
         value: key,
@@ -123,12 +136,12 @@ export default {
 
     if (data) {
       this.noticeData = JSON.parse(data) || {}
-
-      const { noticeTime, noticeDate } = this.noticeData
-      const [hour, min] = noticeTime.split(':')
+      const { noticeTime, noticeDate, remarks } = this.noticeData
+      const [hour, min] = (noticeTime || '').split(':')
       this.hour = hour
       this.min = min
       this.repeatDate = this.getNoticeDay(noticeDate)
+      this.remarks = remarks
     } else {
       this.hour = hours
       this.min = minutes
@@ -143,6 +156,7 @@ export default {
       this.dateChooseVisible = true
     },
     getNoticeDay(date) {
+      date = date || ''
       if (date === '0') return '永不'
       const dateArr = date.split(',')
       if (dateArr.length == 7) return '每天'
@@ -181,23 +195,36 @@ export default {
         })
         .then(() => this.goBack())
     },
-    handleSave() {
+    addLabel() {
+      this.labelVisible = true
+      // const url = `/pages/order-notice/label?type=${this.editType}&data=${JSON.stringify(this.getParams())}`
+      // Taro.navigateTo({ url })
+    },
+    getParams() {
       const params = {
         noticeTime: this.hour + ':' + this.min,
         noticeDate: this.weeks
           .filter(v => v.checked)
           .map(v => v.value)
           .join(','),
+        remarks: this.remarks,
       }
 
-      if (this.editType === 'add') {
-      } else if (this.editType === 'edit') {
+      if (this.editType === 'edit') {
         params.oid = this.noticeData.oid
       }
+
+      return params
+    },
+    handleSave() {
+      const params = this.getParams()
 
       this.$API.editNotice(params).then(() => {
         this.goBack()
       })
+    },
+    confirmLabel(remarks) {
+      this.remarks = this.remarks
     },
   },
 }
@@ -296,6 +323,53 @@ export default {
     .checked {
       width: 32px;
       height: 32px;
+    }
+  }
+}
+
+.order-edit-label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  font-size: 36px;
+  background-color: rgb(240, 242, 245);
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  .input-wrap {
+    width: 100%;
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+
+    .close {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  input {
+    width: calc(100% - 64px);
+    padding: 24px 16px;
+  }
+
+  .back {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    transform: rotate(180deg);
+
+    image {
+      width: 64px;
+      height: 64px;
     }
   }
 }

@@ -10,7 +10,12 @@
           </view>
           <view class="shop-product-detail-edit" v-if="edit">
             <view class="shop-product-detail-edit-number">
-              <view class="product-edit-action-btn" @tap.stop="decreaseProduct(product, index)">-</view>
+              <view
+                class="product-edit-action-btn"
+                :class="{ disable: decreaseDisabled(product) }"
+                @tap.stop="decreaseProduct(product, index)"
+                >-</view
+              >
               <input
                 type="number"
                 v-model="product.amount"
@@ -36,7 +41,9 @@
                 >¥ <text>{{ (Number(product.price) * Number(product.amount)).toFixed(2) }}</text></view
               >
               <view class="shop-product-detail-number">
-                <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)">-</view>
+                <view class="product-action-btn" :class="{ disable: decreaseDisabled(product) }" @tap.stop="decreaseProduct(product, index)"
+                  >-</view
+                >
                 <!-- <text @tap.stop="">{{ product.amount }}</text> -->
                 <input
                   type="number"
@@ -115,6 +122,9 @@ export default {
     userInfo() {
       return this.$store.state.userInfo
     },
+    decreaseDisabled() {
+      return product => product.amount <= product.minOrderQuantity
+    },
   },
 
   onShow() {
@@ -187,6 +197,7 @@ export default {
       this.deleteOid = product.oid
     },
     decreaseProduct(product, index) {
+      if (this.decreaseDisabled(product)) return
       product.amount -= parseInt(product.productUnitConvertRule)
       if (product.amount <= 1) {
         this.productList.splice(index, 1)

@@ -13,7 +13,7 @@
             <text class="time">{{ getNoticeTime(item.noticeTime) }}</text>
           </view>
           <view class="remark">
-            {{ item.remarks }}
+            {{ item.remarks ? `${item.remarks},` : '' }}
             <text class="notice-day">
               {{ getNoticeDay(item.noticeDate) }}
             </text>
@@ -77,9 +77,10 @@ export default {
     },
     getNoticeTime(time) {
       time = time || ''
-      const [hours, min] = time.split(':')
+      const [hours, minutes] = time.split(':')
       const hour = hours > 12 ? hours - 12 : hours
-      return `${hour}:${min}`
+      const min = Number(minutes)
+      return `${hour}:${min > 9 ? min : '0' + min}`
     },
     getNoticeDay(date) {
       date = date || ''

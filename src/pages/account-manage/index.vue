@@ -9,7 +9,7 @@
         </view>
         <view v-else class="right">
           {{ userInfo[item.key] }}
-          <image :src="item.icon" mode="" />
+          <image v-if="item.icon" :src="item.icon" mode="" />
         </view>
       </view>
     </view>
