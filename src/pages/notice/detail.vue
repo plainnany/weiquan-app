@@ -61,7 +61,7 @@ export default {
       const method = {
         Order: 'loadOrderMessage',
         System: 'loadSystemMessage',
-        // Post: 'companyPost',
+        Post: 'companyPost',
       }[this.key]
       if (!method) return
 

@@ -23,7 +23,7 @@
     <view class="quality-search" v-if="qualityIndex === 1">
       <nan-button type="primary" @tap="onSearch()">查询</nan-button>
     </view>
-    <view>
+    <view v-if="!qualityList.length">
       <image class="quality-img" src="http://foodservice-main.oss-cn-hangzhou.aliyuncs.com/old/zjbg.png" mode=""></image>
     </view>
     <view class="quality-result">
@@ -96,6 +96,7 @@ export default {
         this.productList = data
         if (data.length > 0) {
           this.productIndex = 0
+          this.productCode = data[0].productCode
         }
       })
     },

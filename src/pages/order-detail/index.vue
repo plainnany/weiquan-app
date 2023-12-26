@@ -490,7 +490,7 @@ export default {
     },
     addQuestion(order) {
       const { productName } = order.list[0] || {}
-      Taro.navigateTo({ url: `/pages/comment/index?productName=${productName}` })
+      Taro.navigateTo({ url: `/pages/comment/index?type=add&productName=${productName}` })
     },
   },
 }

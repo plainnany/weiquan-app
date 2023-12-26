@@ -90,6 +90,7 @@
         <view class="nav-primary" @tap="batchOrder">批量下单</view>
       </view>
     </view>
+    <view class="toast" v-if="showToast"> <text>加入成功</text></view>
   </view>
 </template>
 
@@ -117,6 +118,7 @@ export default {
       $instance: null,
       productUnitRule: 0,
       currentImage: 1,
+      showToast: false,
     }
   },
   computed: {},
@@ -190,10 +192,15 @@ export default {
           amount: this.product.productUnitRule,
         })
         .then(data => {
-          Taro.showToast({
-            title: '添加成功',
-            icon: 'success',
-          })
+          this.showToast = true
+
+          setTimeout(() => {
+            this.showToast = false
+          }, 3000)
+          // Taro.showToast({
+          //   title: '添加成功',
+          //   icon: 'success',
+          // })
         })
         .catch(data => {
           Taro.showToast({

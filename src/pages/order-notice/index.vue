@@ -78,9 +78,9 @@ export default {
     getNoticeTime(time) {
       time = time || ''
       const [hours, minutes] = time.split(':')
-      const hour = hours > 12 ? hours - 12 : hours
+      const hour = hours > 12 ? hours - 12 : hours - 0
       const min = Number(minutes)
-      return `${hour}:${min > 9 ? min : '0' + min}`
+      return `${'0' + hour}:${min > 9 ? min : '0' + min}`
     },
     getNoticeDay(date) {
       date = date || ''

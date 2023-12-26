@@ -87,7 +87,6 @@ export default {
       },
     ]
     this.categoryIndex = this.$store.state.switchCategoryTab
-    debugger
     this.activeIndex = this.categoryIndex || 0
     this.searchPageNum = 1
     this.searchComplete = false

@@ -117,7 +117,6 @@ export default {
             const url = (response.data || [])[0]?.url
             if (!url) return
             this.$API.updateHeadPic({ url }).then(data => {
-              debugger
               this.userInfo.headPic = url
               this.$store.commit('setUserInfo', this.userInfo)
             })

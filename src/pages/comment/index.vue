@@ -212,7 +212,7 @@ export default {
     },
     btnDisabled() {
       const { description, dictid, number, productCode } = this.form
-      if (!description || !dictid || !number || !productCode || !this.questionImages.length) {
+      if (!description || !dictid || !number || !productCode || !this.questionImages?.length) {
         return true
       }
       return false
@@ -221,21 +221,19 @@ export default {
   created() {
     this.$instance = Taro.getCurrentInstance()
   },
-  mounted() {
+  async mounted() {
     const { code, productName, type } = this.$instance.router.params
     this.type = type // 已处理、未处理
     setTitle({ title: type === 'done' ? '客诉详情' : '问题反馈' })
     this.productName = productName
+    await this.getProductList()
+    await this.getComplainType()
+
     if (code) {
       this.complainCode = code
       this.getComplaintDetail()
     } else if (productName) {
       this.checkedProduct = productName
-      this.getProductList()
-      this.getComplainType()
-    } else {
-      this.getProductList()
-      this.getComplainType()
     }
   },
   methods: {
@@ -247,31 +245,31 @@ export default {
         .then(data => {
           data = data || {}
           this.detailData = data
-          this.questions = [
-            {
-              label: data.dictname,
-              id: data.dictid,
-            },
-          ]
-          this.productList = [
-            {
-              productName: data.productName,
-              productCode: data.productCode,
-            },
-          ]
+          // this.questions = [
+          //   {
+          //     label: data.dictname,
+          //     id: data.dictid,
+          //   },
+          // ]
+          // this.productList = [
+          //   {
+          //     productName: data.productName,
+          //     productCode: data.productCode,
+          //   },
+          // ]
           this.questionImages = data.imageUrl
           this.checkedQuestion = data.dictname
-          this.checkedProduct = data.productName
           this.form.description = data.complainDetail
           this.form.number = data.num
           this.form.dictid = data.dictid
           this.form.productCode = data.productCode
           this.form.returnFlg = data.returnFlg
           this.form.batchCode = data.batchCode
+          this.checkedProduct = data.productName || (this.productList.find(v => v.productCode === data.productCode) || {}).productName
         })
     },
     getProductList() {
-      this.$API.getComplaintProductList().then(data => {
+      return this.$API.getComplaintProductList().then(data => {
         this.productList = data
         if (this.type === 'add') {
           this.checkedProduct = data[0]?.productName
@@ -280,7 +278,7 @@ export default {
       })
     },
     getComplainType() {
-      this.$API
+      return this.$API
         .getComplainType({
           state: '01',
         })
@@ -289,6 +287,7 @@ export default {
           this.questions = data
           if (this.productName || this.type === 'add') {
             this.checkedQuestion = data[0].dictname
+            this.form.dictid = data[0].dictid
           }
         })
     },
@@ -397,7 +396,7 @@ export default {
       this.btnLoading = true
       const params = {
         complainDetail: description,
-        imgUrl: this.questionImages.join(','),
+        imgUrl: (this.questionImages || []).join(','),
         dictid,
         dictname: this.checkedQuestion,
         num: number,
