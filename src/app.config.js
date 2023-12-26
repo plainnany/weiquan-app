@@ -4,6 +4,7 @@ export default defineAppConfig({
     'pages/product/index', // 分类
     'pages/shop/index', // 购物车
     'pages/user/index', // 用户中心
+    'pages/user/help', // 帮助中心
     'pages/search/index', // 搜索
     'pages/cost/index', // 余额
     'pages/cost/detail', // 余额明细

@@ -196,8 +196,7 @@ export default {
         {
           icon: helpImg,
           title: '帮助中心',
-          isWebview: true,
-          path: `/pages/web-view/index?url=${BASE_URL}/service.htm`,
+          path: `/pages/user/help`,
           // path: `/pages/web-view/index?url=${this.$store.state.userInfo.helpLink}`,
         },
         // {
