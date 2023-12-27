@@ -52,7 +52,6 @@ export default {
     this.key = key
     this.postTitle = post
     this.postDate = date
-    this.postUrl = postUrl
     this.pageNo = 1
     this.getNotice()
   },
@@ -64,12 +63,15 @@ export default {
         Post: 'companyPost',
       }[this.key]
       if (!method) return
-
       this.$API[method]({
         pageNo: this.pageNo,
         limit: 10,
+        type: '01',
       }).then(data => {
         data = data || []
+        if (this.key === 'Post') {
+          this.postUrl = data[0]?.postUrl
+        }
         if (type === 'loadMore') {
           this.detailList = this.detailList.concat(data)
         } else {
@@ -91,7 +93,7 @@ export default {
     navPostDetail() {
       if (!this.postUrl) return
       Taro.navigateTo({
-        url: `/pages/web-view/index?url=${this.postUrl}`,
+        url: `/pages/web-view/index?url=${encodeURIComponent(this.postUrl)}`,
       })
     },
   },
