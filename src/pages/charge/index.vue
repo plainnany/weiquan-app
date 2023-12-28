@@ -4,7 +4,7 @@
       <image :src="phoneIcon" mode="" />
       客服</view
     >
-    <view class="charge-way">请选择充值方式</view>
+    <view class="charge-way">选择充值方式</view>
     <view class="charge-card">
       <view class="charge-method">
         <view>

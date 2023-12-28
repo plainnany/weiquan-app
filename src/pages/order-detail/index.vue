@@ -71,26 +71,6 @@
               <view class="order-detail-done-status" v-if="/01/.test(product.state) && userInfo.accountType === '01'">待付款</view>
             </view>
           </view>
-          <!-- <view class="common-card">
-          <view class="flex-between-center">
-            <text class="order-detail-color-grey">商品小计</text>
-            <view class="order-detail-sum"
-              >¥ <text>{{ product.price }}</text></view
-            >
-          </view>
-          <view class="flex-between-center">
-            <text class="order-detail-color-grey">活动优惠</text>
-            <view class="order-detail-sum"
-              >-¥ <text>{{ '7' }}</text></view
-            >
-          </view>
-          <view class="flex-between-center order-detail-total">
-            <text>应付金额合计</text>
-            <view class="order-detail-sum"
-              >¥ <text>{{ '31.8' }}</text></view
-            >
-          </view>
-        </view> -->
         </view>
 
         <view class="flex-between-center" v-if="orderDetail.state === '01'">
@@ -99,6 +79,7 @@
         </view>
       </view>
 
+      <!-- 普通订单详情 -->
       <view class="common-card" v-if="!isTodayDelivery">
         <view class="order-detail-item">
           <text class="order-detail-color-grey">订单编号：</text>
@@ -109,7 +90,7 @@
           <text class="order-detail-color-grey" v-if="userInfo.accountType === '02'">{{ orderDetail.createDate?.split(' ')[0] }}</text>
           <text class="order-detail-color-grey" v-else>{{ orderDetail.createDate }}</text>
         </view>
-        <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && orderType === 'all'">
+        <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && orderDetail.state === '02'">
           <text class="order-detail-color-grey">付款时间：</text>
           <text class="order-detail-color-grey">{{ orderDetail.payDate }}</text>
         </view>
@@ -122,6 +103,7 @@
           <text>183772889499495885993884</text>
         </view> -->
       </view>
+      <!-- 当天收货详情 -->
       <view class="to-delivery" v-else>
         <view class="order-detail-item">
           <text class="order-detail-color-grey">预计到货：{{ orderDetail.deliveryDate }}</text>

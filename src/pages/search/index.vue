@@ -8,7 +8,6 @@
         </view>
         <view class="cancel-btn" @tap="onCancel">取消</view>
       </view>
-      <image class="delete-icon" v-if="keyword" @tap="deleteKeyword" :src="deleteIcon" mode="" />
     </view>
     <view class="search-result">
       <view class="search-result-empty" v-if="!productList.length && startSearch">
@@ -43,7 +42,7 @@ import Taro from '@tarojs/taro'
 import './index.less'
 import { setTitle } from '@/utils'
 import searchEmptyIcon from '@/images/search-empty.png'
-import shopIcon from '@/images/shop.png'
+import shopIcon from '@/images/add-shop.png'
 import deleteIcon from '@/images/delete.png'
 
 export default {
