@@ -300,6 +300,18 @@ export default {
       this.activeTab = key
     },
     getOrder(orderNumber) {
+      if (this.isTodayDelivery) {
+        return this.$API.todayDeliveryOrder({
+          pageNo: 1,
+          limit: 1000,
+        }).then(data => {
+          this.orderDetail = {
+            ...data,
+            list: data.delivery || [],
+            state: "04"
+          }
+        })
+      }
       this.$API
         .getOrderDetail({
           // orderNumber: '2022091920365617123456789',
