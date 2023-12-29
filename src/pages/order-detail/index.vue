@@ -39,9 +39,9 @@
           <image :src="backIcon" mode="" />
         </view> -->
       </view>
-      <view class="common-card">
-        <view v-for="(product, index) in orderDetail.list" :key="index">
-          <view class="order-detail-item flex-between-center">
+      <view class="order-detail-wrapper" :class="{ margin: !isTodayDelivery }">
+        <view v-for="(product, index) in orderDetail.list" :key="index" class="order-detail-item border">
+          <view class="flex-between-center">
             <view class="flex-between-center">
               <view class="order-detail-image">
                 <image :src="product.productImage" mode="" />

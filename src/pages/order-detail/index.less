@@ -187,7 +187,25 @@
   }
 
   &-item {
-    margin: 20px 0;
+    &.border {
+      padding: 24px 30px;
+      border-bottom: 1px solid #e1e1e1;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  &-wrapper {
+    padding: 1px 0;
+    background-color: #fff;
+    border-bottom: 1px solid #e1e1e1;
+
+    &.margin {
+      margin-bottom: 24px;
+      border-bottom: none;
+    }
   }
 
   &-footer {
