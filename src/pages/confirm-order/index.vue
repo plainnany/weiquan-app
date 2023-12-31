@@ -24,7 +24,7 @@
             <image :src="backIcon" mode="" />
           </view>
         </view>
-        <view class="delivery-date-item" v-for="item in product.weekStr || []" :key="item">
+        <view class="delivery-date-item" :class="{ 'is-single': !isBatchOrder }" v-for="item in product.weekStr || []" :key="item">
           {{ item }}
         </view>
         <view class="confirm-order-item flex">
@@ -88,6 +88,7 @@ export default {
   },
   computed: {
     totalFee() {
+      // 此金额需要调用后端接口计算,/api/v2/order/v2/getAmount.ns
       return this.productList.reduce((prev, cur) => prev + parseFloat(cur.total), 0)
     },
   },

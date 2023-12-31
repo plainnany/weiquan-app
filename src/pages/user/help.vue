@@ -36,6 +36,7 @@
 import Taro from '@tarojs/taro'
 import phoneIcon from '@/images/phone.svg'
 import './help.less'
+import {setTitle} from '@/utils'
 
 export default {
   data() {
@@ -43,6 +44,9 @@ export default {
       phoneIcon,
       expand: true,
     }
+  },
+  mounted() {
+    setTitle({ title: '帮助中心' })
   },
   methods: {
     contact() {

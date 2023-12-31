@@ -13,7 +13,7 @@
       </view>
     </view>
     <view class="common-card order-settle-pay">
-      <view class="order-settle-pay-title">支付方式</view>
+      <view class="order-settle-pay-title">支付选择</view>
       <radio-group @change="onPaymethodChange">
         <label class="order-settle-item flex-between-center" v-for="payItem in payList" :key="payItem.name">
           <view class="flex-between-center">
@@ -22,11 +22,11 @@
             </view>
             <view>
               {{ payItem.name }}
-              <text v-if="payItem.method === 'weixin-pocket'"> (¥{{ userInfo.accoutBalance }}) </text>
+              <text v-if="payItem.method === 'weixin-pocket'"> ({{ userInfo.accoutBalance }}) </text>
             </view>
           </view>
           <view>
-            <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#fa4a2d" />
+            <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#333" />
           </view>
         </label>
       </radio-group>
@@ -35,7 +35,7 @@
       >
     </view>
     <view class="order-settle-footer">
-      <nan-button type="primary" @tap="confirmPay">确认支付</nan-button>
+      <nan-button type="primary" @tap="confirmPay">立即支付</nan-button>
     </view>
   </view>
 </template>
@@ -85,7 +85,7 @@ export default {
         },
         {
           method: 'weixin-2',
-          name: '微信好友支付',
+          name: '微信好友代付',
           icon: wechatIcon,
         },
       ]

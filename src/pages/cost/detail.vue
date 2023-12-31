@@ -4,10 +4,11 @@
       <view class="charge-tab" :class="{ active: active === tab.key }" @tap="clickTab(tab)" v-for="tab in tabs" :key="tab.key">
         {{ tab.name }}</view
       >
+      <view class="divider"></view>
     </view>
     <scroll-view :scroll-y="true" @scrolltolower="toLower" v-if="chargeList.length">
       <view class="charge-list">
-        <view class="charge-list-item" v-for="(item, index) in chargeList" :key="index">
+        <view class="charge-list-item" v-for="(item, index) in chargeList" :key="index" @tap="viewOrderDetail(item)">
           <view class="charge-list-item-title">
             <text>{{ active === 'charge' ? (item.state === '04' ? '返还' : '充值') : '消费' }}</text>
             <text class="charge-list-item-date">{{ item.billDate }}</text>
@@ -101,6 +102,13 @@ export default {
       }
       this.pageNo++
       this.getChargeList('loadMore')
+    },
+    viewOrderDetail(item) {
+      if (this.active === 'consume') {
+        Taro.navigateTo({
+          url: `/pages/order-detail/index?order=${item.orderNumber}&type=all`,
+        })
+      }
     },
   },
 }

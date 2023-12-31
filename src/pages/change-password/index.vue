@@ -5,7 +5,7 @@
       <text>管理员密码设置</text>
     </view>
     <view class="common-card">
-      <input v-model.trim="originManagerPassword" placeholder="原密码（6-13位数字+字母）" />
+      <input v-model.trim="originManagerPassword" type="password" placeholder="原密码（6-13位数字+字母）" />
     </view>
     <view class="common-card">
       <input v-model.trim="managerPassword" type="password" placeholder="新密码（6-13位数字+字母）" />

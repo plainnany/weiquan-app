@@ -212,7 +212,7 @@ export default {
     batchOrder() {
       if (!this.checkAddShop()) return
       Taro.navigateTo({
-        url: `/pages/confirm-order/index?type=batch&productId=${this.product.productId}&sum=${this.product.productUnitRule}`,
+        url: `/pages/confirm-order/index?type=batch&productId=${this.product.productId}&sum=${this.product.minOrderQuantity}`,
       })
     },
     contact() {

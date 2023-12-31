@@ -1,7 +1,7 @@
 <template>
   <view class="shop-page" :class="{ empty: productList.length === 0 }">
+    <view class="edit" @tap="handleEdit">{{ edit ? '完成' : '编辑' }}</view>
     <scroll-view v-if="productList.length" class="shop-product-wrapper" scroll-y="true" @scrolltolower="toLower">
-      <view class="edit" @tap="handleEdit">{{ edit ? '完成' : '编辑' }}</view>
       <view v-for="(product, index) in productList" :key="index" class="shop-product-item">
         <view class="border">
           <checkbox :checked="product.checked" @tap.stop="change(product, index)"></checkbox>
@@ -80,7 +80,7 @@
       </view>
     </view>
     <Modal :visible="visible" title="删除" cancelText="取消" confirmText="确认" @cancel="() => (visible = false)" @confirm="confirmDelete">
-      <view style="font-size: 28rpx">确定要删除该商品么？</view>
+      <view style="font-size: 28rpx">确定要删除该商品吗？</view>
     </Modal>
   </view>
 </template>
@@ -133,6 +133,7 @@ export default {
   },
   methods: {
     handleEdit() {
+      if (this.productList.length === 0) return
       this.edit = !this.edit
       if (this.edit) {
         // 编辑
@@ -266,7 +267,7 @@ export default {
       this.getProduct('loadMore')
     },
     onClick(product) {
-      Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.productId}` })
+      // Taro.navigateTo({ url: `/pages/product-detail/index?id=${product.productId}` })
     },
     onBlur(product) {
       if (!product.amount || this.edit) return
