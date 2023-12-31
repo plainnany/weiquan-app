@@ -2,7 +2,14 @@
   <view class="shop-page" :class="{ empty: productList.length === 0 }">
     <view class="edit" @tap="handleEdit">{{ edit ? '完成' : '编辑' }}</view>
     <scroll-view v-if="productList.length" class="shop-product-wrapper" scroll-y="true" @scrolltolower="toLower">
-      <view v-for="(product, index) in productList" :key="index" class="shop-product-item">
+      <view
+        v-for="(product, index) in productList"
+        :key="index"
+        class="shop-product-item"
+        @touchstart="e => handleTouchStart(e, index)"
+        @touchmove="handleTouchMove"
+        :style="{ transform: `translateX(${product.translateX}rpx)` }"
+      >
         <view class="border">
           <checkbox :checked="product.checked" @tap.stop="change(product, index)"></checkbox>
           <view class="shop-product-image">
@@ -58,6 +65,7 @@
             </view>
           </view>
         </view>
+        <view class="delete-btn" v-if="!edit" @tap="deleteProduct(product, index)">删除</view>
       </view>
     </scroll-view>
     <view v-else class="shop-empty">
@@ -102,6 +110,8 @@ export default {
       pageNo: 1,
       edit: false,
       visible: false,
+      startX: 0, // 记录触摸起始位置
+      index: -1, // 记录当前滑动的列表项索引
     }
   },
   components: {
@@ -177,6 +187,7 @@ export default {
           this.productList = this.productList.map(v => ({
             ...v,
             checked: false,
+            translateX: 0,
           }))
           if (data.length === 0) {
             this.complete = true
@@ -294,6 +305,28 @@ export default {
             icon: 'none',
           })
         })
+    },
+    handleTouchStart(e, index) {
+      if (this.edit) return
+      this.startX = e.touches[0].clientX
+      this.index = index
+      console.log('touch start')
+    },
+    handleTouchMove(e) {
+      if (this.edit) return
+
+      const moveX = e.touches[0].clientX
+      const disX = moveX - this.startX
+      const translateX = disX < 0 ? -120 : 0 // 最大滑动距离为-30rpx
+
+      this.productList.forEach((item, index) => {
+        if (this.index === index) {
+          item.translateX = translateX
+        } else {
+          item.translateX = 0
+        }
+        return item
+      })
     },
   },
 }

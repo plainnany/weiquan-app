@@ -3,6 +3,7 @@
   box-sizing: border-box;
   background: #f8f9fa;
   position: relative;
+
   .edit {
     padding-top: 24px;
     padding-right: 24px;
@@ -32,12 +33,26 @@
     &-item {
       background-color: #fff;
       padding: 0 30px;
-
+      display: flex;
+      justify-content: space-between;
+      transition: all 0.2s;
       .border {
         padding: 24px 0;
         border-bottom: 1px solid #f0f2f5;
         display: flex;
         align-items: center;
+      }
+
+      .delete-btn {
+        font-size: 30px;
+        width: 120px;
+        background-color: #ff630f;
+        color: #fff;
+        text-align: center;
+        margin-right: -150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
 
