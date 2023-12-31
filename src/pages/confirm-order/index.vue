@@ -84,13 +84,14 @@ export default {
       dateChooseVisible: false,
       isBatchOrder: false,
       currentProduct: null,
+      totalFee: '',
     }
   },
   computed: {
-    totalFee() {
-      // 此金额需要调用后端接口计算,/api/v2/order/v2/getAmount.ns
-      return this.productList.reduce((prev, cur) => prev + parseFloat(cur.total), 0)
-    },
+    // totalFee() {
+    //   // 此金额需要调用后端接口计算,/api/v2/order/v2/getAmount.ns
+    //   return this.productList.reduce((prev, cur) => prev + parseFloat(cur.total), 0)
+    // },
   },
   mounted() {
     setTitle({ title: '确认订单' })
@@ -139,6 +140,29 @@ export default {
           this.$set(product, 'deliverTime', deliverTime)
           this.$set(product, 'weekStr', weekStr)
         }
+      })
+      let param = {}
+      if (this.isBatchOrder) {
+        const product = this.productList[0] || {}
+        param = {
+          amount: product.amount,
+          productId: product.productId,
+          deliverTime: product.deliverTime,
+          deliverTimeState: '01',
+        }
+      } else {
+        const json = JSON.stringify(
+          this.productList.map(product => ({
+            shopCarId: product.oid,
+            deliverTime: product.deliverTime,
+            deliverTimeState: '01',
+          }))
+        )
+        param = { json }
+      }
+
+      this.$API.getAmount(param).then(data => {
+        this.totalFee = data.sum
       })
       this.dateChooseVisible = false
       setTitle({ title: '确认订单' })

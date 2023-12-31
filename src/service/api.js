@@ -405,6 +405,12 @@ const requestAddressList = [
     url: '/api/customer/missPass.ns',
     type: 'post',
   },
+  {
+    describe: '选择完配送日期获取订单数量',
+    method: 'getAmount',
+    url: '/api/v2/order/v2/getAmount.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}
