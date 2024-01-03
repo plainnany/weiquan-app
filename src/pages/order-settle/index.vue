@@ -126,8 +126,8 @@ export default {
           'company-pocket': 'balanceParentPayment',
         }
         this.$API[method]({
-          out_trade_no: this.payData.out_trade_no,
-          orderNumber: this.payData.orderNumber,
+          out_trade_no: this.tradeNumber,
+          orderNumber: this.orderNumber,
         })
           .then(() => {
             Taro.navigateTo({
@@ -141,6 +141,23 @@ export default {
             })
           })
       } else if (this.payMethod === 'weixin') {
+        // this.$API
+        //   .unifiedorder({
+        //     out_trade_no: this.tradeNumber,
+        //     total_fee: this.totalFee,
+        //   })
+        //   .then(res => {
+        //     debugger
+        //     Taro.navigateBackMiniProgram({
+        //       appId: '',
+        //     })
+        //   })
+        //   .catch(err => {
+        //     Taro.showToast({
+        //       title: err.msg,
+        //       icon: 'error',
+        //     })
+        //   })
         Taro.showToast({
           title: '正在升级招商微信支付中。',
           icon: 'error',

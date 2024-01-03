@@ -417,6 +417,12 @@ const requestAddressList = [
     url: '/api/v2/user/passwordReset.ns',
     type: 'post',
   },
+  {
+    describe: '微信支付接口',
+    method: 'unifiedorder',
+    url: '/api/pay/wechat/unifiedorder.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}

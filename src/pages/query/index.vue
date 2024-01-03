@@ -139,13 +139,14 @@ export default {
         this.tipVisible = true
         return
       }
-      product.productSum = parseInt(product.productSum) + parseInt(product.minOrderQuantity)
+      product.productSum = parseInt(product.productSum) + parseInt(product.uninConvertRule)
     },
     decreaseProduct(product, index) {
-      if (this.decreaseDisabled(product)) return
-      product.productSum -= parseInt(product.minOrderQuantity)
-      if (product.productSum <= 1) {
-        this.productList.splice(index, 1)
+      // if (this.decreaseDisabled(product)) return
+      product.productSum -= parseInt(product.uninConvertRule)
+      if (product.productSum <= 0) {
+        product.productSum = 0
+        // this.productList.splice(index, 1)
         return
       }
     },
