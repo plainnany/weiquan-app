@@ -102,8 +102,8 @@
         </view>
         <view class="order-detail-item">
           <text class="order-detail-color-grey">下单时间：</text>
-          <text class="order-detail-color-grey" v-if="userInfo.accountType === '02'">{{ orderDetail.createDate?.split(' ')[0] }}</text>
-          <text class="order-detail-color-grey" v-else>{{ orderDetail.createDate }}</text>
+          <!-- <text class="order-detail-color-grey" v-if="userInfo.accountType === '02'">{{ orderDetail.createDate?.split(' ')[0] }}</text> -->
+          <text class="order-detail-color-grey">{{ orderDetail.createDate }}</text>
         </view>
         <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && /02|09|04/.test(orderDetail.state)">
           <text class="order-detail-color-grey">付款时间：</text>
