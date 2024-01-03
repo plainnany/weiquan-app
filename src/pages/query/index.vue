@@ -22,7 +22,9 @@
                 {{ product.productTime }}
               </view>
               <view class="product-detail-number">
-                <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)">-</view>
+                <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)" :class="{ disable: decreaseDisabled(product) }"
+                  >-</view
+                >
                 <input
                   type="number"
                   v-model="product.productSum"
@@ -86,6 +88,9 @@ export default {
     isCashUser() {
       return this.$store.state.userInfo.accountType === '01'
     },
+    decreaseDisabled() {
+      return product => Number(product.productSum) <= Number(product.minOrderQuantity)
+    },
   },
 
   onShow() {
@@ -137,10 +142,7 @@ export default {
       product.productSum = parseInt(product.productSum) + parseInt(product.minOrderQuantity)
     },
     decreaseProduct(product, index) {
-      if (this.isCashUser) {
-        this.currentProduct = product
-        this.tipVisible = true
-      }
+      if (this.decreaseDisabled(product)) return
       product.productSum -= parseInt(product.minOrderQuantity)
       if (product.productSum <= 1) {
         this.productList.splice(index, 1)
