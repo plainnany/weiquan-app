@@ -1,6 +1,6 @@
 <template>
   <view class="change-receive-code">
-    <view class="common-card"> 旧收货码 {{ originCode }} </view>
+    <view class="common-card"> 旧收货码: {{ originCode }} </view>
     <view class="common-card">
       <input v-model="code" placeholder="新收货码(6位数字)" />
     </view>

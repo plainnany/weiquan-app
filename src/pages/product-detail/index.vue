@@ -107,7 +107,7 @@
       </view>
     </view>
     <view class="toast" v-if="showToast"> <text>加入成功</text></view>
-    <Modal :visible="visible" title="提示" cancelText="拨打" confirmText="确认" @cancel="contact" @confirm="() => (visible = false)">
+    <Modal :visible="visible" title="提示" cancelText="拨打" confirmText="确定" @cancel="contact" @confirm="() => (visible = false)">
       <view style="font-size: 28rpx; padding: 0 24rpx;"
         >该商品暂不可订,如有需要可联系负责业务或致电服务电话咨询
         <text class="contact-phone">{{ $store.state.userInfo?.customerService || '' }}</text>

@@ -270,7 +270,7 @@ export default {
         },
         {
           method: 'company-pocket',
-          name: '总部支付',
+          name: '总部余额',
           icon: weipocketIcon,
         },
         {

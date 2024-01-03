@@ -91,15 +91,15 @@ export default {
       if (item.key === 'headPic') {
         this.uploadImage()
       } else if (item.needChange) {
-        if (this.userInfo.dianZhang) {
-          Taro.navigateTo({ url: `/pages/account-modify/index?key=${item.key}&title=${item.name}` })
-        } else {
+        if (/consigneeLink|customerLinkTel/.test(item.key) && !this.userInfo.dianZhang) {
           if (this.showError) return
           this.showError = true
           this.timer = setTimeout(() => {
             clearTimeout(this.timer)
             this.showError = false
           }, 3000)
+        } else {
+          Taro.navigateTo({ url: `/pages/account-modify/index?key=${item.key}&title=${item.name}` })
         }
       }
     },

@@ -90,6 +90,7 @@
     <Modal :visible="visible" title="删除" cancelText="取消" confirmText="确认" @cancel="() => (visible = false)" @confirm="confirmDelete">
       <view style="font-size: 28rpx">确定要删除该商品吗？</view>
     </Modal>
+    <view class="toast" v-if="showToast"> <view class="toast-content">删除成功</view></view>
   </view>
 </template>
 
@@ -112,6 +113,7 @@ export default {
       visible: false,
       startX: 0, // 记录触摸起始位置
       index: -1, // 记录当前滑动的列表项索引
+      showToast: false,
     }
   },
   components: {
@@ -265,8 +267,12 @@ export default {
         .then(() => {
           this.getProduct()
           // this.productList = this.productList.filter(v => this.deleteOid.indexOf(v.oid) === -1)
-          Taro.showToast({ title: '删除成功', icon: 'success' })
+          // Taro.showToast({ title: '删除成功', icon: 'success' })
+          this.showToast = true
           this.visible = false
+          setTimeout(() => {
+            this.showToast = false
+          }, 3000)
         })
         .catch(res => {
           Taro.showToast({ title: res.msg || '', icon: 'none' })

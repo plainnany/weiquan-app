@@ -52,7 +52,7 @@
           <view @tap="chooseWeek"> 保存</view>
         </view>
         <view class="week-item" v-for="(item, index) in weeks" :key="index" @tap="handleCheck(item)">
-          <view class="label">{{ item.label }}</view>
+          <view class="label">{{ item.label.replace('周', '星期') }}</view>
           <view class="check" v-if="item.checked">
             <image :src="checkedImg" mode="" class="checked" />
           </view>
@@ -112,11 +112,48 @@ export default {
       remarks: '',
       dateChooseVisible: false,
       labelVisible: false,
-      weeks: Object.keys(weekMap).map(key => ({
-        label: weekMap[key],
-        value: key,
-        checked: false,
-      })),
+      // weeks: Object.keys(weekMap).map(key => ({
+      //   label: weekMap[key],
+      //   value: key,
+      //   checked: false,
+      // })),
+      weeks: [
+        {
+          label: '周天',
+          value: '7',
+          checked: false,
+        },
+        {
+          label: '周一',
+          value: '1',
+          checked: false,
+        },
+        {
+          label: '周二',
+          value: '2',
+          checked: false,
+        },
+        {
+          label: '周三',
+          value: '3',
+          checked: false,
+        },
+        {
+          label: '周四',
+          value: '4',
+          checked: false,
+        },
+        {
+          label: '周五',
+          value: '5',
+          checked: false,
+        },
+        {
+          label: '周六',
+          value: '6',
+          checked: false,
+        },
+      ],
     }
   },
   created() {
