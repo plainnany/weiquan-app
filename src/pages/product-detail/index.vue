@@ -1,12 +1,28 @@
 <template>
   <view class="product-detail">
-    <view class="product-banner">
+    <view class="product-banner" :class="{ extra: hasDonate }">
       <swiper :autoplay="false" @change="onSwiperChange" :indicator-active-color="swiperOptions.indicatorColor">
         <swiper-item v-for="(imageUrl, index) in product.images" :key="index">
           <image :src="imageUrl" />
         </swiper-item>
       </swiper>
       <view class="swiper-indicator">{{ currentImage }}/{{ product.images?.length }}</view>
+      <!-- 是赠品 -->
+      <view class="product-banner-extra" v-if="hasDonate">
+        <image :src="giftIcon" mode="widthFix" />
+      </view>
+      <view class="product-banner-extra-bottom" v-if="hasDonate">
+        {{ product.ruleStr }}
+        <view class="product-donate">
+          <image :src="product.tpmImg" mode="" />
+        </view>
+        <view class="product-donate-name">
+          <text>{{ product.tpmProductName }}</text>
+        </view>
+        <view class="product-donate-tag">
+          赠
+        </view>
+      </view>
     </view>
     <view class="product-wrapper">
       <view class="product-card">
@@ -107,6 +123,7 @@ import Taro from '@tarojs/taro'
 import serviceIcon from '@/images/service.png'
 import { setTitle } from '@/utils'
 import Modal from '../setting/modal.vue'
+import giftIcon from '@/images/gift.png'
 
 export default {
   components: { Modal },
@@ -128,9 +145,15 @@ export default {
       currentImage: 1,
       showToast: false,
       visible: false,
+      giftIcon,
     }
   },
-  computed: {},
+  computed: {
+    // 是否有赠品
+    hasDonate() {
+      return this.product.isTpm === '01'
+    },
+  },
   created() {
     this.$instance = Taro.getCurrentInstance()
   },

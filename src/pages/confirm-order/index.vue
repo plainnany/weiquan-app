@@ -24,8 +24,24 @@
             <image :src="backIcon" mode="" />
           </view>
         </view>
-        <view class="delivery-date-item" :class="{ 'is-single': !isBatchOrder }" v-for="item in product.weekStr || []" :key="item">
-          {{ item }}
+        <!-- 批量 有搭赠单 -->
+        <view class="delivery-date-item" v-if="isBatchOrder" v-for="(item, index) in product.weekStr || []" :key="item">
+          <view class="flex-between-center donate">
+            <view>{{ item }}</view>
+            <view class="flex-between-center" v-if="product.donateList[index].img">
+              <view class="donate-img">
+                <image :src="product.donateList[index].img" mode="" />
+              </view>
+              <view class="donate-num">X {{ product.donateList[index].num }}</view>
+              <view class="donate-tag">搭赠单</view>
+            </view>
+          </view>
+        </view>
+        <!-- 单个 -->
+        <view class="delivery-date-item is-single" v-else v-for="(item, index) in product.weekStr || []" :key="item">
+          <view class="flex-between-center donate">
+            <view>{{ item }}</view>
+          </view>
         </view>
         <view class="confirm-order-item flex">
           <view class="flex">
@@ -47,6 +63,15 @@
             >
             <view>X {{ product.amount }}</view>
           </view>
+        </view>
+        <view class="flex-between-center" v-if="product.donateList && product.donateList[0] && product.donateList[0].img && !isBatchOrder">
+          <view class="flex-between-center">
+            <view class="donate-img">
+              <image :src="product.donateList[0].img" mode="" />
+            </view>
+            <view class="donate-num">X {{ product.donateList[0].num }}</view>
+          </view>
+          <view class="donate-tag">搭赠单</view>
         </view>
       </view>
     </view>
@@ -166,6 +191,13 @@ export default {
 
       this.$API.getAmount(param).then(data => {
         this.totalFee = data.sum
+        this.productList.forEach(product => {
+          if (product.productCode === this.productCode) {
+            if (data.list && data.list.length > 0) {
+              this.$set(product, 'donateList', data.list)
+            }
+          }
+        })
       })
       this.dateChooseVisible = false
       setTitle({ title: '确认订单' })

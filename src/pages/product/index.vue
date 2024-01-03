@@ -26,17 +26,10 @@
                   <text class="sell" v-if="product.sell">订</text>
                   {{ product.productName }}</view
                 >
-                <!-- <view class="product-list-info">规格: {{ product.productSpecs }} | 单位: {{ product.productUnitRule }}</view>
-              <view style="display:flex; justify-content:space-between;align-items: center;">
-                <view>
-                  <view class="product-list-price" v-if="product.price">
-                    <text style="color: #f55726">¥</text>
-                    <text style="color: #f55726; font-size: 22px;">{{ product.price }} </text>
-                    <text style="color: #999">/ {{ product.productUnitRule }}</text>
-                  </view>
-                </view>
-                <image @tap.stop="addShop(product)" :src="shopIcon" class="shop-icon" mode="" />
-              </view> -->
+              </view>
+              <!-- 是赠品 -->
+              <view class="product-list-extra" v-if="product.isTpm === '01'">
+                <image :src="giftIcon" mode="widthFix" />
               </view>
             </view>
           </view>
@@ -53,12 +46,14 @@ import API from '@/service/api'
 import SearchBar from '../index/searchBar.vue'
 import shopIcon from '@/images/shop.png'
 import NanModal from '@/components/modal'
+import giftIcon from '@/images/gift.png'
 
 export default {
   components: { SearchBar, NanModal },
   data() {
     return {
       activeIndex: 0,
+      giftIcon,
       categoryList: [
         {
           classCode: 'special',
