@@ -9,11 +9,11 @@
       </radio-group>
     </view>
     <view class="account-item">
-      <image :src="accountIcon" mode="" />
+      <image :src="pwdIcon" mode="" />
       <input v-model="customerCode" placeholder-style="color:#a89e9e" placeholder="账户" />
     </view>
     <view class="account-item">
-      <image :src="pwdIcon" mode="" />
+      <image :src="accountIcon" mode="" />
       <input v-model="customerPassword" type="password" placeholder-style="color:#a89e9e" placeholder="密码" />
     </view>
     <view class="footer">
