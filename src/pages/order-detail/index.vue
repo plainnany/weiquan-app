@@ -69,7 +69,6 @@
               <view class="order-detail-done-status" v-else-if="/02|03/.test(product.state)">待发货</view>
               <view class="order-detail-done-status" v-else-if="/04/.test(product.state) && !isTodayDelivery">当天收货</view>
               <!-- 只有现金用户有待付款 -->
-              <view class="order-detail-done-status" v-if="/01/.test(product.state) && userInfo.accountType === '01'">待付款</view>
               <view class="order-detail-done-status" v-if="/09/.test(product.state) && userInfo.accountType === '01'">异常订单</view>
             </view>
           </view>
