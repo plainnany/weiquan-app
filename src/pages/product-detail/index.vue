@@ -200,7 +200,7 @@ export default {
       this.$API
         .addToShopcar({
           productId: this.product.productId,
-          amount: this.product.productUnitRule,
+          amount: this.product.minOrderQuantity,
         })
         .then(data => {
           this.showToast = true

@@ -75,6 +75,13 @@
       <input v-model="customerCode" placeholder-style="color:#a89e9e" placeholder="请输入账户" />
       <input v-model="customerPassword" type="password" placeholder-style="color:#a89e9e" placeholder="请输入密码" />
     </nan-modal>
+
+    <view class="toast" v-show="showError">
+      <view class="toast-content">
+        <image :src="checkIcon" mode="widthFix" />
+        您还没有该功能的权限</view
+      ></view
+    >
   </view>
 </template>
 
@@ -103,6 +110,7 @@ import noticeImg from '@/images/user/notice.svg'
 import notice2Img from '@/images/user/notice.png'
 import userImg from '@/images/center-user.png'
 import lineImg from '@/images/line.png'
+import checkIcon from '@/images/account-check.png'
 
 export default {
   name: 'user',
@@ -151,6 +159,8 @@ export default {
       settingImg,
       noticeImg,
       userImg,
+      showError: false,
+      checkIcon,
     }
   },
   computed: {
@@ -275,6 +285,19 @@ export default {
         if (item.path.includes('product-rule')) {
           Taro.navigateTo({ url: `${item.path}&token=${this.userInfo.token}` })
           return
+        }
+
+        if (item.path.includes('electronic-bill')) {
+          const canCharge = this.$store.state.userInfo.dianZhang && this.$store.state.userInfo.franchiser !== '02'
+          if (!canCharge) {
+            if (this.showError) return
+            this.showError = true
+            this.timer = setTimeout(() => {
+              clearTimeout(this.timer)
+              this.showError = false
+            }, 3000)
+            return
+          }
         }
         Taro.navigateTo({ url: item.path })
       }

@@ -177,12 +177,6 @@ const requestAddressList = [
     type: 'post',
   },
   {
-    describe: '修改门店收货码',
-    method: 'updateRecieveCode',
-    url: '/api/customer/updateRecieveCode.ns',
-    type: 'post',
-  },
-  {
     describe: '获取当前用户绑定门店列表',
     method: 'getBindShopList',
     url: '/api/applet/bindList.ns',
@@ -409,6 +403,12 @@ const requestAddressList = [
     describe: '选择完配送日期获取订单数量',
     method: 'getAmount',
     url: '/api/v2/order/v2/getAmount.ns',
+    type: 'post',
+  },
+  {
+    describe: '修改密码',
+    method: 'passwordReset',
+    url: '/api/v2/user/passwordReset.ns',
     type: 'post',
   },
 ]

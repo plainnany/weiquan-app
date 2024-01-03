@@ -7,9 +7,10 @@
       </view>
       <view class="order-settle-item flex-between-center">
         <view class="order-settle-color-grey">实付金额</view>
-        <view class="order-settle-price"
+        <view class="order-settle-price" v-if="isDianZhang"
           >¥ <text>{{ totalFee }}</text></view
         >
+        <view class="order-settle-price" v-else>****</view>
       </view>
     </view>
     <view class="common-card order-settle-pay">
@@ -62,7 +63,7 @@ export default {
   },
   computed: {
     payList() {
-      if (this.userInfo.accountType === '02') {
+      if (this.userInfo.accountType === '02' || !this.isDianZhang) {
         this.payMethod = 'weixin-2'
         return [
           {
@@ -92,6 +93,11 @@ export default {
     },
     userInfo() {
       return this.$store.state.userInfo
+    },
+    // 需要区分是否是店长店员，
+    // 店员：只有微信好友支付，并且余额显示未***
+    isDianZhang() {
+      return this.userInfo.dianZhang
     },
   },
   mounted() {

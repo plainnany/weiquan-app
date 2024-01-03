@@ -13,6 +13,12 @@
         </view>
       </view>
     </view>
+    <view class="toast" v-show="showError">
+      <view class="toast-content">
+        <image :src="checkImg" mode="widthFix" />
+        您还没有该功能的权限</view
+      ></view
+    >
   </view>
 </template>
 
@@ -22,11 +28,14 @@ import './index.less'
 import { setTitle } from '@/utils'
 import { BASE_URL } from '@/const'
 import backImg from '@/images/user/back.png'
+import checkImg from '@/images/account-check.png'
 
 export default {
   components: {},
   data() {
     return {
+      showError: false,
+      checkImg,
       items: [
         [
           {
@@ -82,7 +91,16 @@ export default {
       if (item.key === 'headPic') {
         this.uploadImage()
       } else if (item.needChange) {
-        Taro.navigateTo({ url: `/pages/account-modify/index?key=${item.key}&title=${item.name}` })
+        if (this.userInfo.dianZhang) {
+          Taro.navigateTo({ url: `/pages/account-modify/index?key=${item.key}&title=${item.name}` })
+        } else {
+          if (this.showError) return
+          this.showError = true
+          this.timer = setTimeout(() => {
+            clearTimeout(this.timer)
+            this.showError = false
+          }, 3000)
+        }
       }
     },
     uploadImage() {

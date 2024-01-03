@@ -26,7 +26,13 @@ const mutations = {
 const actions = {
   getUserInfo({ commit }) {
     return API.getUserInfo().then(data => {
-      commit('setUserInfo', data)
+      // 当前用户，是否可以显示价格
+      // 现金用户&店长&priceFlag: 01
+      const userInfo = {
+        ...data,
+        showPrice: data.dianZhang && data.priceFlag === '01' && data.accountType === '01',
+      }
+      commit('setUserInfo', userInfo)
     })
   },
 }

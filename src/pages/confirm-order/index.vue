@@ -42,7 +42,7 @@
             </view>
           </view>
           <view class="confirm-order-price">
-            <view v-show="userInfo.accountType !== '02'"
+            <view v-show="showPrice" style="display: flex"
               >¥ <text>{{ Number(product.total).toFixed(2) }}</text></view
             >
             <view>X {{ product.amount }}</view>
@@ -51,7 +51,7 @@
       </view>
     </view>
     <view class="confirm-order-footer">
-      <view class="total" v-if="userInfo.accountType !== '02'">¥ {{ deliverTime ? totalFee : 0 }}</view>
+      <view class="total" v-if="showPrice">¥ {{ deliverTime ? totalFee : 0 }}</view>
       <view class="confirm-order-btn" @tap="confirmOrder">立即结算</view>
     </view>
     <view>
@@ -92,6 +92,9 @@ export default {
     //   // 此金额需要调用后端接口计算,/api/v2/order/v2/getAmount.ns
     //   return this.productList.reduce((prev, cur) => prev + parseFloat(cur.total), 0)
     // },
+    showPrice() {
+      return this.$store.state.userInfo.showPrice
+    },
   },
   mounted() {
     setTitle({ title: '确认订单' })

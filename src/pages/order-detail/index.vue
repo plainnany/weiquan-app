@@ -75,7 +75,7 @@
           </view>
         </view>
 
-        <view class="flex-between-center" style="padding: 24rpx 30rpx" v-if="orderDetail.state === '01'">
+        <view class="flex-between-center" style="padding: 24rpx 30rpx" v-if="showPrice">
           <text>订单合计金额</text>
           <text class="order-detail-total">¥ {{ total }}</text>
         </view>
@@ -130,7 +130,7 @@
         <view class="order-pay">
           <!-- 头部 -->
           <view class="order-pay-title">
-            <view>支付金额{{ payData.total_fee }}</view>
+            <view>支付金额{{ userInfo.dianZhang ? payData.total_fee : '****' }}</view>
             <view @tap.stop="handleClosePay" class="order-pay-close">
               <image :src="closeIcon" mode="" />
             </view>
@@ -209,18 +209,18 @@ export default {
       payDialogVisible: false,
       payData: {},
       payMethod: '',
-      payList: [
-        {
-          method: 'weixin-pocket',
-          name: '余额支付',
-          icon: weipocketIcon,
-        },
-        {
-          method: 'weixin',
-          name: '微信支付',
-          icon: wechatIcon,
-        },
-      ],
+      // payList: [
+      //   {
+      //     method: 'weixin-pocket',
+      //     name: '余额支付',
+      //     icon: weipocketIcon,
+      //   },
+      //   {
+      //     method: 'weixin',
+      //     name: '微信支付',
+      //     icon: wechatIcon,
+      //   },
+      // ],
       colorMap: {
         '01': '',
         '02': 'sample',
@@ -233,6 +233,35 @@ export default {
     }
   },
   computed: {
+    payList() {
+      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
+        this.payMethod = 'weixin-2'
+        return [
+          {
+            method: 'weixin-2',
+            name: '微信好友支付',
+            icon: wechatIcon,
+          },
+        ]
+      }
+      return [
+        {
+          method: 'weixin-pocket',
+          name: '余额支付',
+          icon: weipocketIcon,
+        },
+        {
+          method: 'weixin',
+          name: '微信支付',
+          icon: wechatIcon,
+        },
+        {
+          method: 'weixin-2',
+          name: '微信好友代付',
+          icon: wechatIcon,
+        },
+      ]
+    },
     userInfo() {
       return this.$store.state.userInfo
     },
@@ -297,6 +326,9 @@ export default {
     },
     showDriver() {
       return !/01|02|03/.test(this.orderDetail.state) && !this.isTodayDelivery
+    },
+    showPrice() {
+      return this.orderDetail.state === '01' && this.$store.state.userInfo.showPrice
     },
   },
   mounted() {

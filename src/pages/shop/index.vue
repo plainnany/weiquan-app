@@ -44,7 +44,7 @@
               >
             </view>
             <view class="shop-product-price">
-              <view class="shop-product-detail-price" v-show="product.price && userInfo.accountType !== '02'"
+              <view class="shop-product-detail-price" v-show="product.price && showPrice"
                 >¥ <text>{{ (Number(product.price) * Number(product.amount)).toFixed(2) }}</text></view
               >
               <view class="shop-product-detail-number">
@@ -134,6 +134,9 @@ export default {
     },
     decreaseDisabled() {
       return product => Number(product.amount) <= Number(product.productUnitConvertRule)
+    },
+    showPrice() {
+      return this.userInfo.showPrice
     },
   },
 

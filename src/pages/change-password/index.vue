@@ -1,6 +1,6 @@
 <template>
   <view class="change-password">
-    <view class="change-password-title">
+    <view class="change-password-title" v-if="isDianZhang">
       <text class="img"></text>
       <text>管理员密码设置</text>
     </view>
@@ -14,20 +14,23 @@
       <input v-model.trim="confirmManagerPassword" type="password" placeholder="确认新密码" />
     </view>
     <view class="error-tip" v-if="validatePassword('manager')">{{ managerErrorTip }}</view>
-    <view class="change-password-title">
-      <text class="img"></text>
-      <text>店员密码设置</text>
-    </view>
+
     <!-- <view class="common-card">
       <input v-model.trim="originAssistantPassword" placeholder="原密码（6-13位数字+字母）" />
     </view> -->
-    <view class="common-card">
-      <input v-model.trim="assistantPassword" type="password" placeholder="新密码（6-13位数字+字母）" />
+    <view v-if="isDianZhang">
+      <view class="change-password-title">
+        <text class="img"></text>
+        <text>店员密码设置</text>
+      </view>
+      <view class="common-card">
+        <input v-model.trim="assistantPassword" type="password" placeholder="新密码（6-13位数字+字母）" />
+      </view>
+      <view class="common-card">
+        <input v-model.trim="confirmAssistantPassword" type="password" placeholder="确认新密码" />
+      </view>
+      <view class="error-tip" v-if="validatePassword('assistant')">{{ assistantErrorTip }}</view>
     </view>
-    <view class="common-card">
-      <input v-model.trim="confirmAssistantPassword" type="password" placeholder="确认新密码" />
-    </view>
-    <view class="error-tip" v-if="validatePassword('assistant')">{{ assistantErrorTip }}</view>
     <nan-button type="primary" :loading="loading" @tap="onConfirm">确认修改</nan-button>
   </view>
 </template>
@@ -35,6 +38,7 @@
 <script>
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
+import crypto from 'crypto-js'
 
 export default {
   components: {},
@@ -54,12 +58,10 @@ export default {
   },
   computed: {
     disabled() {
-      return (
-        !this.managerPassword ||
-        !this.assistantPassword ||
-        this.managerPassword !== this.confirmManagerPassword ||
-        this.assistantPassword !== this.confirmAssistantPassword
-      )
+      return !this.managerPassword || this.managerPassword !== this.confirmManagerPassword
+    },
+    isDianZhang() {
+      return this.$store.state.userInfo.dianZhang
     },
   },
   mounted() {
@@ -92,19 +94,39 @@ export default {
       }
 
       this.loading = true
-      this.$API
-        .updateRecieveCode({
-          recieveCode: this.code,
-        })
-        .then(data => {
-          if (data) {
-            Taro.navigateBack({
-              delta: 1,
-            })
+      // 原密码
+      const oldPassword = crypto.AES.encrypt(this.originManagerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
+      // 店长密码
+      const password = crypto.AES.encrypt(this.managerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
+      // 店员密码
+      const staffPassword = crypto.AES.encrypt(this.assistantPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
+      debugger
+
+      const params = this.isDianZhang
+        ? {
+            oldPassword,
+            password,
+            staffPassword,
           }
+        : {
+            oldPassword,
+            staffPassword: password,
+          }
+      this.$API
+        .passwordReset(params)
+        .then(() => {
+          Taro.navigateTo({
+            url: '/pages/user/index',
+          })
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'error',
+          })
         })
         .finally(() => {
-          thi.loading = false
+          this.loading = false
         })
     },
   },

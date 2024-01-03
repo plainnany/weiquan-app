@@ -73,6 +73,13 @@
         </view>
       </view>
     </view>
+
+    <view class="toast" v-show="showError">
+      <view class="toast-content">
+        <image :src="checkImg" mode="widthFix" />
+        您还没有该功能的权限</view
+      ></view
+    >
   </view>
 </template>
 
@@ -88,6 +95,7 @@ import inviteImg from '@/images/invite.png'
 import backImg from '@/images/red-back.png'
 import Taro from '@tarojs/taro'
 import { downloadImg } from '@/utils'
+import checkImg from '@/images/account-check.png'
 
 export default {
   components: {
@@ -110,6 +118,8 @@ export default {
       message: '',
       imgUrl: '',
       count: '',
+      showError: false,
+      checkImg,
     }
   },
   onShow() {
@@ -119,6 +129,7 @@ export default {
   mounted() {
     // this.getData()
     this.downloadImage()
+    this.$store.dispatch('getUserInfo')
   },
   methods: {
     downloadImage() {
@@ -159,9 +170,25 @@ export default {
       if (type === 'shop') {
         Taro.switchTab({ url: urlMap[type] })
       } else {
-        Taro.navigateTo({
-          url: urlMap[type],
-        })
+        const canCharge = this.$store.state.userInfo.dianZhang && this.$store.state.userInfo.franchiser !== '02'
+        if (type === 'charge') {
+          if (canCharge) {
+            Taro.navigateTo({
+              url: urlMap[type],
+            })
+          } else {
+            if (this.showError) return
+            this.showError = true
+            this.timer = setTimeout(() => {
+              clearTimeout(this.timer)
+              this.showError = false
+            }, 3000)
+          }
+        } else {
+          Taro.navigateTo({
+            url: urlMap[type],
+          })
+        }
       }
     },
     handleLink(link) {

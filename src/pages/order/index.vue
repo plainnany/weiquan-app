@@ -139,7 +139,7 @@
         <view class="order-pay">
           <!-- 头部 -->
           <view class="order-pay-title">
-            <view>支付金额{{ payData.total_fee }}</view>
+            <view>支付金额{{ userInfo.dianZhang ? payData.total_fee : '****' }}</view>
             <view @tap.stop="handleClosePay" class="order-pay-close">
               <image :src="closeIcon" mode="" />
             </view>
@@ -263,7 +263,7 @@ export default {
       return this.$store.state.userInfo
     },
     payList() {
-      if (this.userInfo.accountType === '02') {
+      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
         return [
           {
             method: 'weixin-2',
