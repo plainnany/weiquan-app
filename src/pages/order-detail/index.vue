@@ -144,7 +144,7 @@
         <view class="order-pay">
           <!-- 头部 -->
           <view class="order-pay-title">
-            <view>支付金额{{ userInfo.dianZhang ? payData.total_fee : '****' }}</view>
+            <view style="color: #fa4a2d">支付金额 {{ userInfo.dianZhang ? payData.total_fee : '****' }}</view>
             <view @tap.stop="handleClosePay" class="order-pay-close">
               <image :src="closeIcon" mode="" />
             </view>
@@ -162,7 +162,12 @@
                   </view>
                 </view>
                 <view>
-                  <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#fa4a2d" />
+                  <radio
+                    :value="payItem.method"
+                    :checked="payItem.method === payMethod"
+                    color="#fa4a2d"
+                    v-show="payItem.method === payMethod"
+                  />
                 </view>
               </label>
             </radio-group>
@@ -249,7 +254,7 @@ export default {
   computed: {
     payList() {
       if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
-        this.payMethod = 'weixin-2'
+        this.payMethod = ''
         return [
           {
             method: 'weixin-2',

@@ -27,7 +27,7 @@
             </view>
           </view>
           <view>
-            <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#333" />
+            <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#333" v-show="payItem.method === payMethod" />
           </view>
         </label>
       </radio-group>
@@ -58,13 +58,13 @@ export default {
       totalFee: '',
       alipayIcon,
       wechatIcon,
-      payMethod: 'weixin-pocket',
+      payMethod: '',
     }
   },
   computed: {
     payList() {
       if (this.userInfo.accountType === '02' || !this.isDianZhang) {
-        this.payMethod = 'weixin-2'
+        this.payMethod = ''
         return [
           {
             method: 'weixin-2',
