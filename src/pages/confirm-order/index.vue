@@ -65,7 +65,7 @@
 <script>
 import './index.less'
 import { setTitle } from '@/utils'
-import locationIcon from '@/images/location-2.jpg'
+import locationIcon from '@/images/location-2.png'
 import backIcon from '@/images/user/back.png'
 import Taro from '@tarojs/taro'
 import DateChooser from './date-chooser.vue'
