@@ -257,7 +257,7 @@ export default {
           //     productCode: data.productCode,
           //   },
           // ]
-          this.questionImages = data.imageUrl
+          this.questionImages = data.imageUrl || []
           this.checkedQuestion = data.dictname
           this.form.description = data.complainDetail
           this.form.number = data.num
@@ -407,6 +407,10 @@ export default {
         params.returnFlg = this.form.returnFlg // 是否退回
         params.batchCode = this.form.batchCode // 批次号
       }
+      if (this.complainCode) {
+        params.complainCode = this.complainCode
+      }
+
       this.$API
         .submitComplain(params)
         .then(() => {
