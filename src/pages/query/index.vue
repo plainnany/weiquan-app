@@ -47,6 +47,9 @@
         <DateChooser :dateList="dateList" @confirm="confirmDate" @cancel="cancelDate" />
       </nan-modal>
     </view>
+    <Modal :visible="tipVisible" title="" cancelText="取消" confirmText="追加订单" @cancel="cancelTip" @confirm="buyAgain">
+      <view style="font-size: 32rpx; padding: 24rpx;">如需增加数量，请重新下单 </view>
+    </Modal>
   </view>
 </template>
 
@@ -56,6 +59,7 @@ import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
 import DateChooser from './date-chooser.vue'
 import arrow from '@/images/arrow-down.png'
+import Modal from '../setting/modal.vue'
 
 export default {
   data() {
@@ -66,15 +70,23 @@ export default {
       dateChooseVisible: false,
       dateList: [],
       arrow,
+      tipVisible: false,
+      currentProduct: null,
     }
   },
   components: {
     DateChooser,
+    Modal,
   },
   mounted() {
     setTitle({ title: '查询&修改' })
   },
-  computed: {},
+  computed: {
+    // 是否是现金用户
+    isCashUser() {
+      return this.$store.state.userInfo.accountType === '01'
+    },
+  },
 
   onShow() {
     this.getProduct()
@@ -117,9 +129,18 @@ export default {
       })
     },
     addProduct(product) {
+      if (this.isCashUser) {
+        this.currentProduct = product
+        this.tipVisible = true
+        return
+      }
       product.productSum = parseInt(product.productSum) + parseInt(product.minOrderQuantity)
     },
     decreaseProduct(product, index) {
+      if (this.isCashUser) {
+        this.currentProduct = product
+        this.tipVisible = true
+      }
       product.productSum -= parseInt(product.minOrderQuantity)
       if (product.productSum <= 1) {
         this.productList.splice(index, 1)
@@ -154,6 +175,20 @@ export default {
           })
         })
       // todo
+    },
+    cancelTip() {
+      this.tipVisible = false
+      this.currentProduct = null
+    },
+    buyAgain() {
+      if (!this.currentProduct) return
+      this.$API
+        .anotherOne({
+          orderNumber: this.currentProduct.customerOrderCode,
+        })
+        .then(() => {
+          Taro.switchTab({ url: '/pages/shop/index' })
+        })
     },
   },
 }
