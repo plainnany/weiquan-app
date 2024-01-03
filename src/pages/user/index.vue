@@ -287,7 +287,7 @@ export default {
           return
         }
 
-        if (item.path.includes('electronic-bill')) {
+        if (/electronic-bill|cost/.test(item.path)) {
           const canCharge = this.$store.state.userInfo.dianZhang && this.$store.state.userInfo.franchiser !== '02'
           if (!canCharge) {
             if (this.showError) return

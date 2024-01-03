@@ -41,7 +41,7 @@
       </view>
       <view class="order-detail-wrapper" :class="{ margin: !isTodayDelivery }">
         <view v-for="(product, index) in orderDetail.list" :key="index" class="order-detail-item border">
-          <view class="flex-between-center">
+          <view class="flex-between-center" style="padding: 24rpx 30rpx;">
             <view class="flex-between-center">
               <view class="order-detail-image">
                 <image :src="product.productImage" mode="" />
@@ -71,6 +71,20 @@
               <!-- 只有现金用户有待付款 -->
               <view class="order-detail-done-status" v-if="/01/.test(product.state) && userInfo.accountType === '01'">待付款</view>
               <view class="order-detail-done-status" v-if="/09/.test(product.state) && userInfo.accountType === '01'">异常订单</view>
+            </view>
+          </view>
+          <view class="flex-between-center product-batch" v-if="product.firstBatchCode">
+            <view>批次号</view>
+            <view class="flex-between-center">
+              <view class="batch-num">{{ product.firstNum }}</view>
+              <view>{{ product.firstBatchCode }}</view>
+            </view>
+          </view>
+          <view class="flex-between-center product-batch" v-if="product.secondBatchCode">
+            <view>批次号</view>
+            <view class="flex-between-center">
+              <view class="batch-num">{{ product.secondNum }}</view>
+              <view>{{ product.secondBatchCode }}</view>
             </view>
           </view>
         </view>
