@@ -139,7 +139,7 @@
         <view class="order-pay">
           <!-- 头部 -->
           <view class="order-pay-title">
-            <view style="color: #fa4a2d">支付金额 {{ userInfo.dianZhang ? payData.total_fee : '****' }}</view>
+            <view style="color: #fa4a2d">支付金额 {{ userInfo.dianZhang ? `¥${payData.total_fee}` : '****' }}</view>
             <view @tap.stop="handleClosePay" class="order-pay-close">
               <image :src="closeIcon" mode="" />
             </view>
@@ -153,7 +153,7 @@
                   </view>
                   <view>
                     {{ payItem.name }}
-                    <text v-if="payItem.method === 'weixin-pocket'"> (¥{{ userInfo.accoutBalance }}) </text>
+                    <text v-if="payItem.method === 'weixin-pocket'"> ({{ userInfo.accoutBalance }}) </text>
                   </view>
                 </view>
                 <view>
@@ -168,7 +168,7 @@
             </radio-group>
           </view>
           <view class="order-pay-footer">
-            <nan-button type="primary" :disabled="!payMethod" :loading="btnLoading" @tap="confirmPay">确认支付</nan-button>
+            <nan-button type="primary" :loading="btnLoading" @tap="confirmPay">确认支付</nan-button>
           </view>
         </view>
       </view>
@@ -284,6 +284,11 @@ export default {
           icon: weipocketIcon,
         },
         {
+          method: 'company-pocket',
+          name: '总部支付',
+          icon: weipocketIcon,
+        },
+        {
           method: 'weixin',
           name: '微信支付',
           icon: wechatIcon,
@@ -389,13 +394,16 @@ export default {
       this.payMethod = e.detail.value
     },
     confirmPay() {
-      if (this.payMethod === 'weixin-pocket') {
+      if (this.payMethod === 'weixin-pocket' || this.payMethod === 'company-pocket') {
         this.btnLoading = true
-        this.$API
-          .balancePayment({
-            out_trade_no: this.payData.out_trade_no,
-            orderNumber: this.payData.orderNumber,
-          })
+        const method = {
+          'weixin-pocket': 'balancePayment',
+          'company-pocket': 'balanceParentPayment',
+        }
+        this.$API[method]({
+          out_trade_no: this.payData.out_trade_no,
+          orderNumber: this.payData.orderNumber,
+        })
           .then(data => {
             if (data) {
               this.btnLoading = false

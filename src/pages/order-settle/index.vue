@@ -80,6 +80,11 @@ export default {
           icon: weipocketIcon,
         },
         {
+          method: 'company-pocket',
+          name: '总部支付',
+          icon: weipocketIcon,
+        },
+        {
           method: 'weixin',
           name: '微信支付',
           icon: wechatIcon,
@@ -115,12 +120,15 @@ export default {
       this.payMethod = e.detail.value
     },
     confirmPay() {
-      if (this.payMethod === 'weixin-pocket') {
-        this.$API
-          .balancePayment({
-            out_trade_no: this.tradeNumber,
-            orderNumber: this.orderNumber,
-          })
+      if (this.payMethod === 'weixin-pocket' || this.payMethod === 'company-pocket') {
+        const method = {
+          'weixin-pocket': 'balancePayment',
+          'company-pocket': 'balanceParentPayment',
+        }
+        this.$API[method]({
+          out_trade_no: this.payData.out_trade_no,
+          orderNumber: this.payData.orderNumber,
+        })
           .then(() => {
             Taro.navigateTo({
               url: `/pages/order-detail/index?order=${this.orderNumber}`,

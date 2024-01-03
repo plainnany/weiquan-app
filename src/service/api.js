@@ -237,6 +237,12 @@ const requestAddressList = [
     type: 'post',
   },
   {
+    describe: '总部支付',
+    method: 'balanceParentPayment',
+    url: '/api/order/balanceParentPayment.ns',
+    type: 'post',
+  },
+  {
     describe: '支付订单',
     method: 'orderPay',
     url: '/api/order/orderPay.ns',
