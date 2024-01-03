@@ -160,7 +160,7 @@
                   <radio
                     :value="payItem.method"
                     :checked="payItem.method === payMethod"
-                    color="#fa4a2d"
+                    color="#333"
                     v-show="payItem.method === payMethod"
                   />
                 </view>
@@ -168,7 +168,7 @@
             </radio-group>
           </view>
           <view class="order-pay-footer">
-            <nan-button type="primary" :loading="btnLoading" @tap.stop="confirmPay">确认支付</nan-button>
+            <nan-button type="primary" :loading="btnLoading" @tap.stop="confirmPay">立即支付</nan-button>
           </view>
         </view>
       </view>
