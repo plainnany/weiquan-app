@@ -93,8 +93,8 @@
                       </view>
                     </view>
                     <view class="order-result-number">
-                      <view>订单量 {{ product.productSum }}</view>
-                      <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
+                      <view>订单量:{{ product.productSum }}</view>
+                      <view v-if="product.state === '05'">实收量:{{ product.logisticsSum || '0' }}</view>
                       <view class="order-result-type">{{
                         /01/.test(product.state) && userInfo.accountType === '01' ? '' : STATE_TYPE[product.state]
                       }}</view>

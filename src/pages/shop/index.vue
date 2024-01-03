@@ -133,7 +133,7 @@ export default {
       return this.$store.state.userInfo
     },
     decreaseDisabled() {
-      return product => Number(product.amount) <= Number(product.minOrderQuantity)
+      return product => Number(product.amount) <= Number(product.productUnitConvertRule)
     },
   },
 

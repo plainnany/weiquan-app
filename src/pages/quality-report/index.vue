@@ -30,7 +30,7 @@
       <view class="quality-list">
         <view class="quality-list-item" v-for="(item, index) in qualityList" :key="index">
           <image :src="item" mode="widthFix" @load="e => loadImage(e, index)" />
-          <nan-button type="primary" @tap="onDownload(item)">第{{ index + 1 }}页下载  {{heightList[index]}}</nan-button>
+          <nan-button type="primary" @tap="onDownload(item)">第{{ index + 1 }}页下载 </nan-button>
         </view>
       </view>
     </view>
@@ -138,7 +138,6 @@ export default {
     loadImage(e, index) {
       const { width, height } = e.target
       this.heightList[index] = height + 'px'
-      debugger
     },
   },
 }

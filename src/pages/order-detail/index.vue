@@ -63,17 +63,18 @@
               <view class="order-detail-price" v-if="product.price"
                 >¥ <text>{{ product.price }}</text></view
               >
-              <view>{{ isTodayDelivery ? 'X' : '订单量' }} {{ product.productSum }}</view>
-              <view v-if="product.state === '05'">实收量 {{ product.logisticsSum || '0' }}</view>
+              <view>{{ isTodayDelivery ? 'X' : '订单量:' }} {{ product.productSum }}</view>
+              <view v-if="/05|09/.test(product.state)">实收量:{{ product.logisticsSum || '0' }}</view>
               <view class="order-detail-done-status" v-if="product.state === '05'">已完成</view>
               <view class="order-detail-done-status" v-if="/02|03|04/.test(product.state) && !isTodayDelivery">当天收货</view>
               <!-- 只有现金用户有待付款 -->
               <view class="order-detail-done-status" v-if="/01/.test(product.state) && userInfo.accountType === '01'">待付款</view>
+              <view class="order-detail-done-status" v-if="/09/.test(product.state) && userInfo.accountType === '01'">异常订单</view>
             </view>
           </view>
         </view>
 
-        <view class="flex-between-center" v-if="orderDetail.state === '01'">
+        <view class="flex-between-center" style="padding: 24rpx 30rpx" v-if="orderDetail.state === '01'">
           <text>订单合计金额</text>
           <text class="order-detail-total">¥ {{ total }}</text>
         </view>
@@ -90,7 +91,7 @@
           <text class="order-detail-color-grey" v-if="userInfo.accountType === '02'">{{ orderDetail.createDate?.split(' ')[0] }}</text>
           <text class="order-detail-color-grey" v-else>{{ orderDetail.createDate }}</text>
         </view>
-        <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && orderDetail.state === '02'">
+        <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && /02|09/.test(orderDetail.state)">
           <text class="order-detail-color-grey">付款时间：</text>
           <text class="order-detail-color-grey">{{ orderDetail.payDate }}</text>
         </view>
@@ -157,6 +158,7 @@
         </view>
       </view>
     </view>
+    <view class="toast" v-if="showError"> <text>无法联系</text></view>
   </view>
 </template>
 
@@ -195,7 +197,7 @@ export default {
       orderDetail: {
         list: [],
       },
-      // "state":"01待付款;02,03,04:待发货05:已完成",
+      // "state":"01待付款;02,03,04:待发货05:已完成",09-异常单
       STATE_TYPE: {
         toPay: '01',
         toDeliver: '02',
@@ -226,6 +228,7 @@ export default {
       btnLoading: false,
       countDown: '',
       orderType: '',
+      showError: false,
     }
   },
   computed: {
@@ -284,6 +287,11 @@ export default {
           subTitle: '订单已完成',
           icon: orderDetailEndIcon,
         },
+        '09': {
+          title: '等待发货',
+          subTitle: '买家已下单，等待卖家发货',
+          icon: orderDetail2Icon,
+        },
       }
     },
   },
@@ -301,16 +309,18 @@ export default {
     },
     getOrder(orderNumber) {
       if (this.isTodayDelivery) {
-        return this.$API.todayDeliveryOrder({
-          pageNo: 1,
-          limit: 1000,
-        }).then(data => {
-          this.orderDetail = {
-            ...data,
-            list: data.delivery || [],
-            state: "04"
-          }
-        })
+        return this.$API
+          .todayDeliveryOrder({
+            pageNo: 1,
+            limit: 1000,
+          })
+          .then(data => {
+            this.orderDetail = {
+              ...data,
+              list: data.delivery || [],
+              state: '04',
+            }
+          })
       }
       this.$API
         .getOrderDetail({
@@ -446,9 +456,16 @@ export default {
         }, 2000)
         return
       }
-      Taro.makePhoneCall({
-        phoneNumber: this.orderDetail.driverTel,
-      })
+      if (this.orderDetail.driverTel) {
+        Taro.makePhoneCall({
+          phoneNumber: this.orderDetail.driverTel,
+        })
+      } else {
+        this.showError = true
+        setTimeout(() => {
+          this.showError = false
+        }, 3000)
+      }
     },
     buyAgain() {
       this.$API

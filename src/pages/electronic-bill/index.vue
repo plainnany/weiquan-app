@@ -40,14 +40,20 @@
         <view v-if="bill.expand">
           <view class="electronic-list-extra" v-for="(item, subIndex) in bill.list" :key="subIndex">
             <view class="electronic-list-row">
-              <view>
+              <view class="high">
                 {{ item.productName }}
               </view>
               <view class="electronic-list-sum">{{ item.price }}</view>
             </view>
-            <view>规格: {{ item.productUnitConvertRule }}</view>
-            <view>单价: {{ !isMonthUser ? item.productPrice : '' }}</view>
-            <view>数量: {{ item.num }}</view>
+            <view
+              >规格: <text class="high">{{ item.productUnitConvertRule }}</text></view
+            >
+            <view
+              >单价: <text class="high">{{ !isMonthUser ? item.productPrice : '' }}</text></view
+            >
+            <view
+              >数量: <text class="high">{{ item.num }}</text></view
+            >
             <view
               >订单类型: <text class="yellow"> {{ typeMap[item.type] }}单</text></view
             >
@@ -90,8 +96,8 @@ export default {
 
       return {
         year,
-        month,
-        day,
+        month: month > 9 ? month : '0' + month,
+        day: day > 9 ? day : '0' + day,
       }
     },
     showEmpty() {

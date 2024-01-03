@@ -9,6 +9,7 @@
         <view class="notice-detail-item" v-for="(item, index) in detailList" :key="index">
           <view class="date">{{ item.createDtae }}</view>
           <view class="content">
+            <image :src="imageIcon[key]" v-if="imageIcon[key]" mode="widthFix" />
             {{ item.message }}
           </view>
         </view>
@@ -22,6 +23,8 @@ import Taro from '@tarojs/taro'
 import './index.less'
 import { setTitle } from '@/utils'
 import './detail.less'
+import systemIcon from '@/images/notice/system-icon.png'
+import orderIcon from '@/images/notice/order-icon.png'
 
 export default {
   components: {},
@@ -35,6 +38,10 @@ export default {
       postTitle: '',
       postDate: '',
       postUrl: '',
+      imageIcon: {
+        System: systemIcon,
+        Order: orderIcon,
+      },
     }
   },
   computed: {
