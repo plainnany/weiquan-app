@@ -28,7 +28,7 @@
         <view class="delivery-date-item" v-if="isBatchOrder" v-for="(item, index) in product.weekStr || []" :key="item">
           <view class="flex-between-center donate">
             <view>{{ item }}</view>
-            <view class="flex-between-center" v-if="product.donateList[index].img">
+            <view class="flex-between-center" v-if="product.donateList && product.donateList[index] && product.donateList[index].img">
               <view class="donate-img">
                 <image :src="product.donateList[index].img" mode="" />
               </view>

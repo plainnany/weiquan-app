@@ -105,7 +105,7 @@
           <text class="order-detail-color-grey" v-if="userInfo.accountType === '02'">{{ orderDetail.createDate?.split(' ')[0] }}</text>
           <text class="order-detail-color-grey" v-else>{{ orderDetail.createDate }}</text>
         </view>
-        <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && /02|09/.test(orderDetail.state)">
+        <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && /02|09|04/.test(orderDetail.state)">
           <text class="order-detail-color-grey">付款时间：</text>
           <text class="order-detail-color-grey">{{ orderDetail.payDate }}</text>
         </view>
@@ -138,15 +138,15 @@
       </view>
     </view>
     <view v-if="payDialogVisible" class="order-pay-modal">
-      <view :class="['order-pay-modal-wrap']"></view>
+      <view :class="['order-pay-modal-wrap']" @tap="() => (payDialogVisible = false)"></view>
       <view :class="['order-pay-modal-wrapper']">
         <view class="order-pay">
           <!-- 头部 -->
           <view class="order-pay-title">
             <view style="color: #fa4a2d">支付金额 {{ userInfo.dianZhang ? `¥${payData.total_fee}` : '****' }}</view>
-            <view @tap.stop="handleClosePay" class="order-pay-close">
+            <!-- <view @tap.stop="handleClosePay" class="order-pay-close">
               <image :src="closeIcon" mode="" />
-            </view>
+            </view> -->
           </view>
           <view class="order-pay-content">
             <radio-group @change="onPaymethodChange">
@@ -172,7 +172,7 @@
             </radio-group>
           </view>
           <view class="order-pay-footer">
-            <nan-button type="primary" :loading="btnLoading" @tap="confirmPay">确认支付</nan-button>
+            <nan-button type="primary" :loading="btnLoading" @tap.stop="confirmPay">确认支付</nan-button>
           </view>
         </view>
       </view>
@@ -226,7 +226,7 @@ export default {
       },
       payDialogVisible: false,
       payData: {},
-      payMethod: '',
+      payMethod: 'weixin-pocket',
       // payList: [
       //   {
       //     method: 'weixin-pocket',

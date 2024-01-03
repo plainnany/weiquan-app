@@ -134,15 +134,15 @@
       </view>
     </view>
     <view v-if="payDialogVisible" class="order-pay-modal">
-      <view :class="['order-pay-modal-wrap']"></view>
+      <view :class="['order-pay-modal-wrap']" @tap="() => (payDialogVisible = false)"></view>
       <view :class="['order-pay-modal-wrapper']">
         <view class="order-pay">
           <!-- 头部 -->
           <view class="order-pay-title">
             <view style="color: #fa4a2d">支付金额 {{ userInfo.dianZhang ? `¥${payData.total_fee}` : '****' }}</view>
-            <view @tap.stop="handleClosePay" class="order-pay-close">
+            <!-- <view @tap.stop="handleClosePay" class="order-pay-close">
               <image :src="closeIcon" mode="" />
-            </view>
+            </view> -->
           </view>
           <view class="order-pay-content">
             <radio-group @change="onPaymethodChange">
@@ -168,7 +168,7 @@
             </radio-group>
           </view>
           <view class="order-pay-footer">
-            <nan-button type="primary" :loading="btnLoading" @tap="confirmPay">确认支付</nan-button>
+            <nan-button type="primary" :loading="btnLoading" @tap.stop="confirmPay">确认支付</nan-button>
           </view>
         </view>
       </view>
@@ -253,7 +253,7 @@ export default {
       hasGetOrder: false,
       payDialogVisible: false,
       payData: {},
-      payMethod: '',
+      payMethod: 'weixin-pocket',
       wrapAnimate: 'wrapAnimate',
       frameAnimate: 'frameAnimate',
       btnLoading: false,
