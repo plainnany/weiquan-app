@@ -348,7 +348,7 @@ export default {
       }
     },
     showDriver() {
-      return !/01|02|03/.test(this.orderDetail.state) && !this.isTodayDelivery
+      return !/01|02|03|09/.test(this.orderDetail.state) && !this.isTodayDelivery
     },
     showPrice() {
       return this.orderDetail.state === '01' && this.$store.state.userInfo.showPrice
