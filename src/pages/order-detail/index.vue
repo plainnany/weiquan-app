@@ -65,8 +65,10 @@
               >
               <view>{{ isTodayDelivery ? 'X' : '订单量:' }} {{ product.productSum }}</view>
               <view v-if="/05|09/.test(product.state)">实收量:{{ product.logisticsSum || '0' }}</view>
-              <view class="order-detail-done-status" v-if="product.state === '05'">已完成</view>
-              <view class="order-detail-done-status" v-if="/02|03|04/.test(product.state) && !isTodayDelivery">当天收货</view>
+              <view class="order-detail-done-status">{{ getProductStatus(product) }}</view>
+              <view class="order-detail-done-status" v-if="/05/.test(product.state)">已完成</view>
+              <view class="order-detail-done-status" v-else-if="/02|03/.test(product.state)">待发货</view>
+              <view class="order-detail-done-status" v-else-if="/04/.test(product.state) && !isTodayDelivery">当天收货</view>
               <!-- 只有现金用户有待付款 -->
               <view class="order-detail-done-status" v-if="/01/.test(product.state) && userInfo.accountType === '01'">待付款</view>
               <view class="order-detail-done-status" v-if="/09/.test(product.state) && userInfo.accountType === '01'">异常订单</view>
