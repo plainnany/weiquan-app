@@ -41,11 +41,11 @@
           <view class="notice">
             <image :src="notificationImg" mode="" />
             <text>系统通知：</text>
-            <text class="scroll-wrapper">
-              <text class="scroll">
+            <view class="scroll-wrapper" :style="{ overflow: distance > 0 ? 'hidden' : '' }">
+              <view class="scroll" id="scroll" ref="scroll" :style="{ transform: `translateX(-${distance}px)` }">
                 {{ message }}
-              </text>
-            </text>
+              </view>
+            </view>
           </view>
         </view>
         <view class="card middle" @tap="onCategory(-1)">
@@ -120,18 +120,39 @@ export default {
       count: '',
       showError: false,
       checkImg,
+
+      step: 1, // 滚动速度
+      distance: 0, // 初始滚动距离
+      space: 300,
+      interval: 50, // 时间间隔
     }
   },
   onShow() {
     this.$store.commit('setSwitchCategoryTab', '')
     this.getData()
   },
+
   mounted() {
     // this.getData()
     this.downloadImage()
     this.$store.dispatch('getUserInfo')
   },
   methods: {
+    scrollling() {
+      const length = this.scrollLength // 滚动文字的宽度
+      const interval = setInterval(() => {
+        const maxWidth = length - 200
+        const left = this.distance
+        if (left < maxWidth) {
+          // 判断是否滚动到最大宽度
+          this.distance = left + this.step
+        } else {
+          this.distance = 0
+          clearInterval(interval)
+          this.scrollling()
+        }
+      }, this.interval)
+    },
     downloadImage() {
       Taro.downloadFile({
         url: 'https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/kd.png',
@@ -152,6 +173,21 @@ export default {
         this.category = data.classList || []
         this.message = data.SysMessage
         this.inviteLink = data.community
+
+        setTimeout(() => {
+          const query = wx.createSelectorQuery()
+          // 选择id
+          query
+            .select('#scroll')
+            .boundingClientRect(rect => {
+              this.windowWidth = wx.getSystemInfoSync().windowWidth // 屏幕宽度
+              console.log(this.windowWidth)
+              this.scrollLength = rect.width
+              this.space = this.windowWidth
+              this.scrollling() // 第一个字消失后立即从右边出现
+            })
+            .exec()
+        }, 100)
       })
     },
     onCategory(index) {

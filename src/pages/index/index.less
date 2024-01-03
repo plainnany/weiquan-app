@@ -170,33 +170,35 @@
     font-weight: 500;
     color: #f93a4a;
     margin-bottom: 10px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     width: 100%;
 
     image {
+      display: inline-table;
       width: 30px;
       height: 30px;
       margin-right: 16px;
     }
 
-    text {
-      display: inline-block;
+    > text {
+      width: 140px;
+      display: inline-table;
     }
 
     .scroll-wrapper {
-      width: calc(100% - 190px);
+      // width: calc(100% - 190px);
       display: inline-block;
       white-space: nowrap;
-      overflow: hidden;
+      // overflow: hidden;
       background-color: #ffeef0;
       border-radius: 30px;
       padding: 0 3px;
-      text-overflow: ellipsis;
+      // text-overflow: ellipsis;
     }
 
     .scroll {
-      animation: sroll 10s ease-out infinite;
+      // animation: sroll 10s ease-out infinite;
     }
   }
 
@@ -299,6 +301,6 @@
     transform: translateX(1px);
   }
   100% {
-    transform: translateX(-155px);
+    transform: translateX(-100%);
   }
 }
