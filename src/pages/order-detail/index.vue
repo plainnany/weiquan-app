@@ -24,7 +24,7 @@
             <view class="phone">{{ userInfo.customerLinkTel }}</view>
           </view>
         </view>
-        <view class="flex-between-center" v-if="orderDetail.state !== '01' && !isTodayDelivery">
+        <view class="flex-between-center" v-if="showDriver">
           <view class="order-detail-location">
             <image :src="driverIcon" mode="" class="driver" />
           </view>
@@ -65,7 +65,6 @@
               >
               <view>{{ isTodayDelivery ? 'X' : '订单量:' }} {{ product.productSum }}</view>
               <view v-if="/05|09/.test(product.state)">实收量:{{ product.logisticsSum || '0' }}</view>
-              <view class="order-detail-done-status">{{ getProductStatus(product) }}</view>
               <view class="order-detail-done-status" v-if="/05/.test(product.state)">已完成</view>
               <view class="order-detail-done-status" v-else-if="/02|03/.test(product.state)">待发货</view>
               <view class="order-detail-done-status" v-else-if="/04/.test(product.state) && !isTodayDelivery">当天收货</view>
@@ -295,6 +294,9 @@ export default {
           icon: orderDetail2Icon,
         },
       }
+    },
+    showDriver() {
+      return !/01|02|03/.test(this.orderDetail.state) && !this.isTodayDelivery
     },
   },
   mounted() {
