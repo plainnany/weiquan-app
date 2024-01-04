@@ -43,9 +43,14 @@
             <text>系统通知：</text>
             <view
               class="scroll-wrapper"
-              :style="{ overflow: distance > 0 ? 'hidden' : '', width: distance > 0 ? 'calc(100% - 180rpx)' : 'auto' }"
+              :style="{ overflow: startScroll ? 'hidden' : '', width: startScroll ? 'calc(100% - 180rpx)' : 'auto' }"
             >
-              <view class="scroll" id="scroll" ref="scroll" :style="{ transform: `translateX(-${distance}px)` }">
+              <view
+                class="scroll"
+                id="scroll"
+                ref="scroll"
+                :style="{ transform: `translateX(-${distance}px)`, transition: distance > 0 ? 'all 0.3s' : '' }"
+              >
                 {{ message }}
               </view>
             </view>
@@ -128,6 +133,7 @@ export default {
       distance: 0, // 初始滚动距离
       space: 300,
       interval: 50, // 时间间隔
+      startScroll: false,
     }
   },
   onShow() {
@@ -184,9 +190,10 @@ export default {
             .select('#scroll')
             .boundingClientRect(rect => {
               this.windowWidth = wx.getSystemInfoSync().windowWidth // 屏幕宽度
-              console.log(this.windowWidth)
               this.scrollLength = rect.width
               this.space = this.windowWidth
+              console.log(this.scrollLength)
+              this.startScroll = true
               this.scrollling() // 第一个字消失后立即从右边出现
             })
             .exec()
