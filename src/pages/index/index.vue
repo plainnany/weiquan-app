@@ -41,7 +41,10 @@
           <view class="notice">
             <image :src="notificationImg" mode="" />
             <text>系统通知：</text>
-            <view class="scroll-wrapper" :style="{ overflow: distance > 0 ? 'hidden' : '' }">
+            <view
+              class="scroll-wrapper"
+              :style="{ overflow: distance > 0 ? 'hidden' : '', width: distance > 0 ? 'calc(100% - 180rpx)' : 'auto' }"
+            >
               <view class="scroll" id="scroll" ref="scroll" :style="{ transform: `translateX(-${distance}px)` }">
                 {{ message }}
               </view>
