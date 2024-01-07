@@ -77,7 +77,7 @@ class HttpRequest {
               Taro.navigateTo({ url: '/pages/bind-account/index' })
             }
             store.commit('setBindStatus', true)
-          }, 2000)
+          }, 1000)
         },
       })
     }

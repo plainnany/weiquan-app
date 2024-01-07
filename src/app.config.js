@@ -35,6 +35,7 @@ export default defineAppConfig({
     'pages/order-notice/edit', // 编辑下单提醒
     'pages/query/index', // 查询&修改
     'pages/image-preview/index', // 收退货单
+    'pages/invoice/index', // 开票申请
   ],
   tabBar: {
     color: '#666666',
