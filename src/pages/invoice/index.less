@@ -23,6 +23,30 @@
     }
   }
 
+  .invoice-date-mode {
+    text-align: right;
+    padding: 0 12px;
+    background-color: #fff;
+  }
+
+  .date-mode-wrapper {
+    background-color: #ebebeb;
+    padding: 8px;
+    border-radius: 12px;
+    display: inline-block;
+  }
+  .date-mode-item {
+    padding: 8px 12px;
+    color: #feb9d1;
+    display: inline-block;
+
+    &.active {
+      background-color: #f33424;
+      color: #fff;
+      border-radius: 12px;
+    }
+  }
+
   .invoice-date {
     // position: fixed;
     width: 100%;
@@ -193,11 +217,35 @@
     font-size: 30px;
     background-color: #fff;
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-    display: flex;
-    justify-content: space-between;
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .submit {
+      margin-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .tip {
+        background-color: #f9f1f1;
+        color: #ea2f41;
+        padding: 8px 16px;
+      }
+    }
+    .submit-btn {
+      color: #fff;
+      background-color: #f73125;
+      padding: 24px 0;
+      width: 150px;
+      text-align: center;
+      border-radius: 8px;
+    }
 
     .high {
-      color: rgb(188 28 38);
+      color: #f73125;
     }
 
     .right {

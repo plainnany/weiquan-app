@@ -1,7 +1,19 @@
 <template>
   <view class="invoice-page">
+    <view class="invoice-date-mode">
+      <view class="date-mode-wrapper">
+        <text
+          class="date-mode-item"
+          v-for="item in dateModeList"
+          :class="{ active: dateMode === item.value }"
+          :key="item.value"
+          @tap="handleDateMode(item)"
+          >{{ item.text }}</text
+        >
+      </view>
+    </view>
     <view class="invoice-date">
-      <picker mode="date" @change="startDateChane">
+      <picker mode="date" :value="startDate" :fields="dateMode" @change="startDateChane">
         <image :src="dateIcon" class="date" mode="" />
         <text>
           {{ startDate }}
@@ -9,7 +21,7 @@
         <image :src="arrowIcon" class="arrow" mode="" />
       </picker>
       <text class="invoice-date-seperator"></text>
-      <picker mode="date" @change="endDateChange" :start="startDate">
+      <picker mode="date" :value="endDate" :fields="dateMode" @change="endDateChange" :start="startDate">
         <image :src="dateIcon" class="date" mode="" />
         {{ endDate }}
         <image :src="arrowIcon" class="arrow" mode="" />
@@ -42,20 +54,26 @@
       </view>
     </view>
     <view class="invoice-total invoice-footer">
-      <view class="left">
-        <checkbox :checked="checkAll" @tap="handleCheckAll">全选</checkbox>
+      <view class="footer-top">
+        <view class="left">
+          <checkbox :checked="checkAll" @tap="handleCheckAll">全选</checkbox>
+        </view>
+        <view class="right">
+          <view
+            ><text class="high">{{ totalOrder.length }}</text
+            >个订单，<text class="high">{{ total }}</text
+            >元</view
+          >
+          <view
+            >(发货单<text class="high">{{ totalDelivery.length }}</text
+            >笔，退货单<text class="high">{{ totalReturn.length }}</text
+            >笔)</view
+          >
+        </view>
       </view>
-      <view class="right">
-        <view
-          ><text class="high">{{ totalOrder.length }}</text
-          >个订单，<text class="high">{{ total }}</text
-          >元</view
-        >
-        <view
-          >(发货单<text class="high">{{ totalDelivery.length }}</text
-          >笔，退货单<text class="high">{{ totalReturn.length }}</text
-          >笔)</view
-        >
+      <view class="submit">
+        <view class="tip">用户申请开票须知</view>
+        <view class="submit-btn">提交</view>
       </view>
       <!-- <text style="color: #f93a4a;">{{ billData.num || '0' }}</text>
       <text>个订单</text>
@@ -99,19 +117,33 @@ export default {
       dateIcon,
       arrowIcon,
       checkAll: false,
+      // 日期选择模式，月/日
+      dateMode: 'month', // day/month
+      dateModeList: [
+        {
+          text: '月',
+          value: 'month',
+        },
+        {
+          text: '日',
+          value: 'day',
+        },
+      ],
     }
   },
   computed: {
+    // 上个月 & 上上月时间
     defaultDate() {
+      // 上个月的数据
       const date = new Date()
       const year = date.getFullYear()
-      const month = date.getMonth() + 1
-      const day = date.getDate()
+      const month = date.getMonth()
+
+      const currentMonth = month === 0 ? 12 : month
 
       return {
-        year,
-        month: month > 9 ? month : '0' + month,
-        day: day > 9 ? day : '0' + day,
+        year: month === 0 ? year - 1 : year,
+        month: currentMonth > 9 ? currentMonth : '0' + currentMonth,
       }
     },
     showEmpty() {
@@ -143,11 +175,9 @@ export default {
   },
 
   mounted() {
-    const { year, month, day } = this.defaultDate
-    // this.startDate = `${year}-${month}-01`
-    // this.endDate = `${year}-${month}-${day}`
-    this.startDate = '2023-11'
-    this.endDate = '2023-12'
+    const { year, month } = this.defaultDate
+    this.startDate = `${year}-${month}`
+    this.endDate = `${year}-${month}`
     this.getBillList()
     setTitle({
       title: '开票申请',
@@ -215,6 +245,21 @@ export default {
       bill.checked = !bill.checked
       const { deliveryList = [], returnList = [] } = this.billData
       this.checkAll = [...deliveryList, ...returnList].filter(v => v.canApply).every(v => v.checked)
+    },
+    handleDateMode(item) {
+      this.dateMode = item.value
+      const startDate = this.startDate.slice(0, 7)
+      const endDate = this.endDate.slice(0, 7)
+
+      if (item.value === 'month') {
+        this.startDate = startDate
+        this.endDate = endDate
+      } else {
+        const { year, month } = this.defaultDate
+        var lastDayOfMonth = new Date(year, month, 0).getDate()
+        this.startDate = `${year}-${month}-01`
+        this.endDate = `${year}-${month}-${lastDayOfMonth}`
+      }
     },
   },
 }
