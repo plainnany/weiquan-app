@@ -1,7 +1,7 @@
 <template>
   <view class="flex">
     <view class="invoice-status-icon">
-      <image :src="statusIconMap" mode="widthFix" />
+      <image :src="statusIconMap" mode="" />
     </view>
     <checkbox :checked="bill.checked" @tap.stop="() => $emit('handleCheck', bill)" v-if="bill.canApply"></checkbox>
     <view v-else class="disable-apply"></view>
