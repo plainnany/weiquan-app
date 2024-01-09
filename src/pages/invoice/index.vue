@@ -13,7 +13,7 @@
       </view>
     </view>
     <view class="invoice-date">
-      <picker mode="date" :value="startDate" :fields="dateMode" @change="startDateChane">
+      <picker mode="date" :value="startDate" :fields="dateMode" @change="startDateChange">
         <image :src="dateIcon" class="date" mode="" />
         <text>
           {{ startDate }}
@@ -72,34 +72,66 @@
         </view>
       </view>
       <view class="submit">
-        <view class="tip">用户申请开票须知</view>
-        <view class="submit-btn">提交</view>
+        <view class="tip" @tap="handleNav"
+          >用户申请开票须知
+          <image :src="questionIcon" mode="" />
+        </view>
+        <view class="submit-btn" @tap="handleSubmit">提交</view>
       </view>
-      <!-- <text style="color: #f93a4a;">{{ billData.num || '0' }}</text>
-      <text>个订单</text>
-      <text v-if="!isMonthUser">
-        ，
-        <text style="color: red">{{ billData.amount || '0' }}</text
-        >元
-      </text> -->
     </view>
+    <Modal :visible="dialogVisible" v-if="dialogVisible" confirmText="提交" :title="invoiceText" @confirm="confirm" @cancel="cancel">
+      <view class="invoice-form">
+        <view class="invoice-form-item">
+          <view class="label">抬头</view>
+          <view class="content">{{ invoiceForm.invoiceHead }}</view>
+        </view>
+        <view class="invoice-form-item">
+          <view class="label">税号</view>
+          <view class="content">{{ invoiceForm.invoiceNumber }}</view>
+        </view>
+        <view class="invoice-form-item" v-if="invoiceType === '04' || invoiceType === '02'">
+          <view class="label">开票地址</view>
+          <view class="content">是扥看书L扥就</view>
+        </view>
+        <view class="invoice-form-item" v-if="invoiceType === '04' || invoiceType === '02'">
+          <view class="label">开户行</view>
+          <view class="content">{{ invoiceForm.khh }}</view>
+        </view>
+        <view class="invoice-form-item" v-if="invoiceType === '04' || invoiceType === '01'">
+          <view class="label">邮箱</view>
+          <view class="content">
+            <input v-model="invoiceForm.email" placeholder="请输入邮箱" />
+          </view>
+        </view>
+      </view>
+      <CustomForm v-if="invoiceType === '03' || invoiceType === '02'" :invoiceForm="invoiceForm" />
+      <view class="invoice-form-tips">(如遇发票抬头问题涉及退票，请勿提交，及时联络业务感谢！)</view>
+    </Modal>
   </view>
 </template>
 
 <script>
+import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
 import './index.less'
 import dateIcon from '@/images/date.png'
 import arrowIcon from '@/images/arrow-down.png'
 import Card from './card.vue'
 import More from './more.vue'
+import questionIcon from '@/images/question.svg'
+import Modal from './modal.vue'
+import CustomForm from './custom-form.vue'
+
 // isApply 0未开票 1已申请 2开票失败 3已开票
+// invoiceFlg 01电子普票  02增票 03普票 04电子增
 
 export default {
   name: 'invoice-page',
   components: {
     Card,
     More,
+    Modal,
+    CustomForm,
   },
   data() {
     return {
@@ -129,6 +161,9 @@ export default {
           value: 'day',
         },
       ],
+      questionIcon,
+      dialogVisible: false,
+      invoiceForm: {}, // 提交开票信息
     }
   },
   computed: {
@@ -172,6 +207,19 @@ export default {
       const total = this.checkList.reduce((pre, cur) => pre + Number(cur.amount), 0)
       return Number(total).toFixed(1)
     },
+    // 开票类型，01电子普票  02增票 03普票 04电子增票
+    invoiceType() {
+      // return '04'
+      return this.userInfo.invoiceFlg
+    },
+    invoiceText() {
+      return {
+        '01': '电子普票',
+        '02': '增票',
+        '03': '普票',
+        '04': '电子增票',
+      }[this.invoiceType]
+    },
   },
 
   mounted() {
@@ -213,7 +261,7 @@ export default {
     handleMore(bill) {
       this.$set(bill, 'expand', !bill.expand)
     },
-    startDateChane(e) {
+    startDateChange(e) {
       this.startDate = e.detail.value
 
       if (this.startDate && this.endDate) {
@@ -260,6 +308,65 @@ export default {
         this.startDate = `${year}-${month}-01`
         this.endDate = `${year}-${month}-${lastDayOfMonth}`
       }
+    },
+    handleNav() {
+      Taro.navigateTo({
+        url: '/pages/web-view/index?url=https://wsorder.weichuan.com.cn/invoice.htm',
+      })
+    },
+    handleSubmit() {
+      if (this.btnLoading) return
+      this.btnLoading = true
+      // userInfo。中的invoiceFlg判断用户开票类型
+      this.$API
+        .getCustomerlogisticsInfo()
+        .then(data => {
+          this.invoiceForm = data
+          this.dialogVisible = true
+          this.btnLoading = false
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'none',
+          })
+          this.btnLoading = false
+        })
+    },
+    confirm() {
+      this.btnLoading = true
+      const dateStr = this.checkList.map(v => v.time).join(',')
+      const params = {
+        city: this.invoiceForm.city,
+        county: this.invoiceForm.province,
+        customerName: this.invoiceForm.customerName,
+        detailAddress: this.invoiceForm.detailAddress,
+        familyName: this.invoiceForm.familyName,
+        monthFlg: '',
+        phone: this.invoiceForm.phone,
+        province: this.invoiceForm.province,
+        provinceId: this.invoiceForm.provinceId,
+        strs: dateStr,
+      }
+      this.$API
+        .applyInvoice(params)
+        .then(data => {
+          this.cancel()
+          this.getBillList()
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'none',
+          })
+        })
+        .finally(() => {
+          this.btnLoading = false
+        })
+    },
+    cancel() {
+      this.invoiceForm = {}
+      this.dialogVisible = false
     },
   },
 }

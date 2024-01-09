@@ -89,6 +89,7 @@
 import ruleImg from '@/images/user/rule.png'
 import chargeImg from '@/images/user/charge.png'
 import eletronicBillImg from '@/images/user/eletronic-bill.png'
+import dzkp from '@/images/user/dzkp.jpg'
 import toReceiveImg from '@/images/user/to-receive.png'
 import backImg from '@/images/user/back.png'
 import checkImg from '@/images/user/check.png'
@@ -168,10 +169,17 @@ export default {
       return this.$store.state.userInfo
     },
     items1() {
+      if (this.userInfo.isInvoice === '01') {
+        return [
+          { icon: chargeImg, title: this.userInfo.accountType === '02' ? '账户余额' : '账户余额及充值', path: '/pages/cost/index' },
+          { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
+          { icon: dzkp, title: '开票申请', path: `/pages/invoice/index` },
+          { icon: ruleImg, title: '配送规则', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
+        ]
+      }
       return [
         { icon: chargeImg, title: this.userInfo.accountType === '02' ? '账户余额' : '账户余额及充值', path: '/pages/cost/index' },
         { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
-        { icon: ruleImg, title: '开票申请', path: `/pages/invoice/index` },
         { icon: ruleImg, title: '配送规则', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
       ]
     },

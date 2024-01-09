@@ -229,6 +229,11 @@
       justify-content: space-between;
       align-items: center;
 
+      image {
+        width: 24px;
+        height: 24px;
+      }
+
       .tip {
         background-color: #f9f1f1;
         color: #ea2f41;
@@ -303,5 +308,52 @@
     background: transparent;
     transform: translate(-50%, -50%) scale(1);
     -webkit-transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.invoice-form {
+  padding: 0 32px;
+  font-size: 32px;
+  color: #666;
+  &-title {
+    font-size: 36px;
+    padding: 32px 0;
+  }
+  &-item {
+    display: flex;
+    padding-bottom: 24px;
+
+    .label {
+      width: 140px;
+    }
+    .content {
+      width: calc(100% - 140px);
+    }
+  }
+
+  picker {
+    color: #777;
+  }
+
+  .divider {
+    display: inline-block;
+    padding-right: 24px;
+    vertical-align: super;
+    color: #ccc;
+  }
+
+  .address {
+    margin-top: 24px;
+  }
+
+  .input-item {
+    display: inline-block;
+    width: 45%;
+  }
+
+  &-tips {
+    padding: 32px;
+    text-align: left;
+    color: #f04e4f;
   }
 }

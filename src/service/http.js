@@ -17,7 +17,7 @@ class HttpRequest {
     if (!requestUrl && !requestParams.requestFileUrl) {
       throw new Error('请填写URl!')
     }
-    const { requestHeaders = {} } = requestOptions
+    const { requestHeaders = {}, needLoading = true } = requestOptions
 
     let data = null
 
@@ -29,9 +29,12 @@ class HttpRequest {
     } else if (method === 'post') data = requestParams
 
     return new Promise((resolve, reject) => {
-      Taro.showLoading({
-        title: '加载中',
-      })
+      if (needLoading) {
+        Taro.showLoading({
+          title: '加载中',
+        })
+      }
+
       const token = Taro.getStorageSync('token')
 
       Taro.request({
