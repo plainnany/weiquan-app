@@ -29,8 +29,10 @@
     <view class="quality-result">
       <view class="quality-list">
         <view class="quality-list-item" v-for="(item, index) in qualityList" :key="index">
-          <image :src="item" mode="widthFix" @load="e => loadImage(e, index)" />
-          <nan-button type="primary" @tap="onDownload(item)">第{{ index + 1 }}页下载 </nan-button>
+          <image :src="item.imageUrl" mode="widthFix" @load="e => loadImage(e, index)" />
+          <nan-button type="primary" @tap="onDownload(item)" :loading="item.downloading"
+            >第{{ index + 1 }}页下载{{ item.downloading }}
+          </nan-button>
         </view>
       </view>
     </view>
@@ -42,6 +44,7 @@ import './index.less'
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
 import arrowIcon from '@/images/arrow-down.png'
+import { BASE_URL } from '@/const'
 
 export default {
   components: {},
@@ -64,7 +67,6 @@ export default {
       batchCode: '',
       productIndex: '',
       productCode: '',
-      heightList: [],
     }
   },
   mounted() {
@@ -109,7 +111,10 @@ export default {
           inspectionType: this.qualityTypes[this.qualityIndex].inspectionType,
         })
         .then(data => {
-          this.qualityList = data || []
+          this.qualityList = (data || []).map(v => ({
+            imageUrl: v,
+            downloading: false,
+          }))
         })
     },
     productChange(e) {
@@ -119,13 +124,21 @@ export default {
     qualityTypeChange(e) {
       this.qualityIndex = parseInt(e.detail.value)
     },
-    onDownload(url) {
+    onDownload(item) {
+      if (item.downloading) return
+      item.downloading = true
+      const filename = new Date().getTime() + '.jpg'
+      const savePath = wx.env.USER_DATA_PATH + '/' + filename
+
       Taro.downloadFile({
-        url,
-        success(res) {
-          const { tempFilePath } = res
+        header: 'content-type: image/jpg',
+        url: BASE_URL + '/downFile.ns?curl=' + item.imageUrl,
+        filePath: savePath,
+        success: res => {
+          item.downloading = false
+          const { filePath } = res
           Taro.saveImageToPhotosAlbum({
-            filePath: tempFilePath,
+            filePath,
             success() {
               Taro.showToast({
                 title: '下载成功',
@@ -133,11 +146,38 @@ export default {
             },
           })
         },
+        fail: function(err) {
+          console.log(err)
+          item.downloading = false
+          wx.getSetting({
+            success: function(res) {
+              // 判断否有保存权限
+              if (!res.authSetting['scope.writePhotosAlbum']) {
+                wx.showModal({
+                  title: '提示',
+                  content: '需要获取图片权限哦',
+                  success: function(res) {
+                    if (res.confirm) {
+                      wx.openSetting({
+                        success(res) {
+                          console.log(res)
+                        },
+                        fail(res) {
+                          console.log(res)
+                        },
+                      })
+                    }
+                  },
+                })
+              }
+            },
+          })
+        },
       })
     },
     loadImage(e, index) {
-      const { width, height } = e.target
-      this.heightList[index] = height + 'px'
+      // const { width, height } = e.target
+      // this.heightList[index] = height + 'px'
     },
   },
 }
