@@ -5,11 +5,11 @@
         <view class="label">{{ item.name }}</view>
         <view v-if="item.key === 'headPic'">
           <image :src="userInfo.headPic" v-if="userInfo.headPic" mode="" />
-          <image :src="item.icon" mode="" />
+          <image :src="item.icon" class="arrow" mode="" />
         </view>
         <view v-else class="right">
           {{ userInfo[item.key] }}
-          <image v-if="item.icon" :src="item.icon" mode="" />
+          <image class="arrow" v-if="item.icon" :src="item.icon" mode="" />
         </view>
       </view>
     </view>

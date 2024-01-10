@@ -105,7 +105,7 @@
         </view>
       </view>
       <CustomForm v-if="invoiceType === '03' || invoiceType === '02'" :invoiceForm="invoiceForm" />
-      <view class="invoice-form-tips">(如遇发票抬头问题涉及退票，请勿提交，及时联络业务感谢！)</view>
+      <view class="invoice-form-tips">(如遇发票抬头问题涉及退票，请勿提交，及时联络业务感谢)</view>
     </Modal>
     <view class="toast" v-if="errorToast.visible">
       <text>{{ errorToast.message }}</text></view

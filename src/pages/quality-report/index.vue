@@ -30,9 +30,7 @@
       <view class="quality-list">
         <view class="quality-list-item" v-for="(item, index) in qualityList" :key="index">
           <image :src="item.imageUrl" mode="widthFix" @load="e => loadImage(e, index)" />
-          <nan-button type="primary" @tap="onDownload(item)" :loading="item.downloading"
-            >第{{ index + 1 }}页下载{{ item.downloading }}
-          </nan-button>
+          <nan-button type="primary" @tap="onDownload(item)" :loading="item.downloading">第{{ index + 1 }}页下载 </nan-button>
         </view>
       </view>
     </view>
@@ -131,14 +129,15 @@ export default {
       const savePath = wx.env.USER_DATA_PATH + '/' + filename
 
       Taro.downloadFile({
-        header: 'content-type: image/jpg',
-        url: BASE_URL + '/downFile.ns?curl=' + item.imageUrl,
-        filePath: savePath,
+        // header: 'content-type: image/jpg',
+        // url: BASE_URL + '/downFile.ns?curl=' + item.imageUrl,
+        url: item.imageUrl,
+        // filePath: savePath,
         success: res => {
           item.downloading = false
-          const { filePath } = res
+          const { filePath, tempFilePath } = res
           Taro.saveImageToPhotosAlbum({
-            filePath,
+            filePath: tempFilePath || filePath,
             success() {
               Taro.showToast({
                 title: '下载成功',
