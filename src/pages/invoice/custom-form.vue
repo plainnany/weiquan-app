@@ -13,9 +13,11 @@
       <view class="content">
         <picker class="input-item" mode="selector" :range="provinceList" level="city" range-key="name" @change="provinceChange">
           {{ invoiceForm.province || '请选择省' }}
+          <image :src="arrow" class="arrow-down" />
         </picker>
         <picker class="input-item" mode="selector" :range="cityList" range-key="name" @change="cityChange">
           {{ invoiceForm.city || '请选择市' }}
+          <image :src="arrow" class="arrow-down" />
         </picker>
         <input class="address" v-model="invoiceForm.detailAddress" placeholder="请输入详细地址" />
       </view>
@@ -29,6 +31,8 @@
   </view>
 </template>
 <script>
+import arrow from '@/images/arrow-down.png'
+
 export default {
   props: {
     invoiceForm: {
@@ -43,6 +47,7 @@ export default {
       provinceList: [],
       cityList: [],
       phone: '',
+      arrow,
     }
   },
   mounted() {

@@ -305,6 +305,22 @@
   }
 }
 
+.toast {
+  position: fixed;
+  bottom: 200px;
+  width: 100%;
+  text-align: center;
+  z-index: 1005;
+  text {
+    padding: 16px 36px;
+    text-align: center;
+    background-color: rgb(81 81 81);
+    border-radius: 50px;
+    font-size: 28px;
+    color: #fff;
+  }
+}
+
 .invoice-form {
   padding: 0 32px;
   font-size: 30px;
@@ -315,6 +331,15 @@
   &-item {
     display: flex;
     padding-bottom: 24px;
+
+    .arrow-down {
+      width: 24px;
+      height: 16px;
+      margin-left: 12px;
+    }
+    .email {
+      border-bottom: 1px solid #666;
+    }
 
     .label {
       width: 140px;

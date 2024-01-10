@@ -99,7 +99,7 @@
         </view>
         <view class="invoice-form-item" v-if="invoiceType === '04' || invoiceType === '01'">
           <view class="label">邮箱</view>
-          <view class="content">
+          <view class="content email">
             <input v-model="invoiceForm.email" placeholder="请输入邮箱" />
           </view>
         </view>
@@ -107,6 +107,9 @@
       <CustomForm v-if="invoiceType === '03' || invoiceType === '02'" :invoiceForm="invoiceForm" />
       <view class="invoice-form-tips">(如遇发票抬头问题涉及退票，请勿提交，及时联络业务感谢！)</view>
     </Modal>
+    <view class="toast" v-if="errorToast.visible">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -164,6 +167,10 @@ export default {
       questionIcon,
       dialogVisible: false,
       invoiceForm: {}, // 提交开票信息
+      errorToast: {
+        visible: false,
+        message: '',
+      },
     }
   },
   computed: {
@@ -255,6 +262,7 @@ export default {
           this.hasGetOrder = true
           this.checkAll = false
         })
+        .catch(err => this.showToast(err))
     },
     checkCanApply(item) {
       return item.isApply === '0' || !item.isApply
@@ -327,12 +335,19 @@ export default {
           this.btnLoading = false
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'none',
-          })
+          this.showToast(err)
           this.btnLoading = false
         })
+    },
+    showToast(err) {
+      this.errorToast.visible = true
+      this.errorToast.message = err.msg
+      setTimeout(() => {
+        this.errorToast = {
+          visible: '',
+          message: '',
+        }
+      }, 2000)
     },
     confirm() {
       this.btnLoading = true
@@ -357,10 +372,7 @@ export default {
           this.getBillList()
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'none',
-          })
+          this.showToast(err)
         })
         .finally(() => {
           this.btnLoading = false
