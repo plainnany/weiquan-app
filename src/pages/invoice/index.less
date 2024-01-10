@@ -31,19 +31,18 @@
 
   .date-mode-wrapper {
     background-color: #ebebeb;
-    padding: 8px;
-    border-radius: 12px;
+    padding: 6px;
+    border-radius: 8px;
     display: inline-block;
   }
   .date-mode-item {
-    padding: 8px 12px;
-    color: #feb9d1;
+    padding: 8px 16px;
+    color: #666;
     display: inline-block;
 
     &.active {
-      background-color: #f33424;
-      color: #fff;
-      border-radius: 12px;
+      background-color: #fff;
+      border-radius: 8px;
     }
   }
 
@@ -106,7 +105,7 @@
         }
         &.delivery {
           background-color: #ffeede;
-          color: #f22d46;
+          color: #e57f2f;
         }
       }
     }
@@ -201,11 +200,14 @@
       color: #333;
     }
 
-    .delivery-type {
-      color: #f22d46;
-    }
-    .return-type {
-      color: #e5334a;
+    .order-type {
+      &.delivery {
+        color: #e57f2f;
+      }
+
+      &.return {
+        color: #e5334a;
+      }
     }
   }
 
@@ -262,22 +264,13 @@
   .disable-apply {
     width: 32px;
     height: 32px;
-    border-radius: 50%;
-    box-sizing: border-box;
-    border: 1px solid #f97264;
     margin-right: 12px;
     position: relative;
     overflow: hidden;
-    &::after {
-      content: ' ';
-      position: absolute;
-      left: 0;
-      top: 12px;
-      display: block;
-      width: 100%;
-      height: 1px;
-      background-color: #f97264;
-      transform: rotate(-45deg);
+
+    image {
+      width: 32px;
+      height: 32px;
     }
   }
 
@@ -314,8 +307,7 @@
 
 .invoice-form {
   padding: 0 32px;
-  font-size: 32px;
-  color: #666;
+  font-size: 30px;
   &-title {
     font-size: 36px;
     padding: 32px 0;
@@ -326,8 +318,13 @@
 
     .label {
       width: 140px;
+      color: #333;
     }
     .content {
+      &.default {
+        color: #333;
+      }
+      color: #666;
       width: calc(100% - 140px);
     }
   }

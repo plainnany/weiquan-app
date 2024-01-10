@@ -14,26 +14,30 @@
         <text class="normal">
           订单类型:
         </text>
-        <text class="return-type">{{ typeMap[type] }}</text></view
+        <text :class="['order-type', type]">{{ typeMap[type] }}</text></view
       >
-      <view v-if="item.deliveryCode">
-        <text v-if="type === 'delivery'">
-          <text class="normal">发货单:</text>
-          <text class="code">{{ item.deliveryCode }} </text>
-        </text>
-        <text v-if="isReturn">
+      <view v-if="item.deliveryCode && isReturn">
+        <view>
           <text class="yellow">原始发货单号:</text>
           <text class="code">{{ item.deliveryCode }} </text>
-        </text>
+        </view>
+        <view> <text class="normal">原始发货日:</text>{{ item.deliveryDate }}</view>
       </view>
-      <view v-if="isReturn"> <text class="normal">原始发货日:</text>{{ item.deliveryDate }}</view>
       <view v-if="isApply(item)">
-        <text class="normal">开票状态:</text>
-        <text class="status" :class="{ fail: item.type === '2' }">{{ status[item.type] }}</text>
+        <view>
+          <text class="normal">开票状态:</text>
+          <text class="status" :class="{ fail: item.type === '2' }">{{ status[item.type] }}</text>
+        </view>
+        <view v-if="item.type === '2'">
+          <text class="normal">失败原因</text>
+          <text>{{ item.reason }}</text>
+        </view>
       </view>
-      <view v-if="isApply(item) && item.type === '2'">
-        <text class="normal">失败原因</text>
-        <text>{{ item.reason }}</text>
+      <view v-if="item.deliveryCode && type === 'delivery'">
+        <text>
+          <text class="normal">发货单号:</text>
+          <text class="code">{{ item.deliveryCode }} </text>
+        </text>
       </view>
       <view class="price" v-if="!isMonthUser">{{ total(item) }}</view>
     </view>
@@ -41,6 +45,17 @@
 </template>
 
 <script>
+// 退货单：
+// 订单类型
+// 原始发货单号
+// 原始发货日
+// 开票状态
+
+// 发货单
+// 订单类型
+// 开票状态
+// 发货单号
+
 // invoiceFlg 01电子普票  02增票 03普票 04电子增票
 export default {
   props: {

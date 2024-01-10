@@ -46,6 +46,7 @@ export default {
     }
   },
   mounted() {
+    this.phone = this.invoiceForm.phone
     this.getChinaMap()
   },
   methods: {

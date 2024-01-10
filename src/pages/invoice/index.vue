@@ -83,15 +83,15 @@
       <view class="invoice-form">
         <view class="invoice-form-item">
           <view class="label">抬头</view>
-          <view class="content">{{ invoiceForm.invoiceHead }}</view>
+          <view class="content default">{{ invoiceForm.invoiceHead }}</view>
         </view>
         <view class="invoice-form-item">
           <view class="label">税号</view>
-          <view class="content">{{ invoiceForm.invoiceNumber }}</view>
+          <view class="content default">{{ invoiceForm.invoiceNumber }}</view>
         </view>
         <view class="invoice-form-item" v-if="invoiceType === '04' || invoiceType === '02'">
           <view class="label">开票地址</view>
-          <view class="content">是扥看书L扥就</view>
+          <view class="content">{{ invoiceForm.kpdz }}</view>
         </view>
         <view class="invoice-form-item" v-if="invoiceType === '04' || invoiceType === '02'">
           <view class="label">开户行</view>
@@ -253,6 +253,7 @@ export default {
             })),
           }
           this.hasGetOrder = true
+          this.checkAll = false
         })
     },
     checkCanApply(item) {
@@ -346,6 +347,7 @@ export default {
         phone: this.invoiceForm.phone,
         province: this.invoiceForm.province,
         provinceId: this.invoiceForm.provinceId,
+        email: this.invoiceForm.email,
         strs: dateStr,
       }
       this.$API

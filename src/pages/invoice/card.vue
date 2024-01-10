@@ -4,7 +4,9 @@
       <image :src="statusIconMap" mode="" />
     </view>
     <checkbox :checked="bill.checked" @tap.stop="() => $emit('handleCheck', bill)" v-if="bill.canApply"></checkbox>
-    <view v-else class="disable-apply"></view>
+    <view v-else class="disable-apply">
+      <image :src="banIcon" mode="" />
+    </view>
     <view style="flex: 1"
       ><view class="invoice-list-row">
         <view class="invoice-list-date">
@@ -35,6 +37,7 @@ import open_ok from './images/open-ok.png'
 import return_open_ok from './images/return-open-ok.png'
 import open_invoice_error from './images/open-invoice-error.png'
 import open_invoice_success from './images/open-invoice-success.png'
+import banIcon from './images/ban.png'
 
 // invoiceFlg 01电子普票  02增票 03普票 04电子增票
 // isApply 0未开票 1已申请 2开票失败 3已开票
@@ -50,10 +53,7 @@ export default {
       status: {
         0: '未开票',
       },
-      open_ok,
-      return_open_ok,
-      open_invoice_error,
-      open_invoice_success,
+      banIcon,
     }
   },
   computed: {
@@ -61,7 +61,7 @@ export default {
       const iconMap = {
         return: {
           1: return_open_ok,
-          2: return_open_ok,
+          2: return_open_ok, // 2为已申请，但是列表中有开票失败的，都默认显示已申请的图标
           3: open_invoice_success,
         },
         delivery: {
