@@ -232,8 +232,8 @@ export default {
     } catch (e) {}
   },
   onShow() {
-    const sesstionToken = Taro.getStorageSync('token')
-    if (this.userInfo.userId && sesstionToken === this.userInfo.token) return
+    // const sesstionToken = Taro.getStorageSync('token')
+    // if (this.userInfo.userId && sesstionToken === this.userInfo.token) return
     this.$store.dispatch('getUserInfo').finally(() => {
       this.hasGetUserInfo = true
     })
