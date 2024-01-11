@@ -56,7 +56,7 @@
     <view class="invoice-total invoice-footer">
       <view class="footer-top">
         <view class="left">
-          <checkbox :checked="checkAll" @tap="handleCheckAll">全选</checkbox>
+          <checkbox :checked="checkAll" :disabled="checkAllDisable" @tap="handleCheckAll">全选</checkbox>
         </view>
         <view class="right">
           <view
@@ -141,9 +141,8 @@ export default {
       startDate: '',
       endDate: '',
       billData: {
-        num: '',
-        amount: '',
-        list: [],
+        deliveryList: [],
+        returnList: [],
       },
       typeMap: {
         '01': '发货单',
@@ -227,6 +226,10 @@ export default {
         '04': '电子增票',
       }[this.invoiceType]
     },
+    checkAllDisable() {
+      const list = [...this.billData.deliveryList, ...this.billData.returnList]
+      return list.every(v => !v.canApply)
+    },
   },
 
   mounted() {
@@ -246,6 +249,7 @@ export default {
           end: this.endDate,
         })
         .then(data => {
+          data = data || {}
           this.billData = {
             ...data,
             deliveryList: (data.deliveryList || []).map(v => ({
@@ -324,6 +328,13 @@ export default {
       })
     },
     handleSubmit() {
+      if (!this.checkList.length) {
+        this.showToast({
+          msg: '未选中开票订单!',
+        })
+
+        return
+      }
       if (this.btnLoading) return
       this.btnLoading = true
       // userInfo。中的invoiceFlg判断用户开票类型

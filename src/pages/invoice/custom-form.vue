@@ -79,6 +79,7 @@ export default {
       const province = this.provinceList[index]
       this.invoiceForm.province = province.name
       this.invoiceForm.provinceId = province.id
+      this.invoiceForm.city = ''
       this.getChinaMap(province.id)
     },
     cityChange(e) {

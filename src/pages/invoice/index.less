@@ -1,5 +1,5 @@
 .invoice-page {
-  background-color: #fafcfd;
+  background-color: #ebebeb;
   min-height: 100vh;
   font-size: 26px;
   display: flex;
@@ -10,6 +10,8 @@
     padding-bottom: 200px;
     text-align: center;
     color: #666;
+    background-color: #fff;
+    border-radius: 0 0 12px 12px;
   }
 
   .arrow {
@@ -25,7 +27,7 @@
 
   .invoice-date-mode {
     text-align: right;
-    padding: 0 12px;
+    padding: 0 12px 12px 12px;
     background-color: #fff;
   }
 
@@ -47,10 +49,10 @@
   }
 
   .invoice-date {
-    // position: fixed;
+    border-top: 1px solid #ebebeb;
     width: 100%;
     background-color: #fff;
-    padding: 36px 60px;
+    padding: 24px 60px;
     border-bottom: 1px solid #e3e4e5;
     display: flex;
     justify-content: space-between;
@@ -82,23 +84,23 @@
   }
 
   .invoice-list {
-    height: calc(100vh - 240px);
+    height: calc(100vh - 420px);
     overflow: auto;
-    background-color: #fff;
-    // padding-top: 120px;
     font-size: 28px;
     font-weight: 400;
     color: #333333;
     line-height: 40px;
-    // margin-bottom: 160px;
     .dot {
       background-color: #f54e2a;
     }
     &-group {
       min-height: 400px;
+      margin: 24px 0;
+      padding: 0 12px;
       &-header {
         padding: 24px 42px;
         border-radius: 24px 24px 0 0;
+        background-color: #fff;
         &.return {
           background-color: #f9e4dc;
           color: #e5334a;
@@ -120,6 +122,8 @@
       padding: 34px 42px;
       border-bottom: 1px solid #e3e4e5;
       position: relative;
+      background-color: #fff;
+      border-radius: 0 0 12px 12px;
 
       .flex {
         display: flex;
@@ -289,6 +293,10 @@
     background: #fa4a2d;
   }
 
+  checkbox .wx-checkbox-input-disabled {
+    background: #fff;
+  }
+
   /* 选中后的勾子样式 */
   checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
     box-sizing: border-box;
@@ -307,17 +315,17 @@
 
 .toast {
   position: fixed;
-  bottom: 200px;
+  bottom: 300px;
   width: 100%;
   text-align: center;
   z-index: 1005;
   text {
     padding: 16px 36px;
     text-align: center;
-    background-color: rgb(81 81 81);
+    background-color: rgb(245, 245, 245);
     border-radius: 50px;
     font-size: 28px;
-    color: #fff;
+    color: #333;
   }
 }
 
