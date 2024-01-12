@@ -414,7 +414,8 @@ export default {
       this.$API
         .submitComplain(params)
         .then(() => {
-          Taro.navigateTo({ url: '/pages/custom-comment/index' })
+          Taro.navigateBack({ delta: 1 })
+          // Taro.navigateTo({ url: '/pages/custom-comment/index' })
         })
         .finally(() => {
           this.btnLoading = false
@@ -427,8 +428,9 @@ export default {
         .deleteComplain({
           complainCode: this.complainCode,
         })
-        .then(re => {
-          Taro.navigateTo({ url: '/pages/custom-comment/index' })
+        .then(() => {
+          Taro.navigateBack({ delta: 1 })
+          // Taro.navigateTo({ url: '/pages/custom-comment/index' })
         })
         .finally(() => {
           this.deleteStatus = false
