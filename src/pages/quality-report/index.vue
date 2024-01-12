@@ -113,6 +113,11 @@ export default {
             imageUrl: v,
             downloading: false,
           }))
+        }).catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'none'
+          })
         })
     },
     productChange(e) {
