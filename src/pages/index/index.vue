@@ -134,10 +134,12 @@ export default {
       space: 300,
       interval: 50, // 时间间隔
       startScroll: false,
+      scrollLength: 100,
     }
   },
   onShow() {
     this.$store.commit('setSwitchCategoryTab', '')
+    this.scrollLength = 100
     this.getData()
   },
 
@@ -146,18 +148,21 @@ export default {
     this.downloadImage()
     this.$store.dispatch('getUserInfo')
   },
+  beforeDestroy() {
+    clearInterval(this.intervalTimer)
+  },
   methods: {
     scrollling() {
       const length = this.scrollLength // 滚动文字的宽度
-      const interval = setInterval(() => {
-        const maxWidth = length - 200
+      this.intervalTimer = setInterval(() => {
+        const maxWidth = length - 10
         const left = this.distance
         if (left < maxWidth) {
           // 判断是否滚动到最大宽度
           this.distance = left + this.step
         } else {
           this.distance = 0
-          clearInterval(interval)
+          clearInterval(this.intervalTimer)
           this.scrollling()
         }
       }, this.interval)
@@ -194,10 +199,11 @@ export default {
               this.space = this.windowWidth
               console.log(this.scrollLength)
               this.startScroll = true
+              clearInterval(this.intervalTimer)
               this.scrollling() // 第一个字消失后立即从右边出现
             })
             .exec()
-        }, 100)
+        }, 50)
       })
     },
     onCategory(index) {
