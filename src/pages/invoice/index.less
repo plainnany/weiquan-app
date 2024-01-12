@@ -1,17 +1,15 @@
 .invoice-page {
   background-color: #ebebeb;
-  min-height: 100vh;
+  height: 100vh;
   font-size: 26px;
   display: flex;
   flex-direction: column;
   .empty {
     font-size: 28px;
     padding-top: 60px;
-    padding-bottom: 200px;
+    box-sizing: border-box;
     text-align: center;
     color: #666;
-    background-color: #fff;
-    border-radius: 0 0 12px 12px;
   }
 
   .arrow {
@@ -94,9 +92,10 @@
       background-color: #f54e2a;
     }
     &-group {
-      min-height: 400px;
       margin: 24px 0;
       padding: 0 12px;
+      box-sizing: border-box;
+
       &-header {
         padding: 24px 42px;
         border-radius: 24px 24px 0 0;
@@ -111,6 +110,11 @@
           color: #e57f2f;
         }
       }
+      &-content {
+        min-height: calc(50vh - 340px);
+        background-color: #fff;
+        border-radius: 0 0 12px 12px;
+      }
     }
 
     &-row {
@@ -123,8 +127,6 @@
       padding: 34px 42px;
       border-bottom: 1px solid #e3e4e5;
       position: relative;
-      background-color: #fff;
-      border-radius: 0 0 12px 12px;
 
       .flex {
         display: flex;

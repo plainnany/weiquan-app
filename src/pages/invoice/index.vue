@@ -32,24 +32,28 @@
         <view class="invoice-list-group-header return">
           退货单
         </view>
-        <view class="invoice-list-item" v-for="(bill, index) in billData.returnList" :key="index">
-          <Card :bill="bill" :isMonthUser="isMonthUser" type="return" @handleCheck="handleCheck" @handleMore="handleMore" />
-          <More v-if="bill.expand" :list="bill.list" :isMonthUser="isMonthUser" type="return" />
-        </view>
-        <view v-if="showEmpty(billData.returnList)" class="empty">
-          暂无数据
+        <view class="invoice-list-group-content">
+          <view class="invoice-list-item" v-for="(bill, index) in billData.returnList" :key="index">
+            <Card :bill="bill" :isMonthUser="isMonthUser" type="return" @handleCheck="handleCheck" @handleMore="handleMore" />
+            <More v-if="bill.expand" :list="bill.list" :isMonthUser="isMonthUser" type="return" />
+          </view>
+          <view v-if="showEmpty(billData.returnList)" class="empty">
+            暂无数据
+          </view>
         </view>
       </view>
       <view class="invoice-list-group">
         <view class="invoice-list-group-header delivery">
           发货单
         </view>
-        <view class="invoice-list-item" v-for="(bill, index) in billData.deliveryList" :key="index">
-          <Card :bill="bill" :isMonthUser="isMonthUser" type="delivery" @handleCheck="handleCheck" @handleMore="handleMore" />
-          <More v-if="bill.expand" :list="bill.list" :isMonthUser="isMonthUser" type="delivery" />
-        </view>
-        <view v-if="showEmpty(billData.deliveryList)" class="empty">
-          暂无数据
+        <view class="invoice-list-group-content">
+          <view class="invoice-list-item" v-for="(bill, index) in billData.deliveryList" :key="index">
+            <Card :bill="bill" :isMonthUser="isMonthUser" type="delivery" @handleCheck="handleCheck" @handleMore="handleMore" />
+            <More v-if="bill.expand" :list="bill.list" :isMonthUser="isMonthUser" type="delivery" />
+          </view>
+          <view v-if="showEmpty(billData.deliveryList)" class="empty">
+            暂无数据
+          </view>
         </view>
       </view>
     </view>
