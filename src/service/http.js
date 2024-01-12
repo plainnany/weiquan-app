@@ -75,12 +75,11 @@ class HttpRequest {
         title: '用户未登录，请先绑定用户',
         icon: 'none',
         success() {
-          setTimeout(() => {
-            if (!store.state.bindStatus) {
-              Taro.navigateTo({ url: '/pages/bind-account/index' })
-            }
-            store.commit('setBindStatus', true)
-          }, 1000)
+          Taro.navigateTo({ url: '/pages/bind-account/index' })
+          // if (!store.state.bindStatus) {
+          //   Taro.navigateTo({ url: '/pages/bind-account/index' })
+          // }
+          // store.commit('setBindStatus', true)
         },
       })
     }

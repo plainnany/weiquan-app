@@ -17,9 +17,9 @@
           </view>
           <view class="user-mobile">
             <view> ID: {{ userInfo.userId || '未绑定账号' }} </view>
-            <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
+            <!-- <view class="user-empty" v-if="!userInfo.userId && hasGetUserInfo">
               <text class="user-bind-account" @tap.stop="login">立即绑定</text>
-            </view>
+            </view> -->
             <view v-if="userInfo.userId">
               <image :src="userImg" mode="" class="user-icon" />
               {{ accountTypeMap[userInfo.accountType] }}</view
