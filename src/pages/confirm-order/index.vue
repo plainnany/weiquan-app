@@ -84,6 +84,9 @@
         <DateChooser :productCode="productCode" :isBatchOrder="isBatchOrder" @confirm="confirmDate" @cancel="cancelDate" />
       </nan-modal>
     </view>
+    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -110,6 +113,10 @@ export default {
       isBatchOrder: false,
       currentProduct: null,
       totalFee: '',
+      errorToast: {
+        visible: false,
+        message: '',
+      },
     }
   },
   computed: {
@@ -155,11 +162,18 @@ export default {
           }
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'none',
-          })
+          this.showToast(err)
         })
+    },
+    showToast(err) {
+      this.errorToast.visible = true
+      this.errorToast.message = err.msg
+      setTimeout(() => {
+        this.errorToast = {
+          visible: false,
+          message: '',
+        }
+      }, 2000)
     },
     chooseDate(product) {
       this.productCode = product.productCode
@@ -210,10 +224,7 @@ export default {
           })
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'none',
-          })
+          this.showToast(err)
         })
       this.dateChooseVisible = false
       setTitle({ title: '确认订单' })
@@ -244,10 +255,7 @@ export default {
             this.handleResult(data)
           })
           .catch(err => {
-            Taro.showToast({
-              title: err.msg,
-              icon: 'none',
-            })
+            this.showToast(err)
           })
       } else if (this.params.shopIds) {
         const shopCardList = this.productList.map(product => ({
@@ -263,10 +271,7 @@ export default {
             this.handleResult(data)
           })
           .catch(err => {
-            Taro.showToast({
-              title: err.msg,
-              icon: 'none',
-            })
+            this.showToast(err)
           })
       }
     },
