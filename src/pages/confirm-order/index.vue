@@ -147,11 +147,19 @@ export default {
         }
       }
 
-      this.$API.paySettlement(params).then(data => {
-        if (data) {
-          this.productList = data
-        }
-      }).catch
+      this.$API
+        .paySettlement(params)
+        .then(data => {
+          if (data) {
+            this.productList = data
+          }
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'none',
+          })
+        })
     },
     chooseDate(product) {
       this.productCode = product.productCode
@@ -189,16 +197,24 @@ export default {
         param = { json }
       }
 
-      this.$API.getAmount(param).then(data => {
-        this.totalFee = data.sum
-        this.productList.forEach(product => {
-          if (product.productCode === this.productCode) {
-            if (data.list && data.list.length > 0) {
-              this.$set(product, 'donateList', data.list)
+      this.$API
+        .getAmount(param)
+        .then(data => {
+          this.totalFee = data.sum
+          this.productList.forEach(product => {
+            if (product.productCode === this.productCode) {
+              if (data.list && data.list.length > 0) {
+                this.$set(product, 'donateList', data.list)
+              }
             }
-          }
+          })
         })
-      })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'none',
+          })
+        })
       this.dateChooseVisible = false
       setTitle({ title: '确认订单' })
     },
@@ -227,6 +243,12 @@ export default {
           .then(data => {
             this.handleResult(data)
           })
+          .catch(err => {
+            Taro.showToast({
+              title: err.msg,
+              icon: 'none',
+            })
+          })
       } else if (this.params.shopIds) {
         const shopCardList = this.productList.map(product => ({
           shopCarId: product.oid,
@@ -239,6 +261,12 @@ export default {
           })
           .then(data => {
             this.handleResult(data)
+          })
+          .catch(err => {
+            Taro.showToast({
+              title: err.msg,
+              icon: 'none',
+            })
           })
       }
     },

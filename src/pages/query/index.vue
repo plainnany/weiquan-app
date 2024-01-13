@@ -192,6 +192,12 @@ export default {
         .then(() => {
           Taro.switchTab({ url: '/pages/shop/index' })
         })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'none',
+          })
+        })
     },
   },
 }

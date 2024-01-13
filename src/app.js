@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import NanModal from '@/components/modal'
 import NanButton from '@/components/button'
+import PayMethod from '@/components/pay-method'
 import './app.less'
 import API from '@/service/api'
 import Taro from '@tarojs/taro'
@@ -8,6 +9,7 @@ import store from '@/store'
 
 Vue.component('nan-modal', NanModal)
 Vue.component('nan-button', NanButton)
+Vue.component('pay-method', PayMethod)
 
 Vue.prototype.$API = API
 

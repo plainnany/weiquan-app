@@ -140,35 +140,10 @@
           <!-- 头部 -->
           <view class="order-pay-title">
             <view style="color: #fa4a2d">支付金额 {{ userInfo.dianZhang ? `¥${payData.total_fee}` : '****' }}</view>
-            <!-- <view @tap.stop="handleClosePay" class="order-pay-close">
-              <image :src="closeIcon" mode="" />
-            </view> -->
           </view>
-          <view class="order-pay-content">
-            <radio-group @change="onPaymethodChange">
-              <label class="order-pay-item flex-between-center" v-for="payItem in payList" :key="payItem.name">
-                <view class="flex-between-center">
-                  <view>
-                    <image :src="payItem.icon" mode="" />
-                  </view>
-                  <view>
-                    {{ payItem.name }}
-                    <text v-if="payItem.method === 'weixin-pocket'"> ({{ userInfo.accoutBalance }}) </text>
-                  </view>
-                </view>
-                <view>
-                  <radio
-                    :value="payItem.method"
-                    :checked="payItem.method === payMethod"
-                    color="#333"
-                    v-show="payItem.method === payMethod"
-                  />
-                </view>
-              </label>
-            </radio-group>
-          </view>
+          <pay-method :showTipModal="showTipModal" @change="onPayMethodChange" @cancel="cancelModal" @confirm="confirmPay" />
           <view class="order-pay-footer">
-            <nan-button type="primary" :loading="btnLoading" @tap.stop="confirmPay">立即支付</nan-button>
+            <nan-button type="primary" :loading="btnLoading" @tap="handleConfirm">立即支付</nan-button>
           </view>
         </view>
       </view>
@@ -261,44 +236,12 @@ export default {
       phone: '', // 当前收货的手机号
       confirmBtnLoading: false,
       previewImg: '',
+      showTipModal: false,
     }
   },
   computed: {
     userInfo() {
       return this.$store.state.userInfo
-    },
-    payList() {
-      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
-        return [
-          {
-            method: 'weixin-2',
-            name: '微信好友支付',
-            icon: wechatIcon,
-          },
-        ]
-      }
-      return [
-        {
-          method: 'weixin-pocket',
-          name: '余额支付',
-          icon: weipocketIcon,
-        },
-        {
-          method: 'company-pocket',
-          name: '总部余额',
-          icon: weipocketIcon,
-        },
-        {
-          method: 'weixin',
-          name: '微信支付',
-          icon: wechatIcon,
-        },
-        {
-          method: 'weixin-2',
-          name: '微信好友支付',
-          icon: wechatIcon,
-        },
-      ]
     },
     showEmpty() {
       if (this.activeTab === 'to-delivery') {
@@ -390,8 +333,18 @@ export default {
     handleClosePay() {
       this.hideModal()
     },
-    onPaymethodChange(e) {
+    onPayMethodChange(e) {
       this.payMethod = e.detail.value
+    },
+    cancelModal() {
+      this.showTipModal = false
+    },
+    handleConfirm() {
+      if (this.payMethod === 'company-pocket') {
+        this.showTipModal = true
+      } else {
+        this.confirmPay()
+      }
     },
     confirmPay() {
       if (this.payMethod === 'weixin-pocket' || this.payMethod === 'company-pocket') {
@@ -399,7 +352,7 @@ export default {
         const method = {
           'weixin-pocket': 'balancePayment',
           'company-pocket': 'balanceParentPayment',
-        }
+        }[this.payMethod]
         this.$API[method]({
           out_trade_no: this.payData.out_trade_no,
           orderNumber: this.payData.orderNumber,
@@ -496,6 +449,12 @@ export default {
         })
         .then(() => {
           Taro.switchTab({ url: '/pages/shop/index' })
+        })
+        .catch(err => {
+          Taro.showToast({
+            title: err.msg,
+            icon: 'none',
+          })
         })
     },
     addQuestion(order) {

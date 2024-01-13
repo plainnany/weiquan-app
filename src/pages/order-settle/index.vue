@@ -15,22 +15,7 @@
     </view>
     <view class="common-card order-settle-pay">
       <view class="order-settle-pay-title">支付选择</view>
-      <radio-group @change="onPaymethodChange">
-        <label class="order-settle-item flex-between-center" v-for="payItem in payList" :key="payItem.name">
-          <view class="flex-between-center">
-            <view>
-              <image :src="payItem.icon" mode="" />
-            </view>
-            <view>
-              {{ payItem.name }}
-              <text v-if="payItem.method === 'weixin-pocket'"> ({{ userInfo.accoutBalance }}) </text>
-            </view>
-          </view>
-          <view>
-            <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#333" v-show="payItem.method === payMethod" />
-          </view>
-        </label>
-      </radio-group>
+      <pay-method :showTipModal="showTipModal" @change="onPayMethodChange" @cancel="cancelModal" @confirm="confirmPay" />
       <view class="tips"
         >注:选择好友代付后，请于15分钟内支付。若支付不成功或超时支付，请前往“账户余额及充值查询退款记录，或联系客服查询。感谢!</view
       >
@@ -59,43 +44,10 @@ export default {
       alipayIcon,
       wechatIcon,
       payMethod: 'weixin-pocket',
+      showTipModal: false,
     }
   },
   computed: {
-    payList() {
-      if (this.userInfo.accountType === '02' || !this.isDianZhang) {
-        this.payMethod = ''
-        return [
-          {
-            method: 'weixin-2',
-            name: '微信好友支付',
-            icon: wechatIcon,
-          },
-        ]
-      }
-      return [
-        {
-          method: 'weixin-pocket',
-          name: '余额支付',
-          icon: weipocketIcon,
-        },
-        {
-          method: 'company-pocket',
-          name: '总部余额',
-          icon: weipocketIcon,
-        },
-        {
-          method: 'weixin',
-          name: '微信支付',
-          icon: wechatIcon,
-        },
-        {
-          method: 'weixin-2',
-          name: '微信好友代付',
-          icon: wechatIcon,
-        },
-      ]
-    },
     userInfo() {
       return this.$store.state.userInfo
     },
@@ -116,15 +68,25 @@ export default {
     this.tradeNumber = params.trade
   },
   methods: {
-    onPaymethodChange(e) {
+    onPayMethodChange(e) {
       this.payMethod = e.detail.value
+    },
+    cancelModal() {
+      this.showTipModal = false
+    },
+    handleConfirm() {
+      if (this.payMethod === 'company-pocket') {
+        this.showTipModal = true
+      } else {
+        this.confirmPay()
+      }
     },
     confirmPay() {
       if (this.payMethod === 'weixin-pocket' || this.payMethod === 'company-pocket') {
         const method = {
           'weixin-pocket': 'balancePayment',
           'company-pocket': 'balanceParentPayment',
-        }
+        }[this.payMethod]
         this.$API[method]({
           out_trade_no: this.tradeNumber,
           orderNumber: this.orderNumber,
