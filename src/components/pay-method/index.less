@@ -1,5 +1,6 @@
 .pay-method {
   font-size: 26px;
+  padding-bottom: 12px;
 
   &-title {
     margin-bottom: 40px;
@@ -19,7 +20,24 @@
   }
 
   &-item {
+    button {
+      padding: 0;
+      margin: 20px 0;
+      background-color: #fff;
+      font-size: 26px;
+      display: flex;
+      align-items: center;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  &-info {
     margin: 20px 0;
+    display: flex;
+    justify-content: space-between;
   }
 
   .modal-content {

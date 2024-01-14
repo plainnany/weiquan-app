@@ -148,6 +148,9 @@
         </view>
       </view>
     </view>
+    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -237,6 +240,10 @@ export default {
       confirmBtnLoading: false,
       previewImg: '',
       showTipModal: false,
+      errorToast: {
+        visible: false,
+        message: '',
+      },
     }
   },
   computed: {
@@ -249,6 +256,14 @@ export default {
       }
       return !this.orderList.length && this.hasGetOrder
     },
+  },
+  onShareAppMessage() {
+    return {
+      title: '老板，订货请支付！',
+      path: `/pages/web-view/index?url=${this.payData.wechatUrl}`,
+      imageUrl: 'http://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/fx.png',
+      // promise,
+    }
   },
   created() {
     this.$instance = Taro.getCurrentInstance()
@@ -263,6 +278,16 @@ export default {
     this.getOrder({ type: 'all' })
   },
   methods: {
+    showToast(err) {
+      this.errorToast.visible = true
+      this.errorToast.message = err.msg
+      setTimeout(() => {
+        this.errorToast = {
+          visible: false,
+          message: '',
+        }
+      }, 2000)
+    },
     clickTab({ key }) {
       this.activeTab = key
       this.pageNo = 1
@@ -373,23 +398,33 @@ export default {
           })
           .catch(err => {
             this.btnLoading = false
-            Taro.showToast({
-              title: err.msg,
-              icon: 'error',
-            })
+            this.showToast(err)
           })
       } else if (this.payMethod === 'weixin') {
-        Taro.navigateTo({
-          url: `/pages/web-view/index?url=${this.payData.wechatUrl}`,
-        })
-      } else if (this.payMethod === 'weixin-2') {
-        Taro.showToast({
-          title: '正在改造招商微信支付！',
-          icon: 'error',
-        })
-        // Taro.navigateTo({
-        //   url: `/pages/web-view/index?url=${this.payData.wechatUrl}`,
-        // })
+        // 如果是微信支付，SurplusPage=01 跳转中间支付倒计时页面，然后拉起微信小程序支付
+        // 否则，直接拉起微信小程序支付
+        this.$API
+          .unifiedorder({
+            _data: JSON.stringify({
+              out_trade_no: this.payData.out_trade_no,
+              total_fee: this.payData.total_fee,
+            }),
+          })
+          .then(data => {
+            if (data.surplusPage === '01') {
+              Taro.navigateTo({
+                url: `/pages/pay-countdown/index?orderNumber=${this.payData.orderNumber}&tradeNumber=${this.payData.out_trade_no}`,
+              })
+            } else {
+              Taro.navigateToMiniProgram({
+                appId: data.appletsOriginalId,
+                path: data.appletsPayUrl,
+              })
+            }
+          })
+          .catch(err => {
+            this.showToast(err)
+          })
       }
     },
 
@@ -433,10 +468,7 @@ export default {
           this.getOrder()
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'error',
-          })
+          this.showToast(err)
         })
         .finally(() => {
           this.confirmBtnLoading = false
@@ -451,10 +483,7 @@ export default {
           Taro.switchTab({ url: '/pages/shop/index' })
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'none',
-          })
+          this.showToast(err)
         })
     },
     addQuestion(order) {

@@ -1,0 +1,64 @@
+.pay-countdown {
+  background-color: #f4f4f4;
+  height: 100vh;
+  font-size: 32px;
+
+  &-footer {
+    padding: 36px;
+  }
+
+  &-title {
+    display: flex;
+    align-items: center;
+    image {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  &-item {
+    border-top: 1px solid #e2e2e2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    background-color: #fff;
+  }
+
+  &-tip {
+    text-align: center;
+    margin: 48px 0;
+    color: #666;
+
+    .time {
+      color: rgb(207 127 78);
+      margin-top: 24px;
+    }
+  }
+
+  button {
+    padding: 22px 0;
+    font-size: 30px;
+    line-height: 42px;
+    &::after {
+      display: none;
+    }
+  }
+
+  .confirm {
+    background-color: #3887da;
+    color: #fff;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    padding: 24px 0;
+    text-align: center;
+  }
+
+  .back {
+    border: 1px solid #3887da;
+    color: #3887da;
+    border-radius: 8px;
+    padding: 24px 0;
+    text-align: center;
+  }
+}

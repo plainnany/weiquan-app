@@ -1,22 +1,29 @@
 <template>
   <view class="pay-method">
     <radio-group @change="onPayMethodChange">
-      <label class="pay-method-item flex-between-center" v-for="payItem in payList" :key="payItem.name">
-        <view class="flex-between-center">
-          <view>
+      <label class="pay-method-item" v-for="payItem in payList" :key="payItem.name">
+        <view v-if="payItem.method === 'weixin-2'">
+          <button open-type="share">
             <image :src="payItem.icon" mode="" />
+            {{ payItem.name }}
+          </button>
+        </view>
+        <view v-else class="pay-method-info">
+          <view class="flex-between-center">
+            <view>
+              <image :src="payItem.icon" mode="" />
+            </view>
+            <view>
+              {{ payItem.name }}
+              <text v-if="payItem.method === 'weixin-pocket'"> ({{ userInfo.accoutBalance }}) </text>
+            </view>
           </view>
           <view>
-            {{ payItem.name }}
-            <text v-if="payItem.method === 'weixin-pocket'"> ({{ userInfo.accoutBalance }}) </text>
+            <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#333" v-show="payItem.method === payMethod" />
           </view>
-        </view>
-        <view>
-          <radio :value="payItem.method" :checked="payItem.method === payMethod" color="#333" v-show="payItem.method === payMethod" />
         </view>
       </label>
     </radio-group>
-
     <Modal :visible="visible" title="提示" cancelText="取消" confirmText="确定" @cancel="onCancel" @confirm="onConfirm">
       <view class="modal-content">确认是否使用总部余额支付，该订单退款相应退到总部余额</view>
     </Modal>
@@ -45,8 +52,18 @@ export default {
     return {
       payMethod: 'weixin-pocket',
       visible: false,
+      wechatIcon,
     }
   },
+  // 作为组件，open-type share的情况下onShareAppMessage方法必须要写到pages顶级页面去，写到组件里面不生效
+  // onShareAppMessage() {
+  //   return {
+  //     title: '老板，订货请支付！',
+  //     path: `/pages/web-view/index?url=${this.wechatUrl}`,
+  //     imageUrl: 'http://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/fx.png',
+  //     // promise,
+  //   }
+  // },
   computed: {
     userInfo() {
       return this.$store.state.userInfo

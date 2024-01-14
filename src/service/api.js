@@ -447,6 +447,12 @@ const requestAddressList = [
     url: '/api/customer/getCustomerlogisticsInfo.ns',
     type: 'post',
   },
+  {
+    describe: '微信支付倒计时',
+    method: 'payCountdown',
+    url: '/api/order/countdown.ns?',
+    type: 'post',
+  },
 ]
 
 const API = {}

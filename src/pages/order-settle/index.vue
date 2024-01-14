@@ -23,6 +23,9 @@
     <view class="order-settle-footer">
       <nan-button type="primary" @tap="confirmPay">立即支付</nan-button>
     </view>
+    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -45,6 +48,10 @@ export default {
       wechatIcon,
       payMethod: 'weixin-pocket',
       showTipModal: false,
+      errorToast: {
+        visible: false,
+        message: '',
+      },
     }
   },
   computed: {
@@ -56,18 +63,63 @@ export default {
     isDianZhang() {
       return this.userInfo.dianZhang
     },
+    openType() {
+      return this.payMethod === 'weixin-2' ? 'share' : ''
+    },
   },
   mounted() {
     setTitle({ title: '订单结算' })
   },
+  onShareAppMessage(res) {
+    return {
+      title: '老板，订货请支付！',
+      path: `/pages/web-view/index?url=${this.wechatUrl}`,
+      imageUrl: 'http://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/fx.png',
+      // promise,
+    }
+  },
   onShow() {
+    const res = {
+      returnCode: 200,
+      secure: false,
+      msg: null,
+      data: {
+        pay: {
+          out_trade_no: '2024011419164118140',
+          total_fee: 0.06,
+          subject: '支付订单',
+          aliPayUrl: 'http://wsyy.weichuan.com.cn:8088/alipay.htm?out_trade_no=2024011419164118140',
+          wechatUrl: 'https://wsorder.weichuan.com.cn/wechat.htm?connect_redirect=1&out_trade_no=2024011419164118140',
+          orderNumber: '2024011419365751123456789',
+        },
+        accountType: '01',
+      },
+      result: true,
+    }
     const params = Taro.getCurrentInstance().router.params
+    // const params = {
+    //   ...res,
+    //   number: res.data.orderNumber,
+    //   money: res.data.pay.total_fee,
+    //   payUrl: res.data.pay.wechatUrl,
+    //   trade: res.data.pay.out_trade_no,
+    // }
     this.orderNumber = params.number
     this.totalFee = params.money
     this.wechatUrl = params.payUrl
     this.tradeNumber = params.trade
   },
   methods: {
+    showToast(err) {
+      this.errorToast.visible = true
+      this.errorToast.message = err.msg
+      setTimeout(() => {
+        this.errorToast = {
+          visible: false,
+          message: '',
+        }
+      }, 2000)
+    },
     onPayMethodChange(e) {
       this.payMethod = e.detail.value
     },
@@ -97,41 +149,33 @@ export default {
             })
           })
           .catch(err => {
-            Taro.showToast({
-              title: err.msg,
-              icon: 'error',
-            })
+            this.showToast(err)
           })
       } else if (this.payMethod === 'weixin') {
-        // this.$API
-        //   .unifiedorder({
-        //     out_trade_no: this.tradeNumber,
-        //     total_fee: this.totalFee,
-        //   })
-        //   .then(res => {
-        //     debugger
-        //     Taro.navigateBackMiniProgram({
-        //       appId: '',
-        //     })
-        //   })
-        //   .catch(err => {
-        //     Taro.showToast({
-        //       title: err.msg,
-        //       icon: 'error',
-        //     })
-        //   })
-        Taro.showToast({
-          title: '正在升级招商微信支付中。',
-          icon: 'error',
-        })
-        // Taro.navigateTo({
-        //   url: `/pages/web-view/index?url=${this.wechatUrl}`,
-        // })
-      } else if (this.payMethod === 'weixin-2') {
-        Taro.showToast({
-          title: '正在升级招商微信支付中。',
-          icon: 'error',
-        })
+        // 如果是微信支付，SurplusPage=01 跳转中间支付倒计时页面，然后拉起微信小程序支付
+        // 否则，直接拉起微信小程序支付
+        this.$API
+          .unifiedorder({
+            _data: JSON.stringify({
+              out_trade_no: this.tradeNumber,
+              total_fee: this.totalFee,
+            }),
+          })
+          .then(data => {
+            if (data.surplusPage === '01') {
+              Taro.navigateTo({
+                url: `/pages/pay-countdown/index?orderNumber=${this.orderNumber}&tradeNumber=${this.tradeNumber}`,
+              })
+            } else {
+              Taro.navigateToMiniProgram({
+                appId: data.appletsOriginalId,
+                path: data.appletsPayUrl,
+              })
+            }
+          })
+          .catch(err => {
+            this.showToast(err)
+          })
       }
     },
   },
