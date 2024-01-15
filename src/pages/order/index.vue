@@ -260,7 +260,7 @@ export default {
   onShareAppMessage() {
     return {
       title: '老板，订货请支付！',
-      path: `/pages/web-view/index?url=${this.payData.wechatUrl}`,
+      path: `/pages/web-view/index?url=${encodeURIComponent(this.payData.wechatUrl)}`,
       imageUrl: 'http://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/fx.png',
       // promise,
     }

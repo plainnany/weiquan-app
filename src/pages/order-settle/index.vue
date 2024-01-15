@@ -75,7 +75,7 @@ export default {
     this.notTrigger = true
     return {
       title: '老板，订货请支付！',
-      path: `/pages/web-view/index?url=${this.wechatUrl}`,
+      path: `/pages/web-view/index?url=${encodeURIComponent(this.wechatUrl)}`,
       imageUrl: 'http://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/fx.png',
       // promise,
     }
@@ -146,6 +146,7 @@ export default {
                 url: `/pages/pay-countdown/index?orderNumber=${this.orderNumber}&tradeNumber=${this.tradeNumber}`,
               })
             } else {
+              // 需要直接调用微信支付
               Taro.navigateToMiniProgram({
                 appId: data.appletsOriginalId,
                 path: data.appletsPayUrl,
