@@ -224,6 +224,8 @@ export default {
     }
   },
   onShareAppMessage(res) {
+    // 调用此方法时，会重新触发onShow，以及。app.js中的onShow,暂时只处理当前页面中的onShow方法
+    this.notTrigger = true
     return {
       title: '老板，订货请支付！',
       path: `/pages/web-view/index?url=${this.payData.wechatUrl}`,
@@ -305,6 +307,7 @@ export default {
     setTitle({ title: '我的订单' })
   },
   onShow() {
+    if (this.notTrigger) return
     const { order, type } = Taro.getCurrentInstance().router.params
     this.orderType = type // to-delivery: 当天收货
     this.getOrder(order)

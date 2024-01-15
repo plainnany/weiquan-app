@@ -71,6 +71,8 @@ export default {
     setTitle({ title: '订单结算' })
   },
   onShareAppMessage(res) {
+    // 调用此方法时，会重新触发onShow，以及。app.js中的onShow,暂时只处理当前页面中的onShow方法
+    this.notTrigger = true
     return {
       title: '老板，订货请支付！',
       path: `/pages/web-view/index?url=${this.wechatUrl}`,
@@ -79,31 +81,8 @@ export default {
     }
   },
   onShow() {
-    const res = {
-      returnCode: 200,
-      secure: false,
-      msg: null,
-      data: {
-        pay: {
-          out_trade_no: '2024011419164118140',
-          total_fee: 0.06,
-          subject: '支付订单',
-          aliPayUrl: 'http://wsyy.weichuan.com.cn:8088/alipay.htm?out_trade_no=2024011419164118140',
-          wechatUrl: 'https://wsorder.weichuan.com.cn/wechat.htm?connect_redirect=1&out_trade_no=2024011419164118140',
-          orderNumber: '2024011419365751123456789',
-        },
-        accountType: '01',
-      },
-      result: true,
-    }
+    if (this.notTrigger) return
     const params = Taro.getCurrentInstance().router.params
-    // const params = {
-    //   ...res,
-    //   number: res.data.orderNumber,
-    //   money: res.data.pay.total_fee,
-    //   payUrl: res.data.pay.wechatUrl,
-    //   trade: res.data.pay.out_trade_no,
-    // }
     this.orderNumber = params.number
     this.totalFee = params.money
     this.wechatUrl = params.payUrl
