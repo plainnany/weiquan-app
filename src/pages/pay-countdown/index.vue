@@ -134,8 +134,9 @@ export default {
         })
         .then(data => {
           this.btnLoading = false
+          // 招商支付的appId，后端不知道怎么获取，前端暂时写死了
           Taro.navigateToMiniProgram({
-            appId: data.appletsOriginalId,
+            appId: 'wx88297831a71c80e3',
             path: data.appletsPayUrl,
           })
         })
