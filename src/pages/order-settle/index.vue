@@ -146,10 +146,17 @@ export default {
                 url: `/pages/pay-countdown/index?orderNumber=${this.orderNumber}&tradeNumber=${this.tradeNumber}`,
               })
             } else {
-              // 需要直接调用微信支付
-              Taro.navigateToMiniProgram({
-                appId: data.appletsOriginalId,
-                path: data.appletsPayUrl,
+              wx.requestPayment({
+                ...data,
+                appId: data.appid,
+                package: data.packageStr,
+                success: res => {
+                  Taro.redirectTo({ url: '/pages/order/index?type=all' })
+                },
+                fail: err => {
+                  this.showToast(err)
+                },
+                complete: function(res) {},
               })
             }
           })

@@ -134,11 +134,24 @@ export default {
         })
         .then(data => {
           this.btnLoading = false
-          // 招商支付的appId，后端不知道怎么获取，前端暂时写死了
-          Taro.navigateToMiniProgram({
-            appId: 'wx88297831a71c80e3',
-            path: data.appletsPayUrl,
+          // 调用微信支付接口
+          wx.requestPayment({
+            ...data,
+            appId: data.appid,
+            package: data.packageStr,
+            success: res => {
+              Taro.redirectTo({ url: '/pages/order/index?type=all' })
+            },
+            fail: err => {
+              this.showToast(err)
+            },
+            complete: function(res) {},
           })
+          // // 招商支付的appId，后端不知道怎么获取，前端暂时写死了
+          // Taro.navigateToMiniProgram({
+          //   appId: 'wx88297831a71c80e3',
+          //   path: data.appletsPayUrl,
+          // })
         })
         .catch(err => {
           this.btnLoading = false
