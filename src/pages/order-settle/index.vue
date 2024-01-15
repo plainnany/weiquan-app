@@ -85,7 +85,7 @@ export default {
     const params = Taro.getCurrentInstance().router.params
     this.orderNumber = params.number
     this.totalFee = params.money
-    this.wechatUrl = params.payUrl
+    this.wechatUrl = decodeURIComponent(params.payUrl)
     this.tradeNumber = params.trade
   },
   methods: {

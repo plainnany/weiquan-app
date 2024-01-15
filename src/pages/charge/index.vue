@@ -72,7 +72,7 @@ export default {
         .then(data => {
           if (data && data.wechatUrl) {
             Taro.navigateTo({
-              url: `/pages/web-view/index?url=${data.wechatUrl}`,
+              url: `/pages/web-view/index?url=${encodeURIComponent(data.wechatUrl)}`,
             })
           }
         })

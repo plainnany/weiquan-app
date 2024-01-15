@@ -280,7 +280,9 @@ export default {
         Taro.navigateTo({ url: '/pages/order/index?type=done' })
       } else if (data.pay) {
         Taro.navigateTo({
-          url: `/pages/order-settle/index?number=${data.pay.orderNumber}&money=${data.pay.total_fee}&trade=${data.pay.out_trade_no}&payUrl=${data.pay.wechatUrl}`,
+          url: `/pages/order-settle/index?number=${data.pay.orderNumber}&money=${data.pay.total_fee}&trade=${
+            data.pay.out_trade_no
+          }&payUrl=${encodeURIComponent(data.pay.wechatUrl)}`,
         })
       }
     },
