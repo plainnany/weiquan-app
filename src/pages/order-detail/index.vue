@@ -56,7 +56,7 @@
                 <view class="grey" v-if="!isTodayDelivery"
                   >{{ product.state === '05' ? '签收' : '交货' }}时间 {{ product.deliveryDate }}</view
                 >
-                <view class="grey" v-if="product.originDeliveryData">原始日期 {{ product.originDeliveryData }}</view>
+                <view class="grey" v-if="product.deliveryRepair === '01'">原始日期 {{ product.originDeliveryData || '' }}</view>
               </view>
             </view>
             <view class="order-detail-right">
