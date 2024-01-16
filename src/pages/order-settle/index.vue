@@ -132,6 +132,7 @@ export default {
           })
       } else if (this.payMethod === 'weixin') {
         // 如果是微信支付，SurplusPage=01 跳转中间支付倒计时页面，然后拉起微信小程序支付
+        const unionId = Taro.getStorageSync('unionId')
         // 否则，直接拉起微信小程序支付
         this.$API
           .unifiedorder({
@@ -139,6 +140,7 @@ export default {
               out_trade_no: this.tradeNumber,
               total_fee: this.totalFee,
             }),
+            openid: unionId,
           })
           .then(data => {
             if (data.surplusPage === '01') {

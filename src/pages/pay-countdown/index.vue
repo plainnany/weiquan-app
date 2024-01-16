@@ -123,6 +123,7 @@ export default {
     },
     confirm() {
       this.btnLoading = true
+      const unionId = Taro.getStorageSync('unionId')
       this.$API
         .unifiedorder({
           _data: JSON.stringify({
@@ -131,6 +132,7 @@ export default {
             subject: 'test',
           }),
           payType: '01',
+          openid: unionId,
         })
         .then(data => {
           this.btnLoading = false
