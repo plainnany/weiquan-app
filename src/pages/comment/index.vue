@@ -151,6 +151,9 @@
         <view class="action-btn btn-delete" @tap="handleDelete">删除</view>
         <view class="action-btn" @tap="submit">保存</view>
       </view>
+      <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+        <text>{{ errorToast.message }}</text></view
+      >
     </view>
   </view>
 </template>
@@ -204,6 +207,11 @@ export default {
         },
       ],
       maxlength: 200,
+      errorToast: {
+        visible: false,
+        message: '',
+      },
+      tip: '',
     }
   },
   computed: {
@@ -212,9 +220,28 @@ export default {
     },
     btnDisabled() {
       const { description, dictid, number, productCode } = this.form
-      if (!description || !dictid || !number || !productCode || !this.questionImages?.length) {
+      if (!description) {
+        this.tip = '问题说明不能为空'
         return true
       }
+      if (!dictid) {
+        this.tip = '问题产品不能为空'
+        return true
+      }
+
+      if (!number) {
+        this.tip = '数量不能为空'
+        return true
+      }
+      if (!productCode) {
+        this.tip = '产品不能为空'
+        return true
+      }
+      if (!this.questionImages?.length) {
+        this.tip = '图片不能为空'
+        return true
+      }
+
       return false
     },
   },
@@ -237,6 +264,16 @@ export default {
     }
   },
   methods: {
+    showToast(err) {
+      this.errorToast.visible = true
+      this.errorToast.message = err.msg
+      setTimeout(() => {
+        this.errorToast = {
+          visible: false,
+          message: '',
+        }
+      }, 2000)
+    },
     getComplaintDetail() {
       this.$API
         .getComplaintDetail({
@@ -245,18 +282,6 @@ export default {
         .then(data => {
           data = data || {}
           this.detailData = data
-          // this.questions = [
-          //   {
-          //     label: data.dictname,
-          //     id: data.dictid,
-          //   },
-          // ]
-          // this.productList = [
-          //   {
-          //     productName: data.productName,
-          //     productCode: data.productCode,
-          //   },
-          // ]
           this.questionImages = data.imageUrl || []
           this.checkedQuestion = data.dictname
           this.form.description = data.complainDetail
@@ -267,6 +292,7 @@ export default {
           this.form.batchCode = data.batchCode
           this.checkedProduct = data.productName || (this.productList.find(v => v.productCode === data.productCode) || {}).productName
         })
+        .catch(err => this.showToast(err))
     },
     getProductList() {
       return this.$API.getComplaintProductList().then(data => {
@@ -386,10 +412,7 @@ export default {
     },
     submit() {
       if (this.btnDisabled) {
-        Taro.showToast({
-          title: '请填写完整',
-          icon: 'error',
-        })
+        return this.showToast({ msg: this.tip })
       }
       if (this.btnLoading) return
       const { description, dictid, number, productCode } = this.form
@@ -402,6 +425,7 @@ export default {
         num: number,
         productCode,
         complainKind: '01',
+        vdUrl: this.videoUrl,
       }
       if (this.form.dictid === '2.03') {
         params.returnFlg = this.form.returnFlg // 是否退回
@@ -415,7 +439,9 @@ export default {
         .submitComplain(params)
         .then(() => {
           Taro.navigateBack({ delta: 1 })
-          // Taro.navigateTo({ url: '/pages/custom-comment/index' })
+        })
+        .catch(err => {
+          this.showToast(err)
         })
         .finally(() => {
           this.btnLoading = false
@@ -431,6 +457,9 @@ export default {
         .then(() => {
           Taro.navigateBack({ delta: 1 })
           // Taro.navigateTo({ url: '/pages/custom-comment/index' })
+        })
+        .catch(err => {
+          this.showToast(err)
         })
         .finally(() => {
           this.deleteStatus = false
