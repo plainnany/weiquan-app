@@ -55,26 +55,22 @@ export default {
       if (!this.chargeNumber) {
         return Taro.showToast({
           title: '请输入充值金额',
-          icon: 'error',
         })
       }
-      if (!/\d+/.test(this.chargeNumber)) {
-        return Taro.showToast({
-          title: '请输入正确金额',
-          icon: 'error',
-        })
-      }
+      // if (!/\d.*/.test(this.chargeNumber)) {
+      //   return Taro.showToast({
+      //     title: '请输入正确金额',
+      //   })
+      // }
       this.btnLoading = true
       this.$API
         .recharge({
           money: this.chargeNumber,
         })
         .then(data => {
-          if (data && data.wechatUrl) {
-            Taro.navigateTo({
-              url: `/pages/web-view/index?url=${encodeURIComponent(data.wechatUrl)}`,
-            })
-          }
+          Taro.navigateTo({
+            url: `/pages/pay-countdown/index?orderNumber=${data.orderNumber}&tradeNumber=${data.out_trade_no}`,
+          })
         })
         .finally(() => {
           this.btnLoading = false
