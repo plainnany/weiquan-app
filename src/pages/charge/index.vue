@@ -16,7 +16,7 @@
     <view class="charge-number charge-card">
       <view>金额</view>
       <view class="charge-input">
-        <input type="number" placeholder="请输入充值金额" v-model="chargeNumber" />
+        <input type="digit" placeholder="请输入充值金额" v-model="chargeNumber" />
       </view>
     </view>
     <view class="charge-confirm">
