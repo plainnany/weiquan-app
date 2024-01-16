@@ -290,6 +290,7 @@ export default {
           this.form.productCode = data.productCode
           this.form.returnFlg = data.returnFlg
           this.form.batchCode = data.batchCode
+          this.videoUrl = data.vdUrl
           this.checkedProduct = data.productName || (this.productList.find(v => v.productCode === data.productCode) || {}).productName
         })
         .catch(err => this.showToast(err))
@@ -418,6 +419,7 @@ export default {
       const { description, dictid, number, productCode } = this.form
       this.btnLoading = true
       const params = {
+        productName: this.checkedProduct || '',
         complainDetail: description,
         imgUrl: (this.questionImages || []).join(','),
         dictid,
