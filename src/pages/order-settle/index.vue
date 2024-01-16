@@ -85,6 +85,7 @@ export default {
     const params = Taro.getCurrentInstance().router.params
     this.orderNumber = params.number
     this.totalFee = params.money
+    this.productId = params.productId
     this.wechatUrl = decodeURIComponent(params.payUrl)
     this.tradeNumber = params.trade
   },
@@ -123,7 +124,7 @@ export default {
           orderNumber: this.orderNumber,
         })
           .then(() => {
-            Taro.navigateTo({
+            Taro.redirectTo({
               url: `/pages/order-detail/index?order=${this.orderNumber}`,
             })
           })
@@ -145,7 +146,7 @@ export default {
           .then(data => {
             if (data.surplusPage === '01') {
               Taro.navigateTo({
-                url: `/pages/pay-countdown/index?orderNumber=${this.orderNumber}&tradeNumber=${this.tradeNumber}`,
+                url: `/pages/pay-countdown/index?orderNumber=${this.orderNumber}&tradeNumber=${this.tradeNumber}&productId=${this.productId}`,
               })
             } else {
               wx.requestPayment({

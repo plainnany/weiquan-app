@@ -442,7 +442,7 @@ export default {
                 title: '支付成功',
                 icon: 'success',
               })
-              Taro.navigateTo({ url: `/pages/order/index` })
+              Taro.redirectTo({ url: `/pages/order/index` })
             }
           })
           .catch(err => {
@@ -461,7 +461,7 @@ export default {
           })
           .then(data => {
             if (data.surplusPage === '01') {
-              Taro.navigateTo({
+              Taro.redirectTo({
                 url: `/pages/pay-countdown/index?orderNumber=${this.payData.orderNumber}&tradeNumber=${this.payData.out_trade_no}`,
               })
             } else {
@@ -470,7 +470,7 @@ export default {
                 appId: data.appid,
                 package: data.packageStr,
                 success: res => {
-                  Taro.redirectTo({ url: '/pages/order/index?type=all' })
+                  Taro.redirectTo({ url: '/pages/order/index?type=to-pay' })
                 },
                 fail: err => {
                   this.showToast(err)

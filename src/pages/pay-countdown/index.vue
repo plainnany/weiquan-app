@@ -3,14 +3,14 @@
   <view class="pay-countdown">
     <view class="pay-countdown-item">
       <view class="pay-countdown-title">
-        <image :src="editIcon" />
+        <image :src="shopIcon" />
         <text class="label">来自</text>
       </view>
       <view class="pay-countdown-content">味全食品</view>
     </view>
     <view class="pay-countdown-item">
       <view class="pay-countdown-title">
-        <image :src="editIcon" />
+        <image :src="moneyIcon" />
         <text class="label">金额</text>
       </view>
       <view class="pay-countdown-content">{{ total_fee }}</view>
@@ -31,7 +31,8 @@
 
 <script>
 import './index.less'
-import editIcon from '@/images/edit.png'
+import moneyIcon from './images/jb.png'
+import shopIcon from './images/dp.png'
 import { setTitle } from '@/utils'
 import Taro from '@tarojs/taro'
 
@@ -39,7 +40,8 @@ export default {
   components: {},
   data() {
     return {
-      editIcon,
+      moneyIcon,
+      shopIcon,
       countDown: '',
       orderNumber: '',
       errorToast: {
@@ -54,9 +56,10 @@ export default {
   computed: {},
   mounted() {
     setTitle({ title: '微信支付' })
-    const { orderNumber, tradeNumber } = Taro.getCurrentInstance().router.params
+    const { orderNumber, tradeNumber, productId } = Taro.getCurrentInstance().router.params
     this.orderNumber = orderNumber
     this.tradeNumber = tradeNumber
+    this.productId = productId
     this.getDetail()
   },
   methods: {
@@ -73,18 +76,17 @@ export default {
     getDetail() {
       this.$API
         .payCountdown({
-          orderNumber: this.orderNumber || '2024011421274471123456789',
+          orderNumber: this.orderNumber,
         })
         .then(data => {
           this.detailData = data
           this.total_fee = data.payInfo?.total_fee
           this.handleCountDown()
-          // this.countdown = data
         })
         .catch(err => this.showToast(err))
     },
     handleCountDown() {
-      if (!this.detailData.surplus) return
+      if (!this.detailData.surplus || this.detailData.surplus <= 0) return
       const timeDifference = this.detailData.surplus
 
       const minutes = Math.floor(timeDifference / 60)
@@ -136,13 +138,15 @@ export default {
         })
         .then(data => {
           this.btnLoading = false
+          // Taro.reLaunch({ url: `/pages/pay-countdown/result?orderNumber=${this.orderNumber}&productId=${this.productId}` })
+
           // 调用微信支付接口
           wx.requestPayment({
             ...data,
             appId: data.appid,
             package: data.packageStr,
             success: res => {
-              Taro.redirectTo({ url: '/pages/order/index?type=all' })
+              Taro.reLaunch({ url: `/pages/pay-countdown/result?orderNumber=${this.orderNumber}&productId=${this.productId}` })
             },
             fail: err => {
               this.showToast(err)

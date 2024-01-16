@@ -277,12 +277,12 @@ export default {
     },
     handleResult(data) {
       if (data && data.accountType === '02') {
-        Taro.navigateTo({ url: '/pages/order/index?type=done' })
+        Taro.redirectTo({ url: '/pages/order/index?type=to-pay' })
       } else if (data.pay) {
-        Taro.navigateTo({
+        Taro.redirectTo({
           url: `/pages/order-settle/index?number=${data.pay.orderNumber}&money=${data.pay.total_fee}&trade=${
             data.pay.out_trade_no
-          }&payUrl=${encodeURIComponent(data.pay.wechatUrl)}`,
+          }&payUrl=${encodeURIComponent(data.pay.wechatUrl)}&productId=${this.params.productId}`,
         })
       }
     },

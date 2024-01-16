@@ -37,6 +37,7 @@ export default defineAppConfig({
     'pages/image-preview/index', // 收退货单
     'pages/invoice/index', // 开票申请
     'pages/pay-countdown/index', // 微信支付倒计时
+    'pages/pay-countdown/result', // 支付结果页面
   ],
   tabBar: {
     color: '#666666',
