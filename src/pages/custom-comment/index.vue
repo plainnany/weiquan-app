@@ -52,8 +52,10 @@ export default {
     }
   },
   mounted() {
-    this.getComplainList()
     setTitle({ title: '查看客诉' })
+  },
+  onShow() {
+    this.getComplainList()
   },
   methods: {
     clickTab({ key }) {
