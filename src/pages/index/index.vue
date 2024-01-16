@@ -3,7 +3,7 @@
     <view class="home-info">
       <SearchBar />
       <view class="banner">
-        <swiper :indicator-dots="true" :autoplay="true">
+        <swiper :indicator-dots="true" :autoplay="true" :circular="true">
           <swiper-item v-for="(banner, index) in banners" :key="index" @tap="handleLink(banner.jumpLink)">
             <image :src="banner.imageUrl" />
           </swiper-item>

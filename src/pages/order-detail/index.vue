@@ -132,7 +132,7 @@
       <view></view>
       <view class="flex-between-center">
         <nan-button type="plain" @tap="buyAgain" v-if="!isTodayDelivery">再下一单</nan-button>
-        <nan-button type="plain" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="cancelOrder">取消订单</nan-button>
+        <nan-button type="plain" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="handleCancelOrder">取消订单</nan-button>
         <nan-button type="primary" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="handlePay">立即支付</nan-button>
         <nan-button type="primary" v-if="isTodayDelivery" @tap="confirmDelivery">确认订单</nan-button>
       </view>
@@ -158,6 +158,17 @@
     <view class="toast" v-if="errorToast.visible">
       <text>{{ errorToast.message }}</text></view
     >
+    <Modal
+      :visible="cancelDialog.visible"
+      v-if="cancelDialog.visible"
+      :title="cancelDialog.title"
+      cancelText="放弃"
+      confirmText="取消订单"
+      @cancel="() => (cancelDialog = {})"
+      @confirm="cancelOrder()"
+    >
+      <view>{{ cancelDialog.content }}</view>
+    </Modal>
   </view>
 </template>
 
@@ -176,9 +187,10 @@ import orderDetailIcon from '@/images/order-detail.png'
 import orderDetail2Icon from '@/images/order-detail-2.png'
 import orderDetailEndIcon from '@/images/order-detail-end.png'
 import orderDetailPayIcon from '@/images/order-detail-pay.png'
+import Modal from '../setting/modal.vue'
 
 export default {
-  components: {},
+  components: { Modal },
   data() {
     return {
       locationIcon,
@@ -220,6 +232,9 @@ export default {
       errorToast: {
         visible: false,
         message: '',
+      },
+      cancelDialog: {
+        visible: false,
       },
     }
   },
@@ -379,7 +394,7 @@ export default {
         if (this.minutes === 0 && this.seconds === 0) {
           clearTimeout(this.timer)
           this.countDown = ''
-          Taro.navigateTo({ url: '/pages/order/index' })
+          Taro.redirectTo({ url: '/pages/order/index' })
         } else {
           this.countDown = `${this.minutes}:${this.seconds <= 9 ? '0' + this.seconds : this.seconds}`
           this.setCountDown()
@@ -392,7 +407,7 @@ export default {
           mainOrderNumber: this.orderDetail.customerOrderCode,
         })
         .then(data => {
-          Taro.navigateTo({ url: `/pages/order/index` })
+          Taro.redirectTo({ url: `/pages/order/index?type=to-pay` })
         })
     },
     handlePay() {
@@ -415,6 +430,13 @@ export default {
     },
     cancelModal() {
       this.showTipModal = false
+    },
+    handleCancelOrder() {
+      this.cancelDialog = {
+        title: '删除订单',
+        content: '一旦取消订单，将不再显示',
+        visible: true,
+      }
     },
     handleConfirm() {
       if (this.payMethod === 'company-pocket') {

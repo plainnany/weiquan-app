@@ -1,7 +1,7 @@
 <template>
   <view class="product-detail">
     <view class="product-banner" :class="{ extra: hasDonate }">
-      <swiper :autoplay="false" @change="onSwiperChange" :indicator-active-color="swiperOptions.indicatorColor">
+      <swiper :autoplay="false" @change="onSwiperChange" :indicator-active-color="swiperOptions.indicatorColor" :circular="true">
         <swiper-item v-for="(imageUrl, index) in product.images" :key="index">
           <image :src="imageUrl" />
         </swiper-item>

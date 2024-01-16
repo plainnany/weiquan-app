@@ -121,7 +121,7 @@
                     <view class="btn-plain" @tap.stop="handleDelivery(order, '02')" v-if="order.returnFlg === '01'">退货单</view>
                     <view class="btn-plain" @tap.stop="buyAgain(order)">再下一单</view>
                     <view class="flex-between-center" v-if="order.state === '01'">
-                      <view class="btn-plain" @tap.stop="cancelOrder(order)">取消订单</view>
+                      <view class="btn-plain" @tap.stop="handleCancelOrder(order)">取消订单</view>
                       <view class="btn-primary" @tap.stop="handlePay(order)">立即支付</view>
                     </view>
                     <view v-if="order.state === '05'" class="btn-primary" @tap.stop="addQuestion(order)">问题反馈</view>
@@ -132,6 +132,17 @@
           </view>
         </scroll-view>
       </view>
+      <Modal
+        :visible="cancelDialog.visible"
+        v-if="cancelDialog.visible"
+        :title="cancelDialog.title"
+        cancelText="放弃"
+        confirmText="取消订单"
+        @cancel="() => (cancelDialog = {})"
+        @confirm="cancelOrder(cancelDialog.order)"
+      >
+        <view>{{ cancelDialog.content }}</view>
+      </Modal>
     </view>
     <view v-if="payDialogVisible" class="order-pay-modal">
       <view :class="['order-pay-modal-wrap']" @tap="() => (payDialogVisible = false)"></view>
@@ -165,9 +176,12 @@ import wechatIcon from '@/images/wechat.png'
 import weipocketIcon from '@/images/wei-pocket.png'
 import closeIcon from '@/images/close.png'
 import phoneCallIcon from '@/images/phone-call.png'
+import Modal from '../setting/modal.vue'
 
 export default {
-  components: {},
+  components: {
+    Modal,
+  },
   data() {
     return {
       activeTab: 'all',
@@ -243,6 +257,9 @@ export default {
       errorToast: {
         visible: false,
         message: '',
+      },
+      cancelDialog: {
+        visible: false,
       },
     }
   },
@@ -329,12 +346,21 @@ export default {
       this.pageNo++
       this.getOrder(true)
     },
+    handleCancelOrder(order) {
+      this.cancelDialog = {
+        title: '删除订单',
+        content: '一旦取消订单，将不再显示',
+        visible: true,
+        order,
+      }
+    },
     cancelOrder(order) {
       this.$API
         .deleteOrder({
           mainOrderNumber: order.orderNumber,
         })
         .then(data => {
+          this.cancelDialog = {}
           const index = this.orderList.findIndex(v => v.orderNumber === order.orderNumber)
           if (index > -1) {
             this.orderList.splice(index, 1)
