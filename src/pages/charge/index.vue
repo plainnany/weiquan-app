@@ -69,7 +69,7 @@ export default {
         })
         .then(data => {
           Taro.navigateTo({
-            url: `/pages/pay-countdown/index?orderNumber=${data.orderNumber}&tradeNumber=${data.out_trade_no}`,
+            url: `/pages/pay-countdown/index?orderNumber=${data.orderNumber}&tradeNumber=${data.out_trade_no}&from=charge`,
           })
         })
         .finally(() => {

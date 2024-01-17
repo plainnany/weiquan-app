@@ -146,7 +146,7 @@ export default {
           .then(data => {
             if (data.surplusPage === '01') {
               Taro.navigateTo({
-                url: `/pages/pay-countdown/index?orderNumber=${this.orderNumber}&tradeNumber=${this.tradeNumber}&productId=${this.productId}`,
+                url: `/pages/pay-countdown/index?orderNumber=${this.orderNumber}&tradeNumber=${this.tradeNumber}&productId=${this.productId}&from=detail`,
               })
             } else {
               wx.requestPayment({

@@ -56,10 +56,11 @@ export default {
   computed: {},
   mounted() {
     setTitle({ title: '微信支付' })
-    const { orderNumber, tradeNumber, productId } = Taro.getCurrentInstance().router.params
+    const { orderNumber, tradeNumber, productId, from } = Taro.getCurrentInstance().router.params
     this.orderNumber = orderNumber
     this.tradeNumber = tradeNumber
     this.productId = productId
+    this.from = from
     this.getDetail()
   },
   methods: {
@@ -138,7 +139,6 @@ export default {
         })
         .then(data => {
           this.btnLoading = false
-          // Taro.reLaunch({ url: `/pages/pay-countdown/result?orderNumber=${this.orderNumber}&productId=${this.productId}` })
 
           // 调用微信支付接口
           wx.requestPayment({
@@ -146,7 +146,13 @@ export default {
             appId: data.appid,
             package: data.packageStr,
             success: res => {
-              Taro.reLaunch({ url: `/pages/pay-countdown/result?orderNumber=${this.orderNumber}&productId=${this.productId}` })
+              if (this.from === 'charge') {
+                Taro.redirectTo({ url: `/pages/cost/detail` })
+              } else if (this.from === 'detail') {
+                Taro.reLaunch({ url: `/pages/pay-countdown/result?orderNumber=${this.orderNumber}&productId=${this.productId}` })
+              } else {
+                Taro.redirectTo({ url: `/pages/order/index?type=to-pay` })
+              }
             },
             fail: err => {
               this.showToast(err)
