@@ -150,6 +150,11 @@ export default {
                 Taro.redirectTo({ url: `/pages/cost/detail` })
               } else if (this.from === 'detail') {
                 Taro.reLaunch({ url: `/pages/pay-countdown/result?orderNumber=${this.orderNumber}&productId=${this.productId}` })
+              } else if (this.from === 'h5') {
+                const url = encodeURIComponent(`https://wsorder.weichuan.com.cn/paySuccess.htm?out_trade_no=${this.tradeNumber}`)
+                Taro.redirectTo({
+                  url: `/pages/web-view/index?url=${url}`,
+                })
               } else {
                 Taro.redirectTo({ url: `/pages/order/index?type=to-pay` })
               }
