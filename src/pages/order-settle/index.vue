@@ -36,10 +36,12 @@ import wechatIcon from '@/images/wechat.png'
 import alipayIcon from '@/images/alipay.png'
 import weipocketIcon from '@/images/wei-pocket.png'
 import Taro from '@tarojs/taro'
+import ToastMixin from '@/mixin/toast'
 
 export default {
   name: 'cost',
   components: {},
+  mixins: [ToastMixin],
   data() {
     return {
       orderNumber: '',
@@ -48,10 +50,6 @@ export default {
       wechatIcon,
       payMethod: 'weixin-pocket',
       showTipModal: false,
-      errorToast: {
-        visible: false,
-        message: '',
-      },
     }
   },
   computed: {
@@ -90,16 +88,6 @@ export default {
     this.tradeNumber = params.trade
   },
   methods: {
-    showToast(err) {
-      this.errorToast.visible = true
-      this.errorToast.message = err.msg
-      setTimeout(() => {
-        this.errorToast = {
-          visible: false,
-          message: '',
-        }
-      }, 2000)
-    },
     onPayMethodChange(e) {
       this.payMethod = e.detail.value
     },

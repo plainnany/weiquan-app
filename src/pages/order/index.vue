@@ -177,11 +177,13 @@ import weipocketIcon from '@/images/wei-pocket.png'
 import closeIcon from '@/images/close.png'
 import phoneCallIcon from '@/images/phone-call.png'
 import Modal from '../setting/modal.vue'
+import ToastMixin from '@/mixin/toast'
 
 export default {
   components: {
     Modal,
   },
+  mixins: [ToastMixin],
   data() {
     return {
       activeTab: 'all',
@@ -254,10 +256,6 @@ export default {
       confirmBtnLoading: false,
       previewImg: '',
       showTipModal: false,
-      errorToast: {
-        visible: false,
-        message: '',
-      },
       cancelDialog: {
         visible: false,
       },
@@ -295,16 +293,6 @@ export default {
     this.getOrder({ type: 'all' })
   },
   methods: {
-    showToast(err) {
-      this.errorToast.visible = true
-      this.errorToast.message = err.msg
-      setTimeout(() => {
-        this.errorToast = {
-          visible: false,
-          message: '',
-        }
-      }, 2000)
-    },
     clickTab({ key }) {
       this.activeTab = key
       this.pageNo = 1
@@ -349,7 +337,7 @@ export default {
     handleCancelOrder(order) {
       this.cancelDialog = {
         title: '删除订单',
-        content: '一旦取消订单，将不再显示',
+        content: '一旦取消订单，将不再显示？',
         visible: true,
         order,
       }

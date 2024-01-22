@@ -35,19 +35,17 @@ import moneyIcon from './images/jb.png'
 import shopIcon from './images/dp.png'
 import { setTitle } from '@/utils'
 import Taro from '@tarojs/taro'
+import ToastMixin from '@/mixin/toast'
 
 export default {
   components: {},
+  mixins: [ToastMixin],
   data() {
     return {
       moneyIcon,
       shopIcon,
       countDown: '',
       orderNumber: '',
-      errorToast: {
-        visible: false,
-        message: '',
-      },
       detailData: {},
       total_fee: '',
       btnLoading: false,
@@ -64,16 +62,6 @@ export default {
     this.getDetail()
   },
   methods: {
-    showToast(err) {
-      this.errorToast.visible = true
-      this.errorToast.message = err.msg
-      setTimeout(() => {
-        this.errorToast = {
-          visible: false,
-          message: '',
-        }
-      }, 2000)
-    },
     getDetail() {
       this.$API
         .payCountdown({

@@ -128,12 +128,14 @@ import More from './more.vue'
 import questionIcon from '@/images/question.svg'
 import Modal from './modal.vue'
 import CustomForm from './custom-form.vue'
+import ToastMixin from '@/mixin/toast'
 
 // isApply 0未开票 1已申请 2开票失败 3已开票
 // invoiceFlg 01电子普票  02增票 03普票 04电子增
 
 export default {
   name: 'invoice-page',
+  mixins: [ToastMixin],
   components: {
     Card,
     More,
@@ -170,10 +172,6 @@ export default {
       questionIcon,
       dialogVisible: false,
       invoiceForm: {}, // 提交开票信息
-      errorToast: {
-        visible: false,
-        message: '',
-      },
     }
   },
   computed: {
@@ -353,16 +351,6 @@ export default {
           this.showToast(err)
           this.btnLoading = false
         })
-    },
-    showToast(err) {
-      this.errorToast.visible = true
-      this.errorToast.message = err.msg
-      setTimeout(() => {
-        this.errorToast = {
-          visible: '',
-          message: '',
-        }
-      }, 2000)
     },
     confirm() {
       this.btnLoading = true

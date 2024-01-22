@@ -97,9 +97,11 @@ import locationIcon from '@/images/location-2.png'
 import backIcon from '@/images/user/back.png'
 import Taro from '@tarojs/taro'
 import DateChooser from './date-chooser.vue'
+import ToastMixin from '@/mixin/toast'
 
 export default {
   components: { DateChooser },
+  mixins: [ToastMixin],
   data() {
     return {
       productList: [],
@@ -113,10 +115,6 @@ export default {
       isBatchOrder: false,
       currentProduct: null,
       totalFee: '',
-      errorToast: {
-        visible: false,
-        message: '',
-      },
     }
   },
   computed: {
@@ -164,16 +162,6 @@ export default {
         .catch(err => {
           this.showToast(err)
         })
-    },
-    showToast(err) {
-      this.errorToast.visible = true
-      this.errorToast.message = err.msg
-      setTimeout(() => {
-        this.errorToast = {
-          visible: false,
-          message: '',
-        }
-      }, 2000)
     },
     chooseDate(product) {
       this.productCode = product.productCode
@@ -236,10 +224,7 @@ export default {
     confirmOrder() {
       const hasNotDeliverTime = this.productList.some(v => !v.deliverTime)
       if (hasNotDeliverTime) {
-        Taro.showToast({
-          title: '请选择配送时间',
-          icon: 'error',
-        })
+        this.showToast({ msg: '未选择配送时间' })
         return
       }
       if (this.params.type === 'batch') {

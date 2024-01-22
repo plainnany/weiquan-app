@@ -188,9 +188,11 @@ import orderDetail2Icon from '@/images/order-detail-2.png'
 import orderDetailEndIcon from '@/images/order-detail-end.png'
 import orderDetailPayIcon from '@/images/order-detail-pay.png'
 import Modal from '../setting/modal.vue'
+import ToastMixin from '@/mixin/toast'
 
 export default {
   components: { Modal },
+  mixins: [ToastMixin],
   data() {
     return {
       locationIcon,
@@ -229,10 +231,6 @@ export default {
       orderType: '',
       showError: false,
       showTipModal: false,
-      errorToast: {
-        visible: false,
-        message: '',
-      },
       cancelDialog: {
         visible: false,
       },
@@ -434,7 +432,7 @@ export default {
     handleCancelOrder() {
       this.cancelDialog = {
         title: '删除订单',
-        content: '一旦取消订单，将不再显示',
+        content: '一旦取消订单，将不再显示？',
         visible: true,
       }
     },
@@ -537,16 +535,6 @@ export default {
         //   this.showError = false
         // }, 3000)
       }
-    },
-    showToast(err) {
-      this.errorToast.visible = true
-      this.errorToast.message = err.msg
-      setTimeout(() => {
-        this.errorToast = {
-          visible: false,
-          message: '',
-        }
-      }, 2000)
     },
     buyAgain() {
       this.$API

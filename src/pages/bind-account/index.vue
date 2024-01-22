@@ -20,6 +20,9 @@
       <nan-button type="primary" @tap="bindAccount">确定</nan-button>
     </view>
     <view class="footer-tip" @tap="forgetPassword"> 忘记密码？点击找回</view>
+    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -31,10 +34,12 @@ import './index.less'
 import accountIcon from '@/images/user/account.png'
 import pwdIcon from '@/images/user/pwd.png'
 import './index.less'
+import ToastMixin from '@/mixin/toast'
 
 export default {
   name: 'user',
   components: {},
+  mixins: [ToastMixin],
   data() {
     return {
       accountIcon,
@@ -90,10 +95,7 @@ export default {
           }
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'error',
-          })
+          this.showToast(err)
         })
     },
     accountTypeChange(e) {
