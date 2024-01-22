@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     goBack() {
-      Taro.redirectTo({ url: `/pages/product-detail/index?id=${this.productId}` })
+      Taro.redirectTo({ url: `/pages/order-detail/index?order=${this.orderNumber}` })
     },
     goHome() {
       Taro.reLaunch({ url: '/pages/index/index' })
