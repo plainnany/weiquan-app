@@ -280,17 +280,19 @@ export default {
       // promise,
     }
   },
-  created() {
-    this.$instance = Taro.getCurrentInstance()
-  },
-  mounted() {
-    setTitle({ title: '我的订单' })
+  onShow() {
     const params = this.$instance.router.params
     const { type } = params
     if (type) {
       this.activeTab = type
     }
     this.getOrder({ type: 'all' })
+  },
+  created() {
+    this.$instance = Taro.getCurrentInstance()
+  },
+  mounted() {
+    setTitle({ title: '我的订单' })
   },
   methods: {
     clickTab({ key }) {
@@ -427,6 +429,7 @@ export default {
             openid: unionId,
           })
           .then(data => {
+            this.hideModal()
             if (data.surplusPage === '01') {
               Taro.navigateTo({
                 url: `/pages/pay-countdown/index?orderNumber=${this.payData.orderNumber}&tradeNumber=${this.payData.out_trade_no}`,

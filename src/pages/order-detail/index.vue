@@ -480,6 +480,7 @@ export default {
             }),
           })
           .then(data => {
+            this.hideModal()
             if (data.surplusPage === '01') {
               Taro.redirectTo({
                 url: `/pages/pay-countdown/index?orderNumber=${this.payData.orderNumber}&tradeNumber=${this.payData.out_trade_no}`,

@@ -113,7 +113,7 @@ export default {
         })
           .then(() => {
             Taro.redirectTo({
-              url: `/pages/order-detail/index?order=${this.orderNumber}`,
+              url: `/pages/pay-countdown/result?orderNumber=${this.orderNumber}&productId=${this.productId}`,
             })
           })
           .catch(err => {
