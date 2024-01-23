@@ -21,7 +21,7 @@
       >
     </view>
     <view class="order-settle-footer">
-      <nan-button type="primary" @tap="confirmPay">立即支付</nan-button>
+      <nan-button type="primary" @tap="handleConfirm">立即支付</nan-button>
     </view>
     <view class="common-toast" v-if="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
