@@ -68,7 +68,7 @@ export default {
           money: this.chargeNumber,
         })
         .then(data => {
-          Taro.navigateTo({
+          Taro.redirectTo({
             url: `/pages/pay-countdown/index?orderNumber=${data.orderNumber}&tradeNumber=${data.out_trade_no}&from=charge`,
           })
         })

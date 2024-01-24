@@ -148,7 +148,13 @@
               <image :src="closeIcon" mode="" />
             </view> -->
           </view>
-          <pay-method :showTipModal="showTipModal" @change="onPayMethodChange" @cancel="cancelModal" @confirm="confirmPay" />
+          <pay-method
+            :showTipModal="showTipModal"
+            :initPayMethod="initPayMethod"
+            @change="onPayMethodChange"
+            @cancel="cancelModal"
+            @confirm="confirmPay"
+          />
           <view class="order-pay-footer">
             <nan-button type="primary" :loading="btnLoading" @tap="handleConfirm">立即支付</nan-button>
           </view>
@@ -314,6 +320,14 @@ export default {
     },
     showPrice() {
       return this.orderDetail.state === '01' && this.$store.state.userInfo.showPrice
+    },
+    initPayMethod() {
+      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
+        this.payMethod = 'weixin-2'
+        return 'weixin-2'
+      }
+
+      return 'weixin-pocket'
     },
   },
   mounted() {

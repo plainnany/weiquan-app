@@ -20,8 +20,8 @@
       </view>
       <view class="search-btn" @tap="onSearch">查询</view>
     </view>
-    <view class="quality-search" v-if="qualityIndex === 1">
-      <nan-button type="primary" @tap="onSearch()">查询</nan-button>
+    <view class="quality-search-action" v-if="qualityIndex === 1">
+      <nan-button type="primary" @tap="onSearch()" class="query-action">查询</nan-button>
     </view>
     <view v-if="!qualityList.length">
       <image class="quality-img" src="http://foodservice-main.oss-cn-hangzhou.aliyuncs.com/old/zjbg.png" mode=""></image>
@@ -113,10 +113,11 @@ export default {
             imageUrl: v,
             downloading: false,
           }))
-        }).catch(err => {
+        })
+        .catch(err => {
           Taro.showToast({
             title: err.msg,
-            icon: 'none'
+            icon: 'none',
           })
         })
     },

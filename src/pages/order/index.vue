@@ -152,7 +152,13 @@
           <view class="order-pay-title">
             <view style="color: #fa4a2d">支付金额 {{ userInfo.dianZhang ? `¥${payData.total_fee}` : '****' }}</view>
           </view>
-          <pay-method :showTipModal="showTipModal" @change="onPayMethodChange" @cancel="cancelModal" @confirm="confirmPay" />
+          <pay-method
+            :showTipModal="showTipModal"
+            :initPayMethod="initPayMethod"
+            @change="onPayMethodChange"
+            @cancel="cancelModal"
+            @confirm="confirmPay"
+          />
           <view class="order-pay-footer">
             <nan-button type="primary" :loading="btnLoading" @tap="handleConfirm">立即支付</nan-button>
           </view>
@@ -248,8 +254,6 @@ export default {
       payDialogVisible: false,
       payData: {},
       payMethod: 'weixin-pocket',
-      wrapAnimate: 'wrapAnimate',
-      frameAnimate: 'frameAnimate',
       btnLoading: false,
       delivery: [], // 当日收货订单列表
       phone: '', // 当前收货的手机号
@@ -270,6 +274,14 @@ export default {
         return !this.delivery.length && this.hasGetOrder
       }
       return !this.orderList.length && this.hasGetOrder
+    },
+    initPayMethod() {
+      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
+        this.payMethod = 'weixin-2'
+        return 'weixin-2'
+      }
+
+      return 'weixin-pocket'
     },
   },
   onShareAppMessage() {
@@ -457,17 +469,10 @@ export default {
 
     showModal() {
       this.payDialogVisible = true
-      // this.wrapAnimate = 'wrapAnimate'
-      // this.frameAnimate = 'frameAnimate'
     },
     hideModal() {
-      // this.wrapAnimate = 'wrapAnimateOut'
-      // this.frameAnimate = 'frameAnimateOut'
       this.payMethod = ''
       this.payDialogVisible = false
-      // setTimeout(() => {
-      //   this.payDialogVisible = false
-      // }, 400)
     },
     viewOrderDetail(orderNumber) {
       // 区分一下当天收货

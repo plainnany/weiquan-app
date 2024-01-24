@@ -133,9 +133,7 @@
           <view class="comment-page-item-label">上传视频凭证 <text style="color: #666">(最多一个视频且时长不长于15秒)</text></view>
           <view class="comment-page-upload">
             <view class="comment-page-image-item" v-if="videoUrl">
-              <video v-if="videoUrl" subtitles="视频" descriptions="描述">
-                <source :src="videoUrl" type="video/mp4" />
-              </video>
+              <video v-if="videoUrl" subtitles="视频" descriptions="描述" :src="videoUrl"></video>
               <view class="comment-page-image-delete" @tap="deleteVideo">
                 <image :src="deleteIcon" mode="" />
               </view>

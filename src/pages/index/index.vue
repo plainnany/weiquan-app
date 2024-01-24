@@ -14,7 +14,7 @@
           <view class="nav">
             <view @tap="handleNav('charge')" class="nav-item">
               <image :src="chargeImg" mode="" />
-              <view>支付充值</view>
+              <view>充值支付</view>
             </view>
             <view @tap="handleNav('sign')" class="nav-item">
               <image :src="signImg" mode="" />
@@ -88,6 +88,7 @@
         您还没有该功能的权限</view
       ></view
     >
+    <!-- <button @tap="test">点击</button> -->
   </view>
 </template>
 
@@ -152,6 +153,12 @@ export default {
     clearInterval(this.intervalTimer)
   },
   methods: {
+    // test() {
+    //   Taro.requestSubscribeMessage({
+    //     tmplIds: ['rSaHYjHdAcQ1sWDefbdUoxNfiC7OnsaiDQYu_T3Fga8'],
+    //     success(res) {},
+    //   })
+    // },
     scrollling() {
       const length = this.scrollLength // 滚动文字的宽度
       this.intervalTimer = setInterval(() => {

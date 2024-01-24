@@ -108,9 +108,9 @@
     </view>
     <view class="toast" v-if="showToast"> <text>加入成功</text></view>
     <Modal :visible="visible" title="提示" cancelText="拨打" confirmText="确定" @cancel="contact" @confirm="() => (visible = false)">
-      <view style="font-size: 28rpx; padding: 0 24rpx;"
+      <view style="font-size: 12px; padding: 0 24rpx;"
         >该商品暂不可订,如有需要可联系负责业务或致电服务电话咨询
-        <text class="contact-phone">{{ $store.state.userInfo?.customerService || '' }}</text>
+        <text class="contact-phone" @tap="contact">{{ $store.state.userInfo?.customerService || '' }}</text>
         ,感谢!</view
       >
     </Modal>
@@ -159,7 +159,7 @@ export default {
   },
 
   mounted() {
-    setTitle({ title: '产品详情' })
+    setTitle({ title: ' ' })
   },
   onShow() {
     this.$store.dispatch('getUserInfo')
@@ -198,21 +198,6 @@ export default {
       if (!this.product.sell) {
         this.visible = true
 
-        // Taro.showModal({
-        //   title: '提示',
-        //   content: `该商品暂不可订,如有需要可联系负责业务或致电服务电话咨询${this.$store.state.userInfo?.customerService || ''},感谢!`,
-        //   confirmColor: '#f55726',
-        //   cancelColor: '#f55726',
-        //   confirmText: '确认',
-        //   cancelText: '拨打',
-        //   icon: 'none',
-        //   success: res => {
-        //     if (res.cancel) {
-        //       this.contact()
-        //     }
-        //   },
-        //   fail: () => {},
-        // })
         return false
       }
 

@@ -48,7 +48,8 @@ export default {
       totalFee: '',
       alipayIcon,
       wechatIcon,
-      payMethod: 'weixin-pocket',
+      // payMethod: 'weixin-pocket',
+      payMethod: '',
       showTipModal: false,
     }
   },

@@ -39,6 +39,7 @@ import Modal from '@/pages/setting/modal.vue'
 export default {
   props: {
     showTipModal: Boolean,
+    initPayMethod: String,
   },
   components: {
     Modal,
@@ -47,10 +48,16 @@ export default {
     showTipModal(val) {
       this.visible = val
     },
+    initPayMethod: {
+      immediate: true,
+      handler(val) {
+        this.payMethod = val
+      },
+    },
   },
   data() {
     return {
-      payMethod: 'weixin-pocket',
+      payMethod: '',
       visible: false,
       wechatIcon,
     }
