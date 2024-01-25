@@ -488,7 +488,7 @@ export default {
     },
     // 查看物流
     viewLogistics() {
-      Taro.navigateTo({ url: `/pages/web-view/index?url=${this.$store.state.userInfo.mapUrl}` })
+      Taro.navigateTo({ url: `/pages/web-view/index?url=${encodeURIComponent(this.$store.state.userInfo.mapUrl)}` })
     },
     // 确认收货
     confirmDelivery() {

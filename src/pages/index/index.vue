@@ -258,7 +258,7 @@ export default {
           icon: 'none',
         })
       }
-      Taro.navigateTo({ url: `/pages/web-view/index?url=${link}` })
+      Taro.navigateTo({ url: `/pages/web-view/index?url=${encodeURIComponent(link)}` })
     },
   },
 }
