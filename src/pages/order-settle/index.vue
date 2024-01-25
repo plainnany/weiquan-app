@@ -13,7 +13,7 @@
         <view class="order-settle-price" v-else>****</view>
       </view>
     </view>
-    <view class="common-card order-settle-pay">
+    <view class="order-settle-pay">
       <view class="order-settle-pay-title">支付选择</view>
       <pay-method :showTipModal="showTipModal" @change="onPayMethodChange" @cancel="cancelModal" @confirm="confirmPay" />
       <view class="tips"

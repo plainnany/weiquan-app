@@ -3,7 +3,15 @@
     <view class="home-info">
       <SearchBar />
       <view class="banner">
-        <swiper :indicator-dots="true" :autoplay="true" :circular="true">
+        <swiper
+          :indicator-dots="true"
+          :indicator-color="'#515151'"
+          :indicator-active-color="'#fff'"
+          :interval="3000"
+          :autoplay="true"
+          :circular="true"
+          :easing-function="'easeInOutCubic'"
+        >
           <swiper-item v-for="(banner, index) in banners" :key="index" @tap="handleLink(banner.jumpLink)">
             <image :src="banner.imageUrl" />
           </swiper-item>
@@ -49,7 +57,7 @@
                 class="scroll"
                 id="scroll"
                 ref="scroll"
-                :style="{ transform: `translateX(-${distance}px)`, transition: distance > 0 ? 'all 0.3s' : '' }"
+                :style="{ transform: `translateX(-${distance}px)`, transition: distance > 0 ? 'all 0.4s' : '' }"
               >
                 {{ message }}
               </view>
@@ -204,7 +212,6 @@ export default {
               this.windowWidth = wx.getSystemInfoSync().windowWidth // 屏幕宽度
               this.scrollLength = rect.width
               this.space = this.windowWidth
-              console.log(this.scrollLength)
               this.startScroll = true
               clearInterval(this.intervalTimer)
               this.scrollling() // 第一个字消失后立即从右边出现

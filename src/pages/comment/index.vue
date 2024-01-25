@@ -93,7 +93,8 @@
           <view class="input-wrapper">
             <picker mode="selector" :range="returnFlgRange" @change="returnFlgChange" range-key="label">
               <text v-if="form.returnFlg">{{ form.returnFlg === '01' ? '是' : '否' }}</text>
-              <text v-else>是否退回</text>
+              <text v-else>请选择</text>
+              <image class="arrow" :src="arrowIcon" />
             </picker>
           </view>
         </view>
@@ -106,7 +107,7 @@
         <view class="comment-page-item">
           <view class="comment-page-item-label">产品数量</view>
           <view class="input-wrapper">
-            <input v-model="form.number" placeholder="请输入异常数量" />
+            <input type="number" v-model="form.number" placeholder="请输入异常数量" />
           </view>
         </view>
         <view class="comment-page-item">
@@ -143,16 +144,27 @@
         </view>
       </view>
       <view class="comment-page-footer padding" v-if="type === 'add'">
-        <nan-button type="primary" @tap="submit" :loading="btnLoading">确认提交</nan-button>
+        <nan-button type="primary" @tap="handleSubmit" :loading="btnLoading">确认提交</nan-button>
       </view>
       <view class="comment-page-footer" v-if="type === 'todo'">
         <view class="action-btn btn-delete" @tap="handleDelete">删除</view>
-        <view class="action-btn" @tap="submit">保存</view>
+        <view class="action-btn" @tap="handleSubmit">保存</view>
       </view>
       <view class="common-toast" v-if="errorToast.visible && errorToast.message">
         <text>{{ errorToast.message }}</text></view
       >
     </view>
+    <Modal
+      :visible="confirmDialog.visible"
+      v-if="confirmDialog.visible"
+      :title="confirmDialog.title"
+      cancelText="取消"
+      confirmText="确定"
+      @cancel="() => (confirmDialog = {})"
+      @confirm="submit"
+    >
+      <view style="padding: 0 24rpx">{{ confirmDialog.content }}</view>
+    </Modal>
   </view>
 </template>
 
@@ -166,9 +178,10 @@ import deleteIcon from '@/images/delete.svg'
 import { BASE_URL } from '@/const'
 import arrowIcon from '@/images/arrow-down.png'
 import phoneIcon from '@/images/drive_phone.png'
+import Modal from '../setting/modal.vue'
 
 export default {
-  components: {},
+  components: { Modal },
   data() {
     return {
       arrowIcon,
@@ -210,6 +223,7 @@ export default {
         message: '',
       },
       tip: '',
+      confirmDialog: {},
     }
   },
   computed: {
@@ -408,6 +422,18 @@ export default {
     },
     deleteVideo() {
       this.videoUrl = ''
+    },
+    handleSubmit() {
+      if (this.form.dictid === '2.03') {
+        this.confirmDialog = {
+          title: '提示',
+          content:
+            '烦请留存异常产品至少三个工作日我司会尽快联系您并与您确认问题产品寄送测样。请将异常产品标记区分良次号存放。感谢您的合作!',
+          visible: true,
+        }
+      } else {
+        this.submit()
+      }
     },
     submit() {
       if (this.btnDisabled) {

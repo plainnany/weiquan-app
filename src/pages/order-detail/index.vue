@@ -330,6 +330,9 @@ export default {
       return 'weixin-pocket'
     },
   },
+  beforeDestroy() {
+    clearTimeout(this.timer)
+  },
   mounted() {
     setTitle({ title: '我的订单' })
   },

@@ -1,6 +1,6 @@
 <template>
   <view class="product-page">
-    <icon class="search-icon" type="search" size="12" @tap="goSearch" />
+    <icon class="search-icon" :color="'#000'" type="search" size="12" @tap="goSearch" />
     <view class="product-items">
       <scroll-view :scroll-x="true" :key="scrollViewKey" :scroll-into-view="scrollId" :show-scrollbar="false" :enhanced="true">
         <view

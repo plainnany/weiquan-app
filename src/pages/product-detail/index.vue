@@ -1,5 +1,5 @@
 <template>
-  <view class="product-detail">
+  <view class="product-detail" :style="{ 'padding-bottom': footerBottom }">
     <view class="product-banner" :class="{ extra: hasDonate }">
       <swiper :autoplay="false" @change="onSwiperChange" :indicator-active-color="swiperOptions.indicatorColor" :circular="true">
         <swiper-item v-for="(imageUrl, index) in product.images" :key="index">
@@ -43,6 +43,8 @@
                 @tap.stop="() => {}"
                 @focus.stop="() => {}"
                 @blur.stop="onBlur(product)"
+                @confirm="onChange"
+                @keyboardheightchange="keyboardheightchange"
                 placeholder=""
               />
             </view>
@@ -94,7 +96,7 @@
         </view>
       </view>
     </view>
-    <view class="product-footer">
+    <view class="product-footer" :style="{ bottom: footerBottom }">
       <!-- <view class="product-footer-action" @tap="contact">
         <image :src="serviceIcon" mode="" />
         <view>客服</view>
@@ -146,6 +148,7 @@ export default {
       showToast: false,
       visible: false,
       giftIcon,
+      footerBottom: 0,
     }
   },
   computed: {
@@ -166,6 +169,9 @@ export default {
     this.getProduct()
   },
   methods: {
+    keyboardheightchange(e) {
+      this.footerBottom = e.detail.height + 'px'
+    },
     handleNav(url) {
       Taro.switchTab({ url })
     },
@@ -251,9 +257,11 @@ export default {
       })
     },
     onBlur(product) {
+      this.footerBottom = 0
       if (!product.minOrderQuantity) return
       product.minOrderQuantity = parseInt(product.minOrderQuantity)
     },
+    onChange() {},
   },
 }
 </script>

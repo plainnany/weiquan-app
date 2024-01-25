@@ -71,7 +71,7 @@
       <text>个订单</text>
       <text v-if="!isMonthUser">
         ，
-        <text style="color: red">{{ billData.amount || '0' }}</text
+        <text style="color: red">{{ billData.amount || '0.00' }}</text
         >元
       </text>
     </view>
