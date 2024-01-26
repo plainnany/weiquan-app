@@ -47,19 +47,20 @@
           </view> -->
           </view>
           <view class="notice">
-            <image :src="notificationImg" mode="" />
-            <text>系统通知：</text>
-            <view
-              class="scroll-wrapper"
-              :style="{ overflow: startScroll ? 'hidden' : '', width: startScroll ? 'calc(100% - 180rpx)' : 'auto' }"
-            >
-              <view
-                class="scroll"
-                id="scroll"
-                ref="scroll"
-                :style="{ transform: `translateX(-${distance}px)`, transition: distance > 0 ? 'all 0.4s' : '' }"
-              >
-                {{ message }}
+            <view class="notice-left">
+              <image :src="notificationImg" mode="" />
+              <text>系统通知：</text>
+            </view>
+            <view class="scroll-bg">
+              <view class="scroll-wrapper" :style="{ overflow: startScroll ? 'hidden' : '', width: startScroll ? '100%' : 'auto' }">
+                <view
+                  class="scroll"
+                  id="scroll"
+                  ref="scroll"
+                  :style="{ transform: `translateX(-${distance}px)`, transition: distance > 0 ? 'all 0.3s ease' : '' }"
+                >
+                  {{ message }}
+                </view>
               </view>
             </view>
           </view>
@@ -141,7 +142,7 @@ export default {
       step: 1, // 滚动速度
       distance: 0, // 初始滚动距离
       space: 300,
-      interval: 50, // 时间间隔
+      interval: 40, // 时间间隔
       startScroll: false,
       scrollLength: 100,
     }
@@ -211,6 +212,7 @@ export default {
             .boundingClientRect(rect => {
               this.windowWidth = wx.getSystemInfoSync().windowWidth // 屏幕宽度
               this.scrollLength = rect.width
+              console.log(this.scrollLength)
               this.space = this.windowWidth
               this.startScroll = true
               clearInterval(this.intervalTimer)

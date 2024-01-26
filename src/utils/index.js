@@ -10,3 +10,26 @@ export function getSystemInfoSync() {
 
   return { windowWith, windowHeight }
 }
+
+const stringify = obj =>
+  Object.keys(obj)
+    .filter(v => obj[v])
+    .map(v => `${v}=${obj[v]}`)
+    .join('&')
+
+const parse = s => {
+  const string = s.split('?')[1]
+  const obj = {}
+  string.split('&').forEach(item => {
+    const [key, value] = item.split('=')
+    if (value && value !== 'undefined') {
+      obj[key] = value
+    }
+  })
+  return obj
+}
+
+export const qs = {
+  stringify,
+  parse,
+}

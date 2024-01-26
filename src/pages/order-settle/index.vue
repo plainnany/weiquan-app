@@ -17,7 +17,7 @@
       <view class="order-settle-pay-title">支付选择</view>
       <pay-method :showTipModal="showTipModal" @change="onPayMethodChange" @cancel="cancelModal" @confirm="confirmPay" />
       <view class="tips"
-        >注:选择好友代付后，请于15分钟内支付。若支付不成功或超时支付，请前往“账户余额及充值查询退款记录，或联系客服查询。感谢!</view
+        >注:选择好友代付后，请于15分钟内支付。若支付不成功或超时支付，请前往‘账户余额及充值’查询退款记录，或联系客服查询。感谢!</view
       >
     </view>
     <view class="order-settle-footer">

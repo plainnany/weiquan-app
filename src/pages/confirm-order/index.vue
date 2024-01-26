@@ -15,35 +15,39 @@
       </view> -->
     </view>
     <view v-for="product in productList" :key="product.productId">
-      <view class="common-card">
+      <view class="product-item">
         <view class="delivery-date" @tap="chooseDate(product)">
-          <view style="color: #666">
-            配送时间
-          </view>
-          <view class="confirm-order-nav">
-            <image :src="backIcon" mode="" />
-          </view>
-        </view>
-        <!-- 批量 有搭赠单 -->
-        <view class="delivery-date-item" v-if="isBatchOrder" v-for="(item, index) in product.weekStr || []" :key="item">
-          <view class="flex-between-center donate">
-            <view>{{ item }}</view>
-            <view class="flex-between-center" v-if="product.donateList && product.donateList[index] && product.donateList[index].img">
-              <view class="donate-img">
-                <image :src="product.donateList[index].img" mode="" />
-              </view>
-              <view class="donate-num">X {{ product.donateList[index].num }}</view>
-              <view class="donate-tag">搭赠单</view>
+          <view class="delivery-date-bg">
+            <view style="color: #666">
+              配送时间
+            </view>
+            <view class="confirm-order-nav">
+              <image :src="backIcon" mode="" />
             </view>
           </view>
         </view>
+        <!-- 批量 有搭赠单 -->
+        <template v-if="isBatchOrder">
+          <view class="delivery-date-item" v-for="(item, index) in product.weekStr || []" :key="item">
+            <view class="flex-between-center donate">
+              <view>{{ item }}</view>
+              <view class="flex-between-center" v-if="product.donateList && product.donateList[index] && product.donateList[index].img">
+                <view class="donate-img">
+                  <image :src="product.donateList[index].img" mode="" />
+                </view>
+                <view class="donate-num">X {{ product.donateList[index].num }}</view>
+                <view class="donate-tag">搭赠单</view>
+              </view>
+            </view>
+          </view>
+        </template>
         <!-- 单个 -->
-        <view class="delivery-date-item is-single" v-else v-for="(item, index) in product.weekStr || []" :key="item">
+        <view class="delivery-date-item is-single" v-else v-for="item in product.weekStr || []" :key="item">
           <view class="flex-between-center donate">
             <view>{{ item }}</view>
           </view>
         </view>
-        <view class="confirm-order-item flex">
+        <view class="confirm-order-item flex" :class="{ 'is-batch': isBatchOrder }">
           <view class="flex">
             <view class="confirm-order-image">
               <image :src="product.productImage" mode="" />
@@ -80,9 +84,9 @@
       <view class="confirm-order-btn" @tap="confirmOrder">立即结算</view>
     </view>
     <view>
-      <nan-modal :visible="dateChooseVisible" v-if="dateChooseVisible" fullScreen>
+      <!-- <nan-modal :visible="dateChooseVisible" v-if="dateChooseVisible" fullScreen>
         <DateChooser :productCode="productCode" :isBatchOrder="isBatchOrder" @confirm="confirmDate" @cancel="cancelDate" />
-      </nan-modal>
+      </nan-modal> -->
     </view>
     <view class="common-toast" v-if="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
@@ -92,15 +96,16 @@
 
 <script>
 import './index.less'
-import { setTitle } from '@/utils'
+import { setTitle, qs } from '@/utils'
 import locationIcon from '@/images/location-2.png'
 import backIcon from '@/images/user/back.png'
 import Taro from '@tarojs/taro'
-import DateChooser from './date-chooser.vue'
+// import DateChooser from './date-chooser.vue'
 import ToastMixin from '@/mixin/toast'
 
 export default {
-  components: { DateChooser },
+  name: 'confirm-order',
+  // components: { DateChooser },
   mixins: [ToastMixin],
   data() {
     return {
@@ -109,11 +114,10 @@ export default {
       backIcon,
       params: {},
       userInfo: {},
-      deliverTime: '',
+      deliverTime: [],
       productCode: '',
       dateChooseVisible: false,
       isBatchOrder: false,
-      currentProduct: null,
       totalFee: '',
     }
   },
@@ -130,13 +134,20 @@ export default {
     setTitle({ title: '确认订单' })
     this.userInfo = this.$store.state.userInfo
   },
-  onShow() {
+  async onShow() {
     const instance = Taro.getCurrentInstance()
     this.params = instance.router.params
-    this.deliverTime = this.params.date || ''
     this.isBatchOrder = this.params.type === 'batch'
-    console.log(this.params)
-    this.getDetail()
+    await this.getDetail()
+    if (this.$store.state.deliverTime) {
+      this.productCode = this.$store.state.currentProduct.productCode
+      this.deliverTime = this.$store.state.deliverTime
+      this.confirmDate()
+    }
+  },
+  beforeDestroy() {
+    this.$store.commit('setDeliverTime', null)
+    this.$store.commit('setCurrentProduct', {})
   },
   methods: {
     getDetail() {
@@ -152,7 +163,7 @@ export default {
         }
       }
 
-      this.$API
+      return this.$API
         .paySettlement(params)
         .then(data => {
           if (data) {
@@ -164,14 +175,24 @@ export default {
         })
     },
     chooseDate(product) {
-      this.productCode = product.productCode
-      this.dateChooseVisible = true
-      setTitle({ title: '日期' })
+      // this.productCode = product.productCode
+      this.$store.commit('setCurrentProduct', product)
+      const query = qs.stringify({
+        productCode: product.productCode,
+        isBatchOrder: this.isBatchOrder,
+        productId: this.params.productId,
+        sum: this.params.sum,
+        shopIds: this.params.shopIds,
+      })
+      Taro.navigateTo({
+        url: `/pages/confirm-order/date-chooser?${query}`,
+      })
     },
-    confirmDate(params) {
-      const deliverTime = params.map(v => v.weekStr.split(' ')[0]).join(',')
-      const weekStr = params.map(v => v.weekStr)
-      this.deliverTime = deliverTime
+    confirmDate() {
+      // const deliverTime = params.map(v => v.weekStr.split(' ')[0]).join(',')
+      const weekStr = [...this.deliverTime]
+      // this.deliverTime = deliverTime
+      const deliverTime = this.deliverTime.map(v => v.split(' ')[0]).join(',')
       this.productList.forEach(product => {
         if (product.productCode === this.productCode) {
           product.deliverTime = deliverTime

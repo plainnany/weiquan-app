@@ -120,8 +120,8 @@
         <view class="comment-page-item">
           <view class="comment-page-item-label">上传凭证 <text style="color: #666">(请拍摄产品生产日期和异常情况图片上传)</text></view>
           <view class="comment-page-upload">
-            <view class="comment-page-image-item" v-for="(image, index) in questionImages" :key="index">
-              <image :src="image" mode="" />
+            <view class="comment-page-image-item" v-for="(imageUrl, index) in questionImages" :key="index">
+              <image :src="imageUrl" mode="" />
               <view class="comment-page-image-delete" @tap="deleteImage(index)">
                 <image :src="deleteIcon" mode="" />
               </view>
@@ -134,7 +134,7 @@
           <view class="comment-page-item-label">上传视频凭证 <text style="color: #666">(最多一个视频且时长不长于15秒)</text></view>
           <view class="comment-page-upload">
             <view class="comment-page-image-item" v-if="videoUrl">
-              <video v-if="videoUrl" subtitles="视频" descriptions="描述" :src="videoUrl"></video>
+              <video v-if="videoUrl" :src="videoUrl"></video>
               <view class="comment-page-image-delete" @tap="deleteVideo">
                 <image :src="deleteIcon" mode="" />
               </view>
@@ -261,10 +261,11 @@ export default {
     this.$instance = Taro.getCurrentInstance()
   },
   async mounted() {
-    const { code, productName, type } = this.$instance.router.params
+    const { code, productName, type, customerOrderCode } = this.$instance.router.params
     this.type = type // 已处理、未处理
     setTitle({ title: type === 'done' ? '客诉详情' : '问题反馈' })
     this.productName = productName
+    this.customerOrderCode = customerOrderCode
     await this.getProductList()
     await this.getComplainType()
 
@@ -308,7 +309,8 @@ export default {
         .catch(err => this.showToast(err))
     },
     getProductList() {
-      return this.$API.getComplaintProductList().then(data => {
+      const params = this.customerOrderCode ? { customerOrderCode: this.customerOrderCode } : {}
+      return this.$API.getComplaintProductList(params).then(data => {
         this.productList = data
         if (this.type === 'add') {
           this.checkedProduct = data[0]?.productName
@@ -428,7 +430,7 @@ export default {
         this.confirmDialog = {
           title: '提示',
           content:
-            '烦请留存异常产品至少三个工作日我司会尽快联系您并与您确认问题产品寄送测样。请将异常产品标记区分良次号存放。感谢您的合作!',
+            '烦请留存异常产品至少三个工作日，我司会尽快联系您并与您确认问题产品寄送测样。请将异常产品标记区分良号存放。感谢您的合作!',
           visible: true,
         }
       } else {

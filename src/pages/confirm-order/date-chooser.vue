@@ -1,9 +1,10 @@
 <template>
   <view class="date-chooser">
+    <view class="header" @tap="onConfirm">完成</view>
     <view class="weeks">
       <view class="week-item" v-for="item in weeks" :key="item.day">{{ item.text }}</view>
     </view>
-    <view v-for="(item, index) in dateList" :key="index">
+    <view v-for="(item, index) in dateList" :key="index" class="date-wrapper">
       <view class="month">{{ item.monthStr }} {{ item.year }}</view>
       <view class="date-row" v-for="round in Math.ceil(item.day.length / 7)" :key="round">
         <view
@@ -16,22 +17,24 @@
         >
       </view>
     </view>
-    <view class="footer">
+    <!-- <view class="footer">
       <nan-button @tap="() => $emit('cancel')">取消</nan-button>
       <nan-button type="primary" @tap="onConfirm">完成</nan-button>
-    </view>
+    </view> -->
   </view>
 </template>
 
 <script>
 import './date-chooser.less'
 import Taro from '@tarojs/taro'
+import { setTitle, qs } from '@/utils'
 
 export default {
-  props: {
-    productCode: String,
-    isBatchOrder: Boolean, // 是否是批量下单，批量下单的情况下，日期可以多选
-  },
+  name: 'date-chooser',
+  // props: {
+  //   productCode: String,
+  //   isBatchOrder: Boolean, // 是否是批量下单，批量下单的情况下，日期可以多选
+  // },
   components: {},
   data() {
     return {
@@ -77,10 +80,22 @@ export default {
         周六: 6,
         周日: 7,
       },
+      isBatchOrder: '',
+      productCode: '',
     }
   },
   computed: {},
-  mounted() {
+  onShow() {
+    const { productCode, isBatchOrder, productId, sum, shopIds } = Taro.getCurrentInstance().router.params
+    this.productCode = productCode
+    this.isBatchOrder = isBatchOrder === 'true'
+    this.restQuery = {
+      sum,
+      productId,
+      shopIds,
+      productCode,
+    }
+    setTitle({ title: '日期' })
     this.$API
       .dateChooser({
         productCode: this.productCode,
@@ -92,6 +107,7 @@ export default {
         }))
       })
   },
+  mounted() {},
   methods: {
     chooseDate(date, itemData) {
       // 如果是批量下单，日期可以多选
@@ -164,7 +180,19 @@ export default {
         }
       }
       if (query) {
-        this.$emit('confirm', query, weekStr)
+        const deliverTime = query.map(v => v.weekStr)
+        const pages = Taro.getCurrentPages()
+        const prevPage = pages[pages.length - 2]
+        Taro.navigateBack({
+          delta: 1,
+          success: res => {
+            // 不知道为啥生效，扔到store中处理了
+            this.$store.commit('setDeliverTime', deliverTime)
+            // prevPage.setData({
+            //   deliverTime2: deliverTime,
+            // })
+          },
+        })
       } else {
         Taro.showToast({
           title: '请选择配送时间',

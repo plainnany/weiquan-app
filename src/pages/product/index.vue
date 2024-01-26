@@ -23,9 +23,13 @@
               <view class="product-list-image"><image :src="product.productImage" mode=""/></view>
               <view class="product-list-detail">
                 <view class="product-list-title">
-                  <text class="sell" v-if="product.sell">订</text>
-                  {{ product.productName }}</view
-                >
+                  <view class="sell" v-if="product.sell">
+                    <image :src="dingImg" mode="" />
+                  </view>
+                  <text>
+                    {{ product.productName }}
+                  </text>
+                </view>
               </view>
               <!-- 是赠品 -->
               <view class="product-list-extra" v-if="product.isTpm === '01'">
@@ -47,6 +51,7 @@ import SearchBar from '../index/searchBar.vue'
 import shopIcon from '@/images/shop.png'
 import NanModal from '@/components/modal'
 import giftIcon from '@/images/gift.png'
+import dingImg from '@/images/ding.png'
 
 export default {
   components: { SearchBar, NanModal },
@@ -68,6 +73,7 @@ export default {
       // scrollTop: 0,
       scrollId: '',
       scrollViewKey: '',
+      dingImg,
     }
   },
   computed: {},

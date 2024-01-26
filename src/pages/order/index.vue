@@ -520,7 +520,7 @@ export default {
     },
     addQuestion(order) {
       const { productName } = order.orderListViews[0] || {}
-      Taro.navigateTo({ url: `/pages/comment/index?type=add&productName=${productName}` })
+      Taro.navigateTo({ url: `/pages/comment/index?type=add&productName=${productName}&customerOrderCode=${order.orderNumber}` })
     },
     // 收货单 01，退货单 02
     handleDelivery(item, type) {

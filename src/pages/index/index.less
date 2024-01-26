@@ -97,6 +97,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: #666;
     .dot {
       width: 32px;
       height: 32px;
@@ -181,29 +182,37 @@
       margin-right: 16px;
     }
 
-    > text {
-      width: 140px;
-      display: inline-table;
+    &-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+    }
+
+    .scroll-bg {
+      display: inline-block;
+      border-radius: 30px;
+      background-color: #ffeef0;
+      padding: 0 16px;
+      display: flex;
+      width: calc(100% - 220px);
     }
 
     .scroll-wrapper {
       // width: calc(100% - 190px);
-      display: inline-block;
       white-space: nowrap;
       // overflow: hidden;
-      background-color: #ffeef0;
-      border-radius: 30px;
-      padding: 0 3px;
       // text-overflow: ellipsis;
     }
 
     .scroll {
-      // transition: all 0.3s;
+      // transition: all 0.3s ease;
       // animation: sroll 10s ease-out infinite;
     }
   }
 
   .middle {
+    height: 150px;
     image {
       width: 100%;
       height: 150px;
