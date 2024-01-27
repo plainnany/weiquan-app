@@ -31,7 +31,7 @@
     font-size: 20px;
     position: absolute;
     top: -10px;
-    right: -16px;
+    right: 0;
     color: #fff;
     text-align: center;
     border-radius: 50%;
@@ -62,7 +62,10 @@
 
   .user-info {
     position: relative;
-    background: linear-gradient(306deg, #f7572c 0%, #f76c2c 100%);
+    background: url('../../images/user/bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    // background: linear-gradient(306deg, #f7572c 0%, #f76c2c 100%);
     // height: 420px;
 
     &-wrapper {
@@ -83,6 +86,8 @@
       border-radius: 50%;
       margin-right: 38px;
       overflow: hidden;
+      border: 6px solid #f7572c;
+      padding: 4px;
 
       image {
         width: 110px;
@@ -252,20 +257,29 @@
 
   .user-action {
     margin-top: 16px;
-    padding: 0 33px;
+
+    &-list {
+      // padding-left: 33px;
+    }
 
     .action-item {
-      padding: 16px 0;
       font-size: 26px;
       color: #333333;
       line-height: 24px;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid rgb(240, 242, 245);
+      padding-left: 33px;
+      border-bottom: 1px solid #fafafa;
 
-      &-text {
+      &-main {
         flex: 1;
-        margin-left: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid #eee;
+        padding: 16px 0;
+        margin-left: 32px;
+        margin-bottom: -1px;
       }
       &-link {
         image {
@@ -312,5 +326,4 @@
 .user-card {
   background: #ffffff;
   // box-shadow: 0px 2px 18px 0px rgba(227, 227, 227, 0.5);
-  border-radius: 19px;
 }

@@ -1,5 +1,5 @@
 <template>
-  <view class="product-detail" :style="{ 'padding-bottom': footerBottom }">
+  <view class="product-detail" :style="{ 'padding-bottom': footerBottom === 0 ? 0 : footerBottom + 'px' }">
     <view class="product-banner" :class="{ extra: hasDonate }">
       <swiper :autoplay="false" @change="onSwiperChange" :indicator-active-color="swiperOptions.indicatorColor" :circular="true">
         <swiper-item v-for="(imageUrl, index) in product.images" :key="index">
@@ -96,7 +96,7 @@
         </view>
       </view>
     </view>
-    <view class="product-footer" :style="{ bottom: footerBottom }">
+    <view class="product-footer" :style="{ bottom: footerBottom + 'px' }">
       <!-- <view class="product-footer-action" @tap="contact">
         <image :src="serviceIcon" mode="" />
         <view>客服</view>
@@ -149,6 +149,7 @@ export default {
       visible: false,
       giftIcon,
       footerBottom: 0,
+      pageScrollTop: 0, // 页面滚动距离
     }
   },
   computed: {
@@ -168,9 +169,16 @@ export default {
     this.$store.dispatch('getUserInfo')
     this.getProduct()
   },
+  onPageScroll(res) {
+    this.pageScrollTop = res.scrollTop
+  },
   methods: {
     keyboardheightchange(e) {
-      this.footerBottom = e.detail.height + 'px'
+      this.footerBottom = e.detail.height
+      const distance = 30
+      if (this.pageScrollTop < distance) {
+        wx.pageScrollTo({ scrollTop: distance })
+      }
     },
     handleNav(url) {
       Taro.switchTab({ url })

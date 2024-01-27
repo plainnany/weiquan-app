@@ -22,9 +22,7 @@
                 {{ product.productTime }}
               </view>
               <view class="product-detail-number">
-                <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)" :class="{ disable: decreaseDisabled(product) }"
-                  >-</view
-                >
+                <view class="product-action-btn" @tap.stop="decreaseProduct(product, index)">-</view>
                 <input
                   type="number"
                   v-model="product.productSum"
@@ -52,6 +50,9 @@
     <Modal :visible="tipVisible" title="" cancelText="取消" confirmText="追加订单" @cancel="cancelTip" @confirm="buyAgain">
       <view style="font-size: 32rpx; padding: 24rpx;">如需增加数量，请重新下单 </view>
     </Modal>
+    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -62,8 +63,10 @@ import { setTitle } from '@/utils'
 import DateChooser from './date-chooser.vue'
 import arrow from '@/images/arrow-down.png'
 import Modal from '../setting/modal.vue'
+import ToastMixin from '@/mixin/toast'
 
 export default {
+  mixins: [ToastMixin],
   data() {
     return {
       productList: [],
@@ -105,6 +108,11 @@ export default {
         })
         .then(data => {
           this.orderList = data || []
+          this.orderList.forEach(order => {
+            order.orderViews.forEach(item => {
+              item.originProductSum = item.productSum
+            })
+          })
         })
         .finally(() => {
           this.loading = false
@@ -134,7 +142,7 @@ export default {
       })
     },
     addProduct(product) {
-      if (this.isCashUser) {
+      if (this.isCashUser && product.productSum >= product.originProductSum) {
         this.currentProduct = product
         this.tipVisible = true
         return
@@ -172,10 +180,7 @@ export default {
           Taro.switchTab({ url: '/pages/user/index' })
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'error',
-          })
+          this.showToast(err)
         })
       // todo
     },
@@ -193,10 +198,7 @@ export default {
           Taro.switchTab({ url: '/pages/shop/index' })
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'none',
-          })
+          this.showToast(err)
         })
     },
   },

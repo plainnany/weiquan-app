@@ -30,10 +30,13 @@
       <view class="quality-list">
         <view class="quality-list-item" v-for="(item, index) in qualityList" :key="index">
           <image :src="item.imageUrl" mode="widthFix" @load="e => loadImage(e, index)" />
-          <nan-button type="primary" @tap="onDownload(item)" :loading="item.downloading">第{{ index + 1 }}页下载 </nan-button>
+          <nan-button type="primary" @tap="onDownload(item, index + 1)" :loading="item.downloading">第{{ index + 1 }}页下载 </nan-button>
         </view>
       </view>
     </view>
+    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -42,10 +45,12 @@ import './index.less'
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
 import arrowIcon from '@/images/arrow-down.png'
+import ToastMixin from '@/mixin/toast'
 import { BASE_URL } from '@/const'
 
 export default {
   components: {},
+  mixins: [ToastMixin],
   data() {
     return {
       arrowIcon,
@@ -74,18 +79,16 @@ export default {
   methods: {
     onSearch() {
       if (!this.productCode) {
-        Taro.showToast({
-          icon: 'error',
-          title: '请选择产品',
+        this.showToast({
+          msg: '请选择产品',
         })
         return
       }
 
       if (this.qualityIndex === 0) {
         if (!this.batchCode) {
-          Taro.showToast({
-            icon: 'error',
-            title: '请输入批次号',
+          this.showToast({
+            msg: '请输入批次号',
           })
           return
         }
@@ -115,10 +118,7 @@ export default {
           }))
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'none',
-          })
+          this.showToast(err)
         })
     },
     productChange(e) {
@@ -128,13 +128,13 @@ export default {
     qualityTypeChange(e) {
       this.qualityIndex = parseInt(e.detail.value)
     },
-    onDownload(item) {
+    onDownload(item, index) {
       if (item.downloading) return
       item.downloading = true
       const filename = new Date().getTime() + '.jpg'
       const savePath = wx.env.USER_DATA_PATH + '/' + filename
 
-      Taro.downloadFile({
+      wx.downloadFile({
         // header: 'content-type: image/jpg',
         // url: BASE_URL + '/downFile.ns?curl=' + item.imageUrl,
         url: item.imageUrl,
@@ -142,11 +142,11 @@ export default {
         success: res => {
           item.downloading = false
           const { filePath, tempFilePath } = res
-          Taro.saveImageToPhotosAlbum({
-            filePath: tempFilePath || filePath,
-            success() {
-              Taro.showToast({
-                title: '下载成功',
+          wx.saveImageToPhotosAlbum({
+            filePath: tempFilePath,
+            success: () => {
+              this.showToast({
+                msg: `保存第${index}页质检报告成功！`,
               })
             },
           })

@@ -63,7 +63,7 @@
           </view>
           <view class="confirm-order-price">
             <view v-show="showPrice" style="display: flex"
-              >¥ <text>{{ Number(product.total).toFixed(2) }}</text></view
+              >¥ <text>{{ product.total }}</text></view
             >
             <view>X {{ product.amount }}</view>
           </view>

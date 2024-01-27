@@ -311,9 +311,10 @@ export default {
       this.activeTab = key
       this.pageNo = 1
       this.complete = false
-      this.getOrder()
+      wx.redirectTo({ url: `/pages/order/index?type=${key}` })
+      // this.getOrder()
     },
-    getOrder(isLoadMore) {
+    getOrder({ isLoadMore }) {
       const method = this.tabs.find(tab => tab.key === this.activeTab).method
       this.loading = true
       this.$API[method]({
@@ -346,7 +347,7 @@ export default {
         return
       }
       this.pageNo++
-      this.getOrder(true)
+      this.getOrder({ isLoadMore: true })
     },
     handleCancelOrder(order) {
       this.cancelDialog = {

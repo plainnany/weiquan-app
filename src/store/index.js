@@ -38,6 +38,7 @@ const actions = {
       // 现金用户&店长&priceFlag: 01
       const userInfo = {
         ...data,
+        showParentPay: data.parentPayFlg === '01', // 是否显示总部余额
         showPrice: data.dianZhang && data.priceFlag === '01' && data.accountType === '01',
       }
       commit('setUserInfo', userInfo)

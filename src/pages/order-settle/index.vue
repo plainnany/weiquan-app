@@ -83,7 +83,7 @@ export default {
     if (this.notTrigger) return
     const params = Taro.getCurrentInstance().router.params
     this.orderNumber = params.number
-    this.totalFee = params.money
+    this.totalFee = Number(params.money).toFixed(2)
     this.productId = params.productId
     this.wechatUrl = decodeURIComponent(params.payUrl)
     this.tradeNumber = params.trade

@@ -1,5 +1,6 @@
 <template>
   <view class="home-page">
+    <!-- <official-account></official-account> -->
     <view class="home-info">
       <SearchBar />
       <view class="banner">

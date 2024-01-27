@@ -303,7 +303,7 @@ export default {
           this.form.productCode = data.productCode
           this.form.returnFlg = data.returnFlg
           this.form.batchCode = data.batchCode
-          this.videoUrl = data.vdUrl
+          this.videoUrl = data.vdUrl === 'null' ? '' : data.vdUrl
           this.checkedProduct = data.productName || (this.productList.find(v => v.productCode === data.productCode) || {}).productName
         })
         .catch(err => this.showToast(err))
@@ -373,6 +373,9 @@ export default {
           formData: {
             user: 'test',
           },
+          header: {
+            platform: 3,
+          },
           success: res => {
             const response = JSON.parse(res.data)
             const url = (response.data || [])[0]?.url
@@ -430,7 +433,7 @@ export default {
         this.confirmDialog = {
           title: '提示',
           content:
-            '烦请留存异常产品至少三个工作日，我司会尽快联系您并与您确认问题产品寄送测样。请将异常产品标记区分良号存放。感谢您的合作!',
+            '烦请留存异常产品至少三个工作日，我司会尽快联系您并与您确认问题产品寄送测样。请将异常产品标记区分良品存放。感谢您的合作!',
           visible: true,
         }
       } else {
@@ -466,7 +469,10 @@ export default {
       this.$API
         .submitComplain(params)
         .then(() => {
-          Taro.navigateBack({ delta: 1 })
+          this.showToast({ msg: '提交成功' })
+          setTimeout(() => {
+            Taro.navigateBack({ delta: 1 })
+          }, 1000)
         })
         .catch(err => {
           this.showToast(err)

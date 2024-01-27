@@ -1,7 +1,10 @@
+@bg: #f0efef;
+
 .custom-comment {
   font-size: 26px;
   position: relative;
   color: #333;
+  background-color: @bg;
 
   .empty {
     width: 100%;
@@ -15,7 +18,9 @@
   .custom-tabs {
     display: flex;
     justify-content: center;
-    border-bottom: 1px solid #ececec;
+    border-bottom: 1px solid #fafafa;
+    border-top: 1px solid #eee;
+    background-color: #fff;
   }
 
   .custom-tab {
@@ -26,8 +31,8 @@
     background: #fff;
     &.active {
       color: #ffffff;
-      border-bottom: 1px solid #f7502c;
-      color: #f7502c;
+      border-bottom: 1px solid #b66b47;
+      color: #b66b47;
     }
   }
 
@@ -54,9 +59,10 @@
     .custom-list {
       &-item {
         padding: 30px;
-        border-bottom: 1px solid #e7e7e7;
+        border-bottom: 1px solid #fafafa;
         color: #666;
         position: relative;
+        background-color: #fff;
 
         > view {
           &:first-child {

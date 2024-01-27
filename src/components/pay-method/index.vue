@@ -80,7 +80,7 @@ export default {
         return [
           {
             method: 'weixin-2',
-            name: '微信好友支付',
+            name: '微信好友代付',
             icon: wechatIcon,
           },
         ]
@@ -91,11 +91,15 @@ export default {
           name: '余额支付',
           icon: weipocketIcon,
         },
-        {
-          method: 'company-pocket',
-          name: '总部余额',
-          icon: weipocketIcon,
-        },
+        ...(this.userInfo.showParentPay
+          ? [
+              {
+                method: 'company-pocket',
+                name: '总部余额',
+                icon: weipocketIcon,
+              },
+            ]
+          : []),
         {
           method: 'weixin',
           name: '微信支付',
@@ -103,7 +107,7 @@ export default {
         },
         {
           method: 'weixin-2',
-          name: '微信好友支付',
+          name: '微信好友代付',
           icon: wechatIcon,
         },
       ]

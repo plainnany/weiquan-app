@@ -11,7 +11,7 @@
         <view class="custom-list" v-if="complainList.length > 0">
           <view class="custom-list-item" v-for="(item, index) in complainList" :key="index" @tap="handleClick(item)">
             <view
-              >编号： <text>{{ item.complainCode }}</text></view
+              >{{ active === 'todo' ? '单号' : '编号' }}： <text>{{ item.complainCode }}</text></view
             >
             <view>{{ item.complainDate }}</view>
             <view class="custom-comment-status" v-if="active === 'done'">已处理</view>
@@ -49,6 +49,7 @@ export default {
       loading: false,
       complete: false,
       pageNo: 1,
+      fetchOrder: 0,
     }
   },
   mounted() {
@@ -66,6 +67,8 @@ export default {
     },
     getComplainList(type) {
       const state = this.tabs.find(tab => tab.key === this.active).state
+      this.fetchOrder++
+      const fetchOrder = this.fetchOrder
       this.$API
         .getComplainList({
           pageNo: this.pageNo,
@@ -73,6 +76,7 @@ export default {
           state,
         })
         .then(data => {
+          if (this.fetchOrder !== fetchOrder) return
           data = data || []
           if (type === 'loadMore') {
             this.complainList = this.complainList.concat(data)

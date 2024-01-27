@@ -1,7 +1,7 @@
 .shop-page {
   min-height: 100vh;
   box-sizing: border-box;
-  background: #f8f9fa;
+  background: rgb(249, 249, 249);
   position: relative;
 
   .toast {
@@ -12,12 +12,13 @@
 
     .toast-content {
       display: inline-block;
-      padding: 12px 24px;
+      padding: 24px 32px;
       text-align: center;
-      background-color: rgb(83, 83, 83);
-      border-radius: 40px;
+      box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+      background-color: rgb(244, 244, 244);
+      border-radius: 12px;
       font-size: 28px;
-      color: #fff;
+      color: #666;
       image {
         width: 32px;
         margin-right: 16px;
@@ -58,6 +59,15 @@
       display: flex;
       justify-content: space-between;
       transition: all 0.2s;
+      .checkbox {
+        width: 32px;
+        height: 32px;
+        color: #eee;
+        margin-right: 24px;
+        &.checked {
+          color: #fa4a2d;
+        }
+      }
       .border {
         padding: 24px 0;
         border-bottom: 1px solid #f0f2f5;
@@ -80,7 +90,7 @@
     }
 
     &-image {
-      margin-right: 24px;
+      // margin-right: 24px;
       image {
         width: 140px;
         height: 140px;
@@ -100,6 +110,7 @@
       height: 160px;
       flex: 1;
       width: calc(100% - 200px);
+      margin-left: 24px;
       &-title {
         font-size: 26px;
         color: #333333;
@@ -247,6 +258,7 @@
     width: 40rpx;
     height: 40rpx;
     border-radius: 50%;
+    border-color: #666;
   }
 
   /* 选中后的背景样式 */

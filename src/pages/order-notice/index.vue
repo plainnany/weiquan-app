@@ -6,27 +6,41 @@
       </text>
     </view>
     <view v-if="noticeList.length > 0">
-      <view class="notice-item" v-for="(item, index) in noticeList" :key="index" @tap="editNotice(item)">
-        <view class="notice-item-main">
-          <view class="day">
-            <text class="date">{{ getLabelTime(item.noticeTime) }}</text>
-            <text class="time">{{ getNoticeTime(item.noticeTime) }}</text>
+      <view
+        class="notice-item"
+        v-for="(item, index) in noticeList"
+        :key="index"
+        @touchstart="e => handleTouchStart(e, index)"
+        @touchmove="handleTouchMove"
+        :style="{ transform: `translateX(${item.translateX}rpx)` }"
+      >
+        <view class="border" @tap="editNotice(item)">
+          <view class="notice-item-main">
+            <view class="day">
+              <text class="date">{{ getLabelTime(item.noticeTime) }}</text>
+              <text class="time">{{ getNoticeTime(item.noticeTime) }}</text>
+            </view>
+            <view class="remark">
+              {{ item.remarks ? `${item.remarks},` : '' }}
+              <text class="notice-day">
+                {{ getNoticeDay(item.noticeDate) }}
+              </text>
+            </view>
           </view>
-          <view class="remark">
-            {{ item.remarks ? `${item.remarks},` : '' }}
-            <text class="notice-day">
-              {{ getNoticeDay(item.noticeDate) }}
-            </text>
+          <view class="notice-item-switch" @tap.stop="() => {}">
+            <switch color="#43D95C" :checked="item.checked" @change="e => changeSwitch(e, item)"></switch>
           </view>
         </view>
-        <view class="notice-item-switch" @tap.stop="() => {}">
-          <switch color="#43D95C" :checked="item.checked" @change="e => changeSwitch(e, item)"></switch>
-        </view>
+
+        <view class="delete-btn" @tap="deleteNotice(item, index)">删除</view>
       </view>
     </view>
     <view class="empty" v-else>
       暂无数据
     </view>
+    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -34,11 +48,16 @@
 import './index.less'
 import { setTitle } from '@/utils'
 import Taro from '@tarojs/taro'
+import Modal from '../setting/modal.vue'
+import ToastMixin from '@/mixin/toast'
+
 export default {
-  components: {},
+  components: { Modal },
+  mixins: [ToastMixin],
   data() {
     return {
       noticeList: [],
+      visible: false,
     }
   },
   computed: {
@@ -64,6 +83,7 @@ export default {
           this.noticeList = (data || []).map(v => ({
             ...v,
             checked: v.statusFlag === 'NORMAL',
+            translateX: '',
           }))
         })
         .finally(() => {
@@ -119,6 +139,38 @@ export default {
     },
     editNotice(item) {
       Taro.navigateTo({ url: `/pages/order-notice/edit?type=edit&data=${JSON.stringify(item)}` })
+    },
+    handleTouchStart(e, index) {
+      if (this.edit) return
+      this.startX = e.touches[0].clientX
+      this.index = index
+    },
+    handleTouchMove(e) {
+      if (this.edit) return
+
+      const moveX = e.touches[0].clientX
+      const disX = moveX - this.startX
+      const translateX = disX < 0 ? -120 : 0 // 最大滑动距离为-30rpx
+
+      this.noticeList.forEach((item, index) => {
+        if (this.index === index) {
+          item.translateX = translateX
+        } else {
+          item.translateX = 0
+        }
+        return item
+      })
+    },
+    deleteNotice(item) {
+      this.$API
+        .deleteNotice({
+          noticeOid: item.oid,
+        })
+        .then(() => {
+          this.getOrderList()
+          this.visible = false
+          this.showToast({ msg: '删除成功' })
+        })
     },
   },
 }

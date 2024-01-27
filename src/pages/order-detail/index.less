@@ -1,5 +1,7 @@
+@bg: #f0efef;
+
 .order-detail {
-  background: #f8f9fa;
+  background: @bg;
   min-height: 100vh;
   font-size: 24px;
   padding-bottom: 100px;
@@ -22,8 +24,10 @@
   }
 
   &-right {
-    width: 200px;
+    width: 180px;
     text-align: right;
+    position: absolute;
+    right: 24px;
   }
   &-done-status {
     padding-top: 20px;
@@ -128,6 +132,8 @@
   }
 
   &-info {
+    max-width: calc(100% - 140px);
+
     > view {
       margin-bottom: 10px;
     }
@@ -177,7 +183,7 @@
     width: 130px;
     height: 130px;
     box-sizing: border-box;
-    background: #f8f9fa;
+    background: @bg;
     border-radius: 16px;
     margin-right: 20px;
     image {
@@ -212,12 +218,12 @@
     bottom: 0;
     width: 100%;
     text-align: right;
-    padding: 22px 30px;
+    padding: 26px 30px;
     box-sizing: border-box;
     background-color: #fff;
     border-top: 1px solid #ececec;
     button {
-      padding: 12px 24px;
+      padding: 16px 24px;
       margin-left: 20px;
       border-radius: 8px;
       background-color: #fff;
@@ -231,7 +237,7 @@
       }
 
       &.plain {
-        color: #333;
+        color: #666;
         border: 1px solid #999999;
       }
     }

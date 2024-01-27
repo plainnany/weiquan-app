@@ -16,14 +16,18 @@
       <view>
         充值
       </view>
-      <view class="remain-item-arrow">></view>
+      <view class="remain-item-arrow">
+        <image :src="backImg" mode="" />
+      </view>
     </view>
     <view class="remain-item" @tap="handleDetail">
       <image :src="icon1" class="icon" mode="" />
       <view>
         查看明细
       </view>
-      <view class="remain-item-arrow">></view>
+      <view class="remain-item-arrow">
+        <image :src="backImg" mode="" />
+      </view>
     </view>
   </view>
 </template>
@@ -33,6 +37,7 @@ import './index.less'
 import Taro from '@tarojs/taro'
 import icon1 from '@/images/account_acc.png'
 import icon2 from '@/images/account_up.png'
+import backImg from '@/images/user/back.png'
 
 export default {
   name: 'cost',
@@ -41,6 +46,7 @@ export default {
     return {
       icon1,
       icon2,
+      backImg,
       active: 'charge',
       balance: '',
       tabs: [

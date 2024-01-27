@@ -130,6 +130,9 @@ export default {
           formData: {
             user: 'test',
           },
+          header: {
+            platform: 3,
+          },
           success: res => {
             const response = JSON.parse(res.data)
             const url = (response.data || [])[0]?.url

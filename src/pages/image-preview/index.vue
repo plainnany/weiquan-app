@@ -4,15 +4,20 @@
       <image :src="imageUrl" />
     </view>
     <nan-button class="btn" type="primary" @tap="save">保存</nan-button>
+    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
 <script>
 import Taro from '@tarojs/taro'
 import { setTitle } from '@/utils'
+import ToastMixin from '@/mixin/toast'
 
 export default {
   components: {},
+  mixins: [ToastMixin],
   data() {
     return {
       imageUrl: '',
@@ -32,23 +37,14 @@ export default {
           if (res.statusCode === 200) {
             // 下载成功，获取本地路径
             const localFilePath = res.tempFilePath
-
             // 保存图片到相册
             Taro.saveImageToPhotosAlbum({
               filePath: localFilePath,
               success() {
-                Taro.showToast({
-                  title: '保存成功',
-                  icon: 'success',
-                  duration: 2000,
-                })
+                this.showToast({ msg: '保存成功' })
               },
               fail(err) {
-                Taro.showToast({
-                  title: '保存失败',
-                  icon: 'none',
-                  duration: 2000,
-                })
+                this.showToast({ msg: '保存失败' })
                 console.error('保存图片失败', err)
               },
             })

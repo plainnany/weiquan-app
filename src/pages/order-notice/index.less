@@ -20,11 +20,12 @@
 
   .notice-item {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 24px;
-    border-bottom: 1px solid rgb(240, 242, 245);
     background-color: #fff;
+    transition: all 0.2s;
+    padding: 0 30px;
+    box-sizing: border-box;
+    border-bottom: 2px solid #eee;
   }
 
   .time {
@@ -44,5 +45,27 @@
     align-items: center;
     justify-content: center;
     color: #666;
+  }
+
+  .delete-btn {
+    font-size: 30px;
+    width: 120px;
+    background-color: #ff630f;
+    color: #fff;
+    text-align: center;
+    margin-right: -150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .border {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0;
+    // flex: 1;
   }
 }

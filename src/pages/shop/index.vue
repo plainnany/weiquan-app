@@ -11,7 +11,8 @@
         :style="{ transform: `translateX(${product.translateX}rpx)` }"
       >
         <view class="border">
-          <checkbox :checked="product.checked" @tap.stop="change(product, index)"></checkbox>
+          <image :src="product.checked ? checkedIcon2 : checkedIcon" mode="" class="checkbox" @tap.stop="change(product, index)" />
+          <!-- <checkbox :checked="product.checked" @tap.stop="change(product, index)"></checkbox> -->
           <view class="shop-product-image">
             <image :src="product.productImage" mode="" />
           </view>
@@ -90,7 +91,9 @@
     <Modal :visible="visible" title="删除" cancelText="取消" confirmText="确认" @cancel="() => (visible = false)" @confirm="confirmDelete">
       <view style="font-size: 28rpx">确定要删除该商品吗？</view>
     </Modal>
-    <view class="toast" v-if="showToast"> <view class="toast-content">删除成功</view></view>
+    <view class="toast" v-if="errorToast.visible && errorToast.message">
+      <view class="toast-content">{{ errorToast.message }}</view></view
+    >
   </view>
 </template>
 
@@ -98,8 +101,18 @@
 import './index.less'
 import Taro from '@tarojs/taro'
 import Modal from '../setting/modal.vue'
+import ToastMixin from '@/mixin/toast'
+
+function loadSvg(color) {
+  const svgXML = `<svg t="1706317403168" class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" p-id="26969" width="48" height="48">
+  <path d="M972.8 512a461.1584 461.1584 0 1 1-132.608-323.2768l-81.5104 81.664-268.9024 269.056a14.3872 14.3872 0 0 1-20.48 0L352.3072 422.6048a57.5488 57.5488 0 0 0-81.3568 81.3568l167.168 167.168a57.344 57.344 0 0 0 81.92 0.7168l305.1008-305.2544 85.0944-85.248A456.192 456.192 0 0 1 972.8 512z" fill="${color}" p-id="26970"></path>
+</svg>`
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgXML)}`
+}
 
 export default {
+  mixins: [ToastMixin],
   data() {
     return {
       msg: '',
@@ -113,7 +126,8 @@ export default {
       visible: false,
       startX: 0, // 记录触摸起始位置
       index: -1, // 记录当前滑动的列表项索引
-      showToast: false,
+      checkedIcon: loadSvg('#dadada'),
+      checkedIcon2: loadSvg('#333'),
     }
   },
   components: {
@@ -167,10 +181,7 @@ export default {
             console.log('updateProduct')
           })
           .catch(res => {
-            Taro.showToast({
-              title: res.msg,
-              icon: 'none',
-            })
+            this.showToast(res)
           })
         // 保存
       }
@@ -191,9 +202,10 @@ export default {
           }
           this.productList = this.productList.map(v => ({
             ...v,
-            checked: false,
+            checked: v.singleKey,
             translateX: 0,
           }))
+          this.checkAll = this.productList.every(v => v.checked)
           if (data.length === 0) {
             this.complete = true
           }
@@ -249,6 +261,8 @@ export default {
         //   .then(data => {
         //     // Taro.navigateTo({ url: '/pages/confirm-order/index' })
         //   })
+      } else {
+        this.showToast({ msg: '请选择商品' })
       }
     },
     handleDelete() {
@@ -266,17 +280,10 @@ export default {
         })
         .then(() => {
           this.getProduct()
-          // this.productList = this.productList.filter(v => this.deleteOid.indexOf(v.oid) === -1)
-          // Taro.showToast({ title: '删除成功', icon: 'success' })
-          this.showToast = true
-          this.visible = false
-          setTimeout(() => {
-            this.showToast = false
-          }, 3000)
+          this.showToast({ msg: '删除成功' })
         })
         .catch(res => {
-          Taro.showToast({ title: res.msg || '', icon: 'none' })
-          this.visible = false
+          this.showToast(res)
         })
     },
     toLower() {
@@ -309,17 +316,13 @@ export default {
           console.log('updateProduct')
         })
         .catch(res => {
-          Taro.showToast({
-            title: res.msg,
-            icon: 'none',
-          })
+          this.showToast(res)
         })
     },
     handleTouchStart(e, index) {
       if (this.edit) return
       this.startX = e.touches[0].clientX
       this.index = index
-      console.log('touch start')
     },
     handleTouchMove(e) {
       if (this.edit) return

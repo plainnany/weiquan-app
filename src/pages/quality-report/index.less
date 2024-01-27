@@ -1,8 +1,8 @@
 .quality {
   &-page {
     min-height: 100vh;
-    background: #f8f9fa;
-    font-size: 28px;
+    background: #f0efef;
+    font-size: 32px;
     padding-top: 24px;
   }
 
@@ -13,7 +13,7 @@
 
   &-selection {
     background-color: #fff;
-    padding: 20px 30px;
+    padding: 28px 30px;
     position: relative;
     &:first-child {
       border-bottom: 1px solid #eee;
@@ -32,6 +32,7 @@
     margin: 20px 30px;
     background-color: #fff;
     position: relative;
+    border-radius: 12px;
 
     &-action {
       padding: 20px 30px;
@@ -53,9 +54,11 @@
       position: absolute;
       right: 0;
       top: 0;
-      height: 84px;
+      bottom: 0;
       padding: 0 20px;
-      line-height: 84px;
+      display: flex;
+      align-items: center;
+      border-radius: 0 12px 12px 0;
     }
   }
 

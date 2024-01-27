@@ -2,7 +2,9 @@
   <view class="forget-page">
     <view class="form-item mobile">
       <input type="text" v-model="form.mobile" placeholder="手机号码" />
-      <nan-button class="send" type="primary" @tap="sendCode">{{ sending ? `${countDown}s` : '获取验证码' }}</nan-button>
+      <nan-button class="send" type="primary" @tap="sendCode">{{
+        sending ? `${countDown}s` : reSend ? '重新获取' : '获取验证码'
+      }}</nan-button>
     </view>
     <view class="form-item">
       <input type="text" v-model="form.mobileCode" placeholder="验证码" />
@@ -19,6 +21,9 @@
     <view class="footer">
       <nan-button type="primary" @tap="onConfirm" :loading="btnLoading">确认修改</nan-button>
     </view>
+    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -28,10 +33,12 @@ import { setTitle } from '@/utils'
 import crypto from 'crypto-js'
 import './index.less'
 import './forget.less'
+import ToastMixin from '@/mixin/toast'
 
 export default {
   name: 'user',
   components: {},
+  mixins: [ToastMixin],
   data() {
     return {
       form: {
@@ -44,6 +51,7 @@ export default {
       countDown: 60,
       sending: false,
       btnLoading: false,
+      reSend: false,
     }
   },
   mounted() {
@@ -55,10 +63,7 @@ export default {
   },
   methods: {
     message(title) {
-      Taro.showToast({
-        title,
-        icon: 'none',
-      })
+      this.showToast({ msg: title })
     },
     sendCode() {
       if (!/^1[3-9][0-9]{9}$/.test(this.form.mobile)) {
@@ -87,7 +92,9 @@ export default {
         this.countDown--
         if (this.countDown === 0) {
           clearTimeout(this.timer)
+          this.countDown = 60
           this.sending = false
+          this.reSend = true
         } else {
           this.startCountDown()
         }

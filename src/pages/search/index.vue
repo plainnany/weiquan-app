@@ -3,7 +3,7 @@
     <view class="search-bar">
       <view class="search-wrap">
         <view class="search-input">
-          <icon class="search-icon" type="search" size="16" />
+          <icon class="search-icon" type="search" size="14" :color="'#fff'" />
           <input placeholder="请输入商品名称搜索" :value="keyword" @confirm="onSearch" />
         </view>
         <view class="cancel-btn" @tap="onCancel">取消</view>
@@ -34,6 +34,13 @@
         </view>
       </scroll-view>
     </view>
+    <Modal :visible="visible" title="提示" cancelText="拨打" confirmText="确定" @cancel="contact" @confirm="() => (visible = false)">
+      <view style="font-size: 12px; padding: 0 24rpx;"
+        >该商品暂不可订,如有需要可联系负责业务或致电服务电话咨询
+        <text class="contact-phone" @tap="contact">{{ $store.state.userInfo?.customerService || '' }}</text>
+        ,感谢!</view
+      >
+    </Modal>
   </view>
 </template>
 
@@ -44,9 +51,13 @@ import { setTitle } from '@/utils'
 import searchEmptyIcon from '@/images/search-empty.png'
 import shopIcon from '@/images/add-shop.png'
 import deleteIcon from '@/images/delete.png'
+import Modal from '../setting/modal.vue'
 
 export default {
   name: 'search',
+  components: {
+    Modal,
+  },
   data() {
     return {
       searchEmptyIcon,
@@ -59,6 +70,7 @@ export default {
       searchPageNum: 1,
       searchComplete: false,
       redirect: '',
+      visible: false,
     }
   },
   onShow() {
@@ -74,10 +86,7 @@ export default {
   methods: {
     addShop(product) {
       if (!product.sell) {
-        Taro.showToast({
-          title: '当前商品不支持购买',
-          icon: 'none',
-        })
+        this.visible = true
         return
       }
       this.$API
@@ -149,6 +158,22 @@ export default {
     onCancel() {
       const path = this.redirect || 'index'
       Taro.switchTab({ url: `/pages/${path}/index` })
+    },
+    contact() {
+      if (!this.$store.state.userInfo.customerService) {
+        Taro.showToast({
+          title: '用户未登录，请先登录',
+          icon: 'none',
+        })
+
+        setTimeout(() => {
+          Taro.navigateTo({ url: '/pages/bind-account/index' })
+        }, 2000)
+        return
+      }
+      Taro.makePhoneCall({
+        phoneNumber: this.$store.state.userInfo.customerService,
+      })
     },
   },
 }

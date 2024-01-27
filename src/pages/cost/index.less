@@ -1,8 +1,9 @@
+@bg: #f0efef;
 page {
   height: 100%;
 }
 .remain-page {
-  background: #f8f9fa;
+  background: @bg;
   height: 100%;
 
   .setting {
@@ -28,7 +29,7 @@ page {
   .remain-info {
     background: linear-gradient(306deg, #f7572c 0%, #f76c2c 100%);
     color: #fff;
-    padding: 65px 45px;
+    padding-top: 65px;
     text-align: center;
     font-size: 32px;
   }
@@ -40,11 +41,10 @@ page {
   }
 
   .remain-money {
-    padding-top: 100px;
+    padding-top: 64px;
     font-size: 90px;
-    font-weight: 500;
+    // font-weight: 500;
     color: #ffffff;
-    line-height: 42px;
   }
 
   .remain-item {
@@ -52,12 +52,17 @@ page {
     display: flex;
     align-items: center;
     background-color: #fff;
-    padding: 24px 36px;
+    padding: 16px 36px;
+    margin-top: 16px;
     margin-bottom: 24px;
 
     &-arrow {
       flex: 1;
       text-align: right;
+      image {
+        width: 48px;
+        height: 48px;
+      }
     }
   }
 
@@ -75,7 +80,7 @@ page {
   height: 100%;
 }
 .charge-record {
-  background: #f8f9fa;
+  background: @bg;
   height: 100%;
 
   .empty {
@@ -98,11 +103,12 @@ page {
     margin-bottom: 37px;
     background-color: #fff;
     position: relative;
+    border-top: 2px solid #eee;
 
     .divider {
       position: absolute;
       left: 50%;
-      width: 1px;
+      width: 4px;
       top: 20px;
       bottom: 30px;
       background-color: #ccc;

@@ -4,8 +4,10 @@
       <view class="user-info-wrapper" @tap="handleNav({ path: '/pages/account-manage/index' })">
         <view class="setting">
           <image :src="settingImg" mode="" @tap.stop="handleNav({ path: '/pages/setting/index' })" />
-          <image :src="noticeImg" class="notice" mode="" @tap.stop="handleNav({ path: '/pages/notice/index' })" />
-          <view class="dot" v-if="userInfo.total > 0">{{ userInfo.total > 99 ? '99+' : userInfo.total }}</view>
+          <view @tap.stop="handleNav({ path: '/pages/notice/index' })" style="display: inline-block;position: relative;">
+            <image :src="noticeImg" class="notice" mode="" />
+            <view class="dot" v-if="userInfo.total > 0">{{ userInfo.total > 99 ? '99+' : userInfo.total }}</view>
+          </view>
         </view>
         <view class="user-avatar">
           <image :src="userInfo.headPic" mode="" />
@@ -45,20 +47,28 @@
       </view>
     </view>
     <view class="user-action user-card">
-      <view class="action-item" v-for="(item, index) in items1" :key="index" @tap="handleNav(item)">
-        <image :src="item.icon" mode="" />
-        <view class="action-item-text">{{ item.title }}</view>
-        <view class="action-item-link">
-          <image :src="backImg" mode="" />
+      <view class="user-action-list" v-for="(item, index) in items1" :key="index" @tap="handleNav(item)">
+        <view class="action-item">
+          <image :src="item.icon" mode="" />
+          <view class="action-item-main">
+            <view class="action-item-text">{{ item.title }}</view>
+            <view class="action-item-link">
+              <image :src="backImg" mode="" />
+            </view>
+          </view>
         </view>
       </view>
     </view>
     <view class="user-action user-card">
-      <view class="action-item" v-for="(item, index) in items2" :key="index" @tap="handleNav(item)">
-        <image :src="item.icon" mode="" />
-        <view class="action-item-text">{{ item.title }}</view>
-        <view class="action-item-link">
-          <image :src="backImg" mode="" />
+      <view class="user-action-list" v-for="(item, index) in items2" :key="index" @tap="handleNav(item)">
+        <view class="action-item">
+          <image :src="item.icon" mode="" />
+          <view class="action-item-main">
+            <view class="action-item-text">{{ item.title }}</view>
+            <view class="action-item-link">
+              <image :src="backImg" mode="" />
+            </view>
+          </view>
         </view>
       </view>
     </view>
