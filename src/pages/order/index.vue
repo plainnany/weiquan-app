@@ -568,8 +568,8 @@ export default {
           type,
         })
         .then(data => {
-          this.previewImg = data.imgUrl
-          Taro.navigateTo({ url: `/pages/image-preview/index?imageUrl=${data.imgUrl}` })
+          this.previewImg = data.imgUr
+          Taro.navigateTo({ url: `/pages/image-preview/index?imageUrl=${encodeURIComponent(data.imgUrl)}&type=${type}` })
         })
     },
   },

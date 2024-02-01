@@ -205,9 +205,10 @@ export default {
             checked: v.singleKey,
             translateX: 0,
           }))
-          this.checkAll = this.productList.every(v => v.checked)
           if (data.length === 0) {
             this.complete = true
+          } else {
+            this.checkAll = this.productList.every(v => v.checked)
           }
         })
         .finally(() => {

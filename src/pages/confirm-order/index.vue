@@ -283,7 +283,11 @@ export default {
     },
     handleResult(data) {
       if (data && data.accountType === '02') {
-        Taro.redirectTo({ url: '/pages/order/index?type=to-pay' })
+        // 如果是月结用户，跳转到下单成功页面
+        // Taro.redirectTo({ url: '/pages/order/index?type=to-pay' })
+        Taro.redirectTo({
+          url: `/pages/pay-countdown/result?orderNumber=${data.pay.orderNumber}&productId=${this.params.productId}`,
+        })
       } else if (data.pay) {
         Taro.redirectTo({
           url: `/pages/order-settle/index?number=${data.pay.orderNumber}&money=${data.pay.total_fee}&trade=${

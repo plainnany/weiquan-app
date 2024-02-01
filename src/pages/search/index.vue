@@ -33,7 +33,12 @@
         <view class="product-list-item" @tap="viewDetail(product)" v-for="(product, index) in productList" :key="index">
           <view class="product-list-image"><image :src="product.productImage" mode=""/></view>
           <view class="product-list-detail">
-            <view class="product-list-title">{{ product.productName }}</view>
+            <view class="product-list-title">
+              <image :src="dingImg" mode="" v-if="product.sell" />
+              <text class="a">
+                {{ product.productName }}
+              </text>
+            </view>
             <!-- <view class="product-list-info">规格: {{ product.specifications }} | 单位: {{ product.productUnitRule }}</view> -->
             <view style="display:flex; justify-content:space-between;align-items: center;">
               <view class="product-list-price">
@@ -67,6 +72,7 @@ import deleteIcon from '@/images/delete.png'
 import Modal from '../setting/modal.vue'
 import historyIcon from '@/images/history.png'
 import searchIcon from '@/images/search2.png'
+import dingImg from '@/images/ding.png'
 
 export default {
   name: 'search',
@@ -89,6 +95,7 @@ export default {
       historyIcon,
       searchIcon,
       historyList: [],
+      dingImg,
     }
   },
   computed: {

@@ -235,20 +235,25 @@ export default {
   },
 
   mounted() {
-    const { year, month } = this.defaultDate
-    this.startDate = `${year}-${month}`
-    this.endDate = `${year}-${month}`
+    this.initDate()
     this.getBillList()
     setTitle({
       title: '开票申请',
     })
   },
   methods: {
+    initDate() {
+      const { year, month } = this.defaultDate
+      this.startDate = `${year}-${month}`
+      this.endDate = `${year}-${month}`
+      this.saveStartDate = this.startDate
+      this.saveEndDate = this.endDate
+    },
     getBillList() {
       this.$API
         .electronicInvoice({
-          start: this.startDate,
-          end: this.endDate,
+          start: this.saveStartDate,
+          end: this.saveEndDate,
         })
         .then(data => {
           data = data || {}
@@ -257,6 +262,7 @@ export default {
             deliveryList: (data.deliveryList || []).map(v => ({
               ...v,
               checked: false,
+              isDelivery: true,
               canApply: this.checkCanApply(v),
             })),
             returnList: (data.returnList || []).map(v => ({
@@ -267,8 +273,13 @@ export default {
           }
           this.hasGetOrder = true
           this.checkAll = false
+          this.startDate = this.saveStartDate
+          this.endDate = this.saveEndDate
         })
-        .catch(err => this.showToast(err))
+        .catch(err => {
+          this.initDate()
+          this.showToast(err)
+        })
     },
     checkCanApply(item) {
       return item.isApply === '0' || !item.isApply
@@ -277,16 +288,18 @@ export default {
       this.$set(bill, 'expand', !bill.expand)
     },
     startDateChange(e) {
-      this.startDate = e.detail.value
+      const startDate = e.detail.value
+      this.saveStartDate = startDate
+      // this.startDate = e.detail.value
 
-      if (this.startDate && this.endDate) {
+      if (this.saveStartDate && this.saveEndDate) {
         this.getBillList()
       }
     },
     endDateChange(e) {
-      this.endDate = e.detail.value
+      this.saveEndDate = e.detail.value
 
-      if (this.startDate && this.endDate) {
+      if (this.saveStartDate && this.saveEndDate) {
         this.getBillList()
       }
     },
@@ -319,7 +332,7 @@ export default {
         this.endDate = endDate
       } else {
         const { year, month } = this.defaultDate
-        var lastDayOfMonth = new Date(year, month, 0).getDate()
+        const lastDayOfMonth = new Date(year, month, 0).getDate()
         this.startDate = `${year}-${month}-01`
         this.endDate = `${year}-${month}-${lastDayOfMonth}`
       }
@@ -353,6 +366,14 @@ export default {
         })
     },
     confirm() {
+      if (!this.checkList.some(v => v.isDelivery)) {
+        this.dialogVisible = false
+        this.showToast({
+          msg: '必须选择一个发货单!',
+        })
+
+        return
+      }
       this.btnLoading = true
       const dateStr = this.checkList.map(v => v.time).join(',')
       const params = {

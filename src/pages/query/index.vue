@@ -142,12 +142,16 @@ export default {
       })
     },
     addProduct(product) {
-      if (this.isCashUser && product.productSum >= product.originProductSum) {
-        this.currentProduct = product
-        this.tipVisible = true
-        return
+      const productSum = parseInt(product.productSum) + parseInt(product.uninConvertRule)
+      if (this.isCashUser) {
+        if (productSum >= product.originProductSum) {
+          this.currentProduct = product
+          this.tipVisible = true
+
+          return
+        }
       }
-      product.productSum = parseInt(product.productSum) + parseInt(product.uninConvertRule)
+      product.productSum = productSum
     },
     decreaseProduct(product, index) {
       // if (this.decreaseDisabled(product)) return

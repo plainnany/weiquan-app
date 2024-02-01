@@ -91,7 +91,8 @@ export default {
           if (data) {
             this.$store.commit('setUserInfo', data)
             Taro.setStorageSync('token', data.token)
-            Taro.navigateBack({ delta: 1 })
+            // 登录成功固定跳转到首页
+            Taro.switchTab({ url: '/pages/index/index' })
           }
         })
         .catch(err => {
