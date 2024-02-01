@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view class="order-page">
+    <view class="order-page" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend">
       <view class="order-tabs">
         <view class="order-tab" :class="{ active: activeTab === tab.key }" v-for="tab in tabs" :key="tab.key" @tap="clickTab(tab)">{{
           tab.title
@@ -12,7 +12,15 @@
             暂无数据
           </view>
         </view>
-        <scroll-view :scroll-y="true" @scrolltolower="toLower" v-else>
+        <scroll-view
+          v-else
+          :scroll-y="true"
+          :refresher-triggered="pulling"
+          :refresher-enabled="false"
+          :refresher-threshold="10"
+          @refresherrefresh="onRefresh"
+          @scrolltolower="toLower"
+        >
           <view class="order-result-list" v-if="activeTab === 'to-delivery'">
             <view class="common-card">
               <view class="order-result-title">
@@ -143,6 +151,7 @@
       >
         <view>{{ cancelDialog.content }}</view>
       </Modal>
+      <view v-if="showRefresher" class="refresher">refresher</view>
     </view>
     <view v-if="payDialogVisible" class="order-pay-modal">
       <view :class="['order-pay-modal-wrap']" @tap="() => (payDialogVisible = false)"></view>
@@ -263,6 +272,8 @@ export default {
       cancelDialog: {
         visible: false,
       },
+      pulling: false,
+      showRefresher: false,
     }
   },
   computed: {
@@ -292,7 +303,18 @@ export default {
       // promise,
     }
   },
-  onShow() {
+  onShow() {},
+  // onPullDownRefresh() {
+  //   console.log('')
+  //   this.getOrder().then(() => {
+  //     Taro.stopPullDownRefresh()
+  //   })
+  // },
+  created() {
+    this.$instance = Taro.getCurrentInstance()
+  },
+  mounted() {
+    // setTitle({ title: '我的订单' })
     const params = this.$instance.router.params
     const { type } = params
     if (type) {
@@ -300,13 +322,29 @@ export default {
     }
     this.getOrder({ type: 'all' })
   },
-  created() {
-    this.$instance = Taro.getCurrentInstance()
-  },
-  mounted() {
-    setTitle({ title: '我的订单' })
-  },
   methods: {
+    onRefresh(e) {
+      this.pulling = true
+      console.log('onrefresh', this.pulling)
+
+      setTimeout(() => {
+        this.pulling = false
+      }, 1000)
+    },
+    // 以下代码模拟下拉刷新
+    touchstart(e) {
+      this.startY = e.touches[0].clientY
+    },
+    touchmove(e) {
+      const moveY = e.touches[0].clientY
+      const disY = moveY - this.startY
+      if (disY > 10) {
+        // this.showRefresher = true
+      }
+    },
+    touchend() {
+      this.showRefresher = false
+    },
     clickTab({ key }) {
       this.activeTab = key
       this.pageNo = 1
@@ -317,7 +355,7 @@ export default {
     getOrder({ isLoadMore }) {
       const method = this.tabs.find(tab => tab.key === this.activeTab).method
       this.loading = true
-      this.$API[method]({
+      return this.$API[method]({
         pageNo: this.pageNo,
         limit: 10,
       })
@@ -419,9 +457,8 @@ export default {
               if (index > -1) {
                 this.orderList.splice(index, 1)
               }
-              Taro.showToast({
-                title: '支付成功',
-                icon: 'success',
+              this.showToast({
+                msg: '支付成功',
               })
             }
           })

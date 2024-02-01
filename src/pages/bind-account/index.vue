@@ -82,7 +82,7 @@ export default {
       const password = crypto.AES.encrypt(this.customerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
       this.$API
         .bindShop({
-          unionId: this.unionId,
+          unionId: Taro.getStorageSync('unionId'),
           customerCode: this.customerCode,
           password,
           userType: this.userType,

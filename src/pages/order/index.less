@@ -2,6 +2,13 @@
 .order-page {
   position: relative;
   background: @bg;
+  min-height: 100vh;
+
+  .refresher {
+    position: fixed;
+    top: 100px;
+    width: 100%;
+  }
 
   .setting-modal-footer {
     font-size: 30px;
@@ -70,7 +77,7 @@
   }
 
   .order-result {
-    margin-top: 104px;
+    top: 104px;
     box-sizing: border-box;
     height: calc(100vh - 104px);
     position: relative;
