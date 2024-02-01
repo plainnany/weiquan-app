@@ -4,12 +4,25 @@
       <view class="search-wrap">
         <view class="search-input">
           <icon class="search-icon" type="search" size="14" :color="'#fff'" />
-          <input placeholder="请输入商品名称搜索" :value="keyword" @confirm="onSearch" />
+          <input placeholder="请输入商品名称搜索" v-model="keyword" @confirm="onSearch" />
         </view>
         <view class="cancel-btn" @tap="onCancel">取消</view>
       </view>
     </view>
-    <view class="search-result">
+    <view class="search-history" v-if="showHistorySearch">
+      <view class="search-history-title">
+        <image :src="historyIcon" mode="" />
+        <text>搜索历史</text>
+      </view>
+      <view class="search-history-item" v-for="item in historyList" :key="item" @tap="onSearch">
+        <icon class="search-icon" type="search" size="14" :color="'#ccc'" />
+        <text>{{ item }}</text>
+      </view>
+      <view class="search-history-clear" @tap="clearSearchHistory">
+        清除历史
+      </view>
+    </view>
+    <view class="search-result" v-else>
       <view class="search-result-empty" v-if="!productList.length && startSearch">
         <image :src="searchEmptyIcon" mode="" />
         <view class="search-result-empty-text">
@@ -52,6 +65,7 @@ import searchEmptyIcon from '@/images/search-empty.png'
 import shopIcon from '@/images/add-shop.png'
 import deleteIcon from '@/images/delete.png'
 import Modal from '../setting/modal.vue'
+import historyIcon from '@/images/history.png'
 
 export default {
   name: 'search',
@@ -71,17 +85,28 @@ export default {
       searchComplete: false,
       redirect: '',
       visible: false,
+      historyIcon,
+      historyList: [],
     }
+  },
+  computed: {
+    showHistorySearch() {
+      return this.historyList.length > 0 && !this.searchLoading
+    },
   },
   onShow() {
     this.startSearch = null
+    const { redirect, keyword } = Taro.getCurrentInstance().router.params
+    this.keyword = keyword === 'undefined' ? '' : keyword
+    this.redirect = redirect
+    this.getCacheSearch()
+    if (!this.keyword) return
+    this.searchProduct({ keyword, pageNo: 1 })
   },
   mounted() {
     setTitle({
       title: '搜索',
     })
-    const { redirect } = Taro.getCurrentInstance().router.params
-    this.redirect = redirect
   },
   methods: {
     addShop(product) {
@@ -112,8 +137,25 @@ export default {
     },
     onSearch(e) {
       const { value } = e.detail
-      this.keyword = value || ''
-      this.searchProduct({ keyword: value, pageNo: 1 })
+      this.keyword = (value || '').trim()
+      this.cacheSearch()
+      Taro.redirectTo({ url: `/pages/search/index?keyword=${this.keyword}` })
+      // this.searchProduct({ keyword: value, pageNo: 1 })
+    },
+    getCacheSearch() {
+      this.historyList = Taro.getStorageSync('searchHistory') || []
+    },
+    cacheSearch() {
+      if (this.keyword) {
+        const history = Taro.getStorageSync('searchHistory') || []
+        if (history.includes(this.keyword)) return
+        history.push(this.keyword)
+        Taro.setStorageSync('searchHistory', history)
+      }
+    },
+    clearSearchHistory() {
+      Taro.clearStorage('searchHistory')
+      this.historyList = []
     },
     searchProduct(params) {
       this.searchLoading = true
@@ -141,6 +183,7 @@ export default {
         })
         .finally(() => {
           this.startSearch = true
+          this.historyList = []
           this.searchLoading = false
         })
     },
