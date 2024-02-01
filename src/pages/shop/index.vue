@@ -91,7 +91,7 @@
     <Modal :visible="visible" title="删除" cancelText="取消" confirmText="确认" @cancel="() => (visible = false)" @confirm="confirmDelete">
       <view style="font-size: 28rpx">确定要删除该商品吗？</view>
     </Modal>
-    <view class="toast" v-if="errorToast.visible && errorToast.message">
+    <view class="toast" v-show="errorToast.visible && errorToast.message">
       <view class="toast-content">{{ errorToast.message }}</view></view
     >
   </view>

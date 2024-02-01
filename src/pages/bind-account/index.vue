@@ -20,7 +20,7 @@
       <nan-button type="primary" @tap="bindAccount">确定</nan-button>
     </view>
     <view class="footer-tip" @tap="forgetPassword"> 忘记密码？点击找回</view>
-    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+    <view class="common-toast" v-show="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
     >
   </view>

@@ -38,7 +38,7 @@
     <view class="empty" v-else>
       暂无数据
     </view>
-    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+    <view class="common-toast" v-show="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
     >
   </view>

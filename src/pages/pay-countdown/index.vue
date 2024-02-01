@@ -23,7 +23,7 @@
       <nan-button class="confirm" :loading="btnLoading" @tap="confirm">确认支付</nan-button>
       <nan-button class="back" @tap="goBack">返回商户界面</nan-button>
     </view>
-    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+    <view class="common-toast" v-show="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
     >
   </view>

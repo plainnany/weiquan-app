@@ -21,7 +21,7 @@
     <view class="footer">
       <nan-button type="primary" @tap="onConfirm" :loading="btnLoading">确认修改</nan-button>
     </view>
-    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+    <view class="common-toast" v-show="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
     >
   </view>

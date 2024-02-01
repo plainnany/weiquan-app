@@ -4,7 +4,7 @@
       <image :src="imageUrl" />
     </view>
     <nan-button class="btn" type="primary" @tap="save">保存</nan-button>
-    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+    <view class="common-toast" v-show="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
     >
   </view>

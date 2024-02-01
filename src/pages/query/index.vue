@@ -50,7 +50,7 @@
     <Modal :visible="tipVisible" title="" cancelText="取消" confirmText="追加订单" @cancel="cancelTip" @confirm="buyAgain">
       <view style="font-size: 32rpx; padding: 24rpx;">如需增加数量，请重新下单 </view>
     </Modal>
-    <view class="common-toast" v-if="errorToast.visible && errorToast.message">
+    <view class="common-toast" v-show="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
     >
   </view>
