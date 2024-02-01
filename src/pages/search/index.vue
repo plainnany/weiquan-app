@@ -15,7 +15,7 @@
         <text>搜索历史</text>
       </view>
       <view class="search-history-item" v-for="item in historyList" :key="item" @tap="onSearch">
-        <icon class="search-icon" type="search" size="14" :color="'#ccc'" />
+        <image :src="searchIcon" mode="" />
         <text>{{ item }}</text>
       </view>
       <view class="search-history-clear" @tap="clearSearchHistory">
@@ -66,6 +66,7 @@ import shopIcon from '@/images/add-shop.png'
 import deleteIcon from '@/images/delete.png'
 import Modal from '../setting/modal.vue'
 import historyIcon from '@/images/history.png'
+import searchIcon from '@/images/search2.png'
 
 export default {
   name: 'search',
@@ -86,6 +87,7 @@ export default {
       redirect: '',
       visible: false,
       historyIcon,
+      searchIcon,
       historyList: [],
     }
   },

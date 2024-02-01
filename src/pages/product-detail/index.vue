@@ -20,7 +20,7 @@
           <text>{{ product.tpmProductName }}</text>
         </view>
         <view class="product-donate-tag">
-          赠
+          <image :src="donateIcon" mode="widthFix" />
         </view>
       </view>
     </view>
@@ -126,6 +126,7 @@ import serviceIcon from '@/images/service.png'
 import { setTitle } from '@/utils'
 import Modal from '../setting/modal.vue'
 import giftIcon from '@/images/gift.png'
+import donateIcon from '@/images/zeng.jpg'
 
 export default {
   components: { Modal },
@@ -148,6 +149,7 @@ export default {
       showToast: false,
       visible: false,
       giftIcon,
+      donateIcon,
       footerBottom: 0,
       pageScrollTop: 0, // 页面滚动距离
     }

@@ -80,7 +80,7 @@
       </view>
     </view>
     <view class="confirm-order-footer">
-      <view class="total" v-if="showPrice">¥ {{ deliverTime ? totalFee : 0 }}</view>
+      <view class="total" v-if="showPrice">¥ {{ deliverTime ? totalFee : '' }}</view>
       <view class="confirm-order-btn" @tap="confirmOrder">立即结算</view>
     </view>
     <view>
