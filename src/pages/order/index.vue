@@ -355,9 +355,10 @@ export default {
     getOrder({ isLoadMore }) {
       const method = this.tabs.find(tab => tab.key === this.activeTab).method
       this.loading = true
+      // 奇葩的玩意，limit只有在6的情况下，小程序和app的数据才一致
       return this.$API[method]({
         pageNo: this.pageNo,
-        limit: 12,
+        limit: 6,
       })
         .then(res => {
           const data = res || []
