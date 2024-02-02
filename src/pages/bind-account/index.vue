@@ -10,7 +10,13 @@
     </view>
     <view class="account-item">
       <image :src="pwdIcon" mode="" />
-      <input v-model="customerCode" placeholder-style="color:#a89e9e" placeholder="账户" />
+      <input v-model="customerCode" placeholder-style="color:#a89e9e" placeholder="账户" @blur="blur" @focus="focus" />
+      <view class="account-history" v-if="showHistorySearch">
+        <view class="account-history-item" v-for="(item, index) in historyList" :key="item" @tap="() => checkHistory(item)">
+          <text>{{ item }}</text>
+          <image :src="closeIcon" @tap="() => clearHistory(index)" />
+        </view>
+      </view>
     </view>
     <view class="account-item">
       <image :src="accountIcon" mode="" />
@@ -35,6 +41,7 @@ import accountIcon from '@/images/user/account.png'
 import pwdIcon from '@/images/user/pwd.png'
 import './index.less'
 import ToastMixin from '@/mixin/toast'
+import closeIcon from '@/images/close.svg'
 
 export default {
   name: 'user',
@@ -58,16 +65,43 @@ export default {
         },
       ],
       unionId: '',
+      closeIcon,
+      historyList: [],
+      showHistory: false,
     }
+  },
+  computed: {
+    showHistorySearch() {
+      return this.historyList.length > 0 && this.showHistory
+    },
   },
   mounted() {
     setTitle({ title: '登录' })
+    const historyList = Taro.getStorageSync('accountHistory')
+    if (historyList && historyList.length) {
+      this.historyList = historyList
+    }
     try {
       const unionId = Taro.getStorageSync('unionId')
       this.unionId = unionId
     } catch (e) {}
   },
   methods: {
+    focus() {
+      this.showHistory = true
+    },
+    blur() {
+      setTimeout(() => {
+        this.showHistory = false
+      }, 50)
+    },
+    checkHistory(v) {
+      this.customerCode = v
+    },
+    clearHistory(index) {
+      this.historyList.splice(index, 1)
+      Taro.setStorageSync('accountHistory', this.historyList)
+    },
     onChange(e) {
       this.userType = e.detail.value
     },
@@ -91,6 +125,11 @@ export default {
           if (data) {
             this.$store.commit('setUserInfo', data)
             Taro.setStorageSync('token', data.token)
+            if (!this.historyList.includes(this.customerCode)) {
+              this.historyList.push(this.customerCode)
+              Taro.setStorageSync('accountHistory', this.historyList)
+            }
+
             // 登录成功固定跳转到首页
             Taro.switchTab({ url: '/pages/index/index' })
           }
