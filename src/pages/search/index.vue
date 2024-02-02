@@ -24,9 +24,9 @@
     </view>
     <view class="search-result" v-else>
       <view class="search-result-empty" v-if="!productList.length && startSearch">
-        <image :src="searchEmptyIcon" mode="" />
+        <!-- <image :src="searchEmptyIcon" mode="" /> -->
         <view class="search-result-empty-text">
-          抱歉，没有找到商品哦
+          暂无数据
         </view>
       </view>
       <scroll-view :scroll-y="true" v-else @scrolltolower="toLower">
@@ -163,7 +163,7 @@ export default {
       }
     },
     clearSearchHistory() {
-      Taro.clearStorage('searchHistory')
+      Taro.setStorageSync('searchHistory', '')
       this.historyList = []
     },
     searchProduct(params) {

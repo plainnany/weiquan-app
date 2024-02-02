@@ -369,7 +369,7 @@ export default {
       if (!this.checkList.some(v => v.isDelivery)) {
         this.dialogVisible = false
         this.showToast({
-          msg: '必须选择一个发货单!',
+          msg: '请选择发货单!',
         })
 
         return
