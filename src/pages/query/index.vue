@@ -144,7 +144,7 @@ export default {
     addProduct(product) {
       const productSum = parseInt(product.productSum) + parseInt(product.uninConvertRule)
       if (this.isCashUser) {
-        if (productSum >= product.originProductSum) {
+        if (productSum > product.originProductSum) {
           this.currentProduct = product
           this.tipVisible = true
 

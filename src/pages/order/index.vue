@@ -357,7 +357,7 @@ export default {
       this.loading = true
       return this.$API[method]({
         pageNo: this.pageNo,
-        limit: 10,
+        limit: 12,
       })
         .then(res => {
           const data = res || []

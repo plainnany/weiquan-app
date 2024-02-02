@@ -53,13 +53,8 @@
               <text>系统通知：</text>
             </view>
             <view class="scroll-bg">
-              <view class="scroll-wrapper" :style="{ overflow: startScroll ? 'hidden' : '', width: startScroll ? '100%' : 'auto' }">
-                <view
-                  class="scroll"
-                  id="scroll"
-                  ref="scroll"
-                  :style="{ transform: `translateX(-${distance}px)`, transition: distance > 0 ? 'all 0.3s ease' : '' }"
-                >
+              <view class="scroll-wrapper">
+                <view class="scroll" id="scroll" ref="scroll" :style="{ animation: `roll linear ${duration}s infinite` }">
                   {{ message }}
                 </view>
               </view>
@@ -140,12 +135,7 @@ export default {
       showError: false,
       checkImg,
 
-      step: 1, // 滚动速度
-      distance: 0, // 初始滚动距离
-      space: 300,
-      interval: 40, // 时间间隔
-      startScroll: false,
-      scrollLength: 100,
+      duration: '', // 文字滚动时间
     }
   },
   onShow() {
@@ -163,27 +153,6 @@ export default {
     clearInterval(this.intervalTimer)
   },
   methods: {
-    // test() {
-    //   Taro.requestSubscribeMessage({
-    //     tmplIds: ['rSaHYjHdAcQ1sWDefbdUoxNfiC7OnsaiDQYu_T3Fga8'],
-    //     success(res) {},
-    //   })
-    // },
-    scrollling() {
-      const length = this.scrollLength // 滚动文字的宽度
-      this.intervalTimer = setInterval(() => {
-        const maxWidth = length - 10
-        const left = this.distance
-        if (left < maxWidth) {
-          // 判断是否滚动到最大宽度
-          this.distance = left + this.step
-        } else {
-          this.distance = 0
-          clearInterval(this.intervalTimer)
-          this.scrollling()
-        }
-      }, this.interval)
-    },
     downloadImage() {
       Taro.downloadFile({
         url: 'https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/kd.png',
@@ -211,13 +180,7 @@ export default {
           query
             .select('#scroll')
             .boundingClientRect(rect => {
-              this.windowWidth = wx.getSystemInfoSync().windowWidth // 屏幕宽度
-              this.scrollLength = rect.width
-              console.log(this.scrollLength)
-              this.space = this.windowWidth
-              this.startScroll = true
-              clearInterval(this.intervalTimer)
-              this.scrollling() // 第一个字消失后立即从右边出现
+              this.duration = rect.width * 0.03 // 滚动文字时间，滚动速度为0.03s/px
             })
             .exec()
         }, 50)
