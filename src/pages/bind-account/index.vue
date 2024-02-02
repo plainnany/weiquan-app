@@ -41,7 +41,7 @@ import accountIcon from '@/images/user/account.png'
 import pwdIcon from '@/images/user/pwd.png'
 import './index.less'
 import ToastMixin from '@/mixin/toast'
-import closeIcon from '@/images/close.svg'
+import closeIcon from '@/images/delete2.png'
 
 export default {
   name: 'user',
