@@ -73,7 +73,7 @@ export default defineAppConfig({
   window: {
     backgroundTextStyle: 'dark',
     navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'WeChat',
+    navigationBarTitleText: '味全',
     navigationBarTextStyle: 'black',
   },
 })

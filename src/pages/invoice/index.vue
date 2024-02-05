@@ -244,8 +244,15 @@ export default {
   methods: {
     initDate() {
       const { year, month } = this.defaultDate
-      this.startDate = `${year}-${month}`
-      this.endDate = `${year}-${month}`
+
+      if (this.dateMode === 'month') {
+        this.startDate = `${year}-${month}`
+        this.endDate = `${year}-${month}`
+      } else {
+        const lastDayOfMonth = new Date(year, month, 0).getDate()
+        this.startDate = `${year}-${month}-01`
+        this.endDate = `${year}-${month}-${lastDayOfMonth}`
+      }
       this.saveStartDate = this.startDate
       this.saveEndDate = this.endDate
     },

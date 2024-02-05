@@ -81,6 +81,7 @@ page {
     background: transparent;
     padding: 0 24px;
     margin: 0 20px;
+    background-color: #fff;
 
     .search-input {
       width: calc(100% - 120px);
@@ -97,7 +98,6 @@ page {
 
   .search-result {
     margin-top: 30px;
-    background-color: #eee;
     flex: auto;
     position: relative;
 
@@ -111,20 +111,20 @@ page {
   }
 
   .search-result-empty {
-    width: 320px;
-    height: 380px;
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &-text {
       font-size: 32px;
       font-weight: 400;
       color: #999999;
-      line-height: 45px;
-      padding-top: 80px;
     }
 
     image {

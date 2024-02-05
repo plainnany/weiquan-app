@@ -14,7 +14,7 @@
         <image :src="historyIcon" mode="" />
         <text>搜索历史</text>
       </view>
-      <view class="search-history-item" v-for="item in historyList" :key="item" @tap="onSearch">
+      <view class="search-history-item" v-for="item in historyList" :key="item" @tap="() => onSearch({ detail: { value: item } })">
         <image :src="searchIcon" mode="" />
         <text>{{ item }}</text>
       </view>
@@ -59,6 +59,9 @@
         ,感谢!</view
       >
     </Modal>
+    <view class="common-toast" v-show="errorToast.visible && errorToast.message">
+      <text>{{ errorToast.message }}</text></view
+    >
   </view>
 </template>
 
@@ -73,9 +76,11 @@ import Modal from '../setting/modal.vue'
 import historyIcon from '@/images/history.png'
 import searchIcon from '@/images/search2.png'
 import dingImg from '@/images/ding.png'
+import ToastMixin from '@/mixin/toast'
 
 export default {
   name: 'search',
+  mixins: [ToastMixin],
   components: {
     Modal,
   },
@@ -129,16 +134,12 @@ export default {
           amount: product.productUnitRule,
         })
         .then(data => {
-          Taro.showToast({
-            title: '添加成功',
-            icon: 'success',
+          this.showToast({
+            msg: '加入成功',
           })
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'error',
-          })
+          this.showToast(err)
         })
     },
     viewDetail(product) {
@@ -185,10 +186,7 @@ export default {
           }
         })
         .catch(err => {
-          Taro.showToast({
-            title: err.msg,
-            icon: 'error',
-          })
+          this.showToast(err)
         })
         .finally(() => {
           this.startSearch = true

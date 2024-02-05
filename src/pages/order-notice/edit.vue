@@ -12,7 +12,7 @@
           <view class="time-detail">
             <view class="hour">
               <input v-model="hour" />
-              <view>点</view>
+              <view>时</view>
             </view>
             <view>:</view>
             <view class="min">

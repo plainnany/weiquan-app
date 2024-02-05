@@ -164,6 +164,15 @@ export default {
     },
     onBlur(product) {
       if (!product.productSum) return
+      if (this.isCashUser) {
+        if (Number(product.productSum) > Number(product.originProductSum)) {
+          this.currentProduct = product
+          this.tipVisible = true
+          product.productSum = parseInt(product.originProductSum)
+
+          return
+        }
+      }
       product.productSum = parseInt(product.productSum)
     },
     handleChange() {
