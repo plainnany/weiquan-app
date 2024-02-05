@@ -53,7 +53,7 @@
               <image :src="product.productImage" mode="" />
             </view>
             <view class="confirm-order-info">
-              <view>{{ product.productName }}</view>
+              <view class="confirm-order-info-title">{{ product.productName }}</view>
               <view>规格：{{ product.productSpecs }} </view>
               <view>单位：1 {{ product.productUnitMax }} / 数量：{{ product.productUnitConvertRule }}</view>
               <!-- <view class="confirm-order-tag"
