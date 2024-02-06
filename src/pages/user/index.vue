@@ -181,14 +181,14 @@ export default {
     items1() {
       if (this.userInfo.isInvoice === '01') {
         return [
-          { icon: chargeImg, title: this.userInfo.accountType === '02' ? '账户余额' : '账户余额及充值', path: '/pages/cost/index' },
+          { icon: chargeImg, title: this.userInfo.accountType === '02' ? '账号余额' : '账户余额及充值', path: '/pages/cost/index' },
           { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
           { icon: dzkp, title: '开票申请', path: `/pages/invoice/index` },
           { icon: ruleImg, title: '配送规则', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
         ]
       }
       return [
-        { icon: chargeImg, title: this.userInfo.accountType === '02' ? '账户余额' : '账户余额及充值', path: '/pages/cost/index' },
+        { icon: chargeImg, title: this.userInfo.accountType === '02' ? '账号余额' : '账户余额及充值', path: '/pages/cost/index' },
         { icon: eletronicBillImg, title: '电子对账单', path: '/pages/electronic-bill/index' },
         { icon: ruleImg, title: '配送规则', path: `/pages/web-view/index?url=${BASE_URL}/product-rule.htm` }, // 配送规则可能是个h5地址，先暂时放着
       ]

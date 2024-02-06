@@ -21,7 +21,7 @@
           @refresherrefresh="onRefresh"
           @scrolltolower="toLower"
         >
-          <view class="order-result-list" v-if="activeTab === 'to-delivery'">
+          <view class="order-result-list to-delivery" v-if="activeTab === 'to-delivery'">
             <view class="common-card">
               <view class="order-result-title">
                 <view @tap="contact" class="contact"
@@ -50,7 +50,7 @@
                       </view>
                     </view>
                   </view>
-                  <view>
+                  <view class="order-result-number">
                     <view>{{ product.productSum }}</view>
                   </view>
                 </view>

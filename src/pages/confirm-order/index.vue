@@ -53,7 +53,7 @@
               <image :src="product.productImage" mode="" />
             </view>
             <view class="confirm-order-info">
-              <view class="confirm-order-info-title">{{ product.productName }}</view>
+              <view class="confirm-order-info-title" :class="{ title2: showPrice }">{{ product.productName }}</view>
               <view>规格：{{ product.productSpecs }} </view>
               <view>单位：1 {{ product.productUnitMax }} / 数量：{{ product.productUnitConvertRule }}</view>
               <!-- <view class="confirm-order-tag"
@@ -139,6 +139,7 @@ export default {
     this.params = instance.router.params
     this.isBatchOrder = this.params.type === 'batch'
     await this.getDetail()
+    console.log(this.$store.state.deliverTime)
     if (this.$store.state.deliverTime) {
       this.productCode = this.$store.state.currentProduct.productCode
       this.deliverTime = this.$store.state.deliverTime

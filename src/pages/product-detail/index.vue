@@ -1,5 +1,5 @@
 <template>
-  <view class="product-detail" :style="{ 'padding-bottom': footerBottom === 0 ? 0 : footerBottom + 'px' }">
+  <view class="product-detail" :style="{ 'padding-bottom': footerBottom === 0 ? 0 : footerBottom + 300 + 'px' }">
     <view class="product-banner" :class="{ extra: hasDonate }">
       <swiper :autoplay="false" @change="onSwiperChange" :indicator-active-color="swiperOptions.indicatorColor" :circular="true">
         <swiper-item v-for="(imageUrl, index) in product.images" :key="index">
@@ -177,7 +177,7 @@ export default {
   methods: {
     keyboardheightchange(e) {
       this.footerBottom = e.detail.height
-      const distance = 30
+      const distance = 80
       if (this.pageScrollTop < distance) {
         wx.pageScrollTo({ scrollTop: distance })
       }

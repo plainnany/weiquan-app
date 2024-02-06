@@ -2,7 +2,7 @@
   <view class="remain-page">
     <view class="remain-info">
       <view class="remain-title">
-        账户余额(元)
+        账号余额(元)
       </view>
 
       <view class="remain-money">

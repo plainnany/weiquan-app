@@ -95,13 +95,19 @@ export default {
 
 <style lang="less">
 .image-preview {
+  border-top: 2px solid #eee;
   height: 100%;
-  padding: 24px;
+  padding: 24px 49px;
+  background-color: rgb(249, 249, 249);
+
+  .btn {
+    margin-top: 24px;
+  }
 
   .image {
     image {
       width: 100%;
-      height: calc(100vh - 150px);
+      height: 64vh;
     }
   }
 }

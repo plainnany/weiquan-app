@@ -280,10 +280,12 @@ export default {
           oid: this.deleteOid,
         })
         .then(() => {
+          this.visible = false
           this.getProduct()
           this.showToast({ msg: '删除成功' })
         })
         .catch(res => {
+          this.visible = false
           this.showToast(res)
         })
     },

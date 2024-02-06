@@ -12,7 +12,7 @@
           <view class="time-detail">
             <view class="hour">
               <input v-model="hour" />
-              <view>时</view>
+              <view>点</view>
             </view>
             <view>:</view>
             <view class="min">
@@ -44,7 +44,7 @@
       </view>
     </view>
 
-    <view class="footer" @tap="deleteNotice">删除下单提醒</view>
+    <!-- <view class="footer" @tap="deleteNotice">删除下单提醒</view> -->
     <nan-modal :visible="dateChooseVisible" v-if="dateChooseVisible" fullScreen>
       <view class="week">
         <view class="week-action">
@@ -160,7 +160,7 @@ export default {
     this.$instance = Taro.getCurrentInstance()
   },
   mounted() {
-    setTitle({ title: '下单提醒' })
+    setTitle({ title: '编辑下单提醒' })
     const params = this.$instance.router.params
     const { type, data } = params
     this.editType = type
@@ -168,14 +168,15 @@ export default {
     const defaultDate = new Date()
     let minutes = defaultDate.getMinutes()
     let hours = defaultDate.getHours()
+    hours = hours > 12 ? hours - 12 : hours
     minutes = minutes > 10 ? minutes : '0' + minutes
-    hours = hours > 10 ? hours : '0' + hours
+    // hours = hours > 10 ? hours : '0' + hours
 
     if (data) {
       this.noticeData = JSON.parse(data) || {}
       const { noticeTime, noticeDate, remarks } = this.noticeData
       const [hour, min] = (noticeTime || '').split(':')
-      this.hour = hour
+      this.hour = Number(hour)
       this.min = min
       this.repeatDate = this.getNoticeDay(noticeDate)
       this.remarks = remarks

@@ -14,9 +14,10 @@
         <image :src="historyIcon" mode="" />
         <text>搜索历史</text>
       </view>
-      <view class="search-history-item" v-for="item in historyList" :key="item" @tap="() => onSearch({ detail: { value: item } })">
+      <view class="search-history-item" v-for="(item, index) in historyList" :key="item" @tap="() => onSearch({ detail: { value: item } })">
         <image :src="searchIcon" mode="" />
         <text>{{ item }}</text>
+        <image :src="closeIcon" class="delete-icon" @tap="() => clearHistory(index)" />
       </view>
       <view class="search-history-clear" @tap="clearSearchHistory">
         清除历史
@@ -77,6 +78,7 @@ import historyIcon from '@/images/history.png'
 import searchIcon from '@/images/search2.png'
 import dingImg from '@/images/ding.png'
 import ToastMixin from '@/mixin/toast'
+import closeIcon from '@/images/delete2.png'
 
 export default {
   name: 'search',
@@ -101,6 +103,7 @@ export default {
       searchIcon,
       historyList: [],
       dingImg,
+      closeIcon,
     }
   },
   computed: {
@@ -166,6 +169,10 @@ export default {
     clearSearchHistory() {
       Taro.setStorageSync('searchHistory', '')
       this.historyList = []
+    },
+    clearHistory(index) {
+      this.historyList.splice(index, 1)
+      Taro.setStorageSync('searchHistory', this.historyList)
     },
     searchProduct(params) {
       this.searchLoading = true

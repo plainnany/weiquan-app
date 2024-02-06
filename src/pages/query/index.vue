@@ -42,11 +42,11 @@
     <view class="order-item-footer" @tap="handleChange">
       完成修改
     </view>
-    <view>
+    <!-- <view>
       <nan-modal :visible="dateChooseVisible" v-if="dateChooseVisible" fullScreen>
         <DateChooser :dateList="dateList" @confirm="confirmDate" @cancel="cancelDate" />
       </nan-modal>
-    </view>
+    </view> -->
     <Modal :visible="tipVisible" title="" cancelText="取消" confirmText="追加订单" @cancel="cancelTip" @confirm="buyAgain">
       <view style="font-size: 32rpx; padding: 24rpx;">如需增加数量，请重新下单 </view>
     </Modal>
@@ -98,6 +98,13 @@ export default {
 
   onShow() {
     this.getProduct()
+    this.deliverTime = this.$store.state.deliverTime
+    if (this.deliverTime) {
+      this.confirmDate()
+    }
+  },
+  beforeDestroy() {
+    this.$store.commit('setDeliverTime', null)
   },
   methods: {
     getProduct(type) {
@@ -123,17 +130,19 @@ export default {
     },
     chooseDate() {
       setTitle({ title: '选择日期' })
-      this.dateChooseVisible = true
+      Taro.navigateTo({
+        url: `/pages/confirm-order/date-chooser?type=query`,
+      })
+      // this.dateChooseVisible = true
     },
     cancelDate() {
       this.dateChooseVisible = false
       setTitle({ title: '查询&修改' })
     },
     confirmDate(params) {
-      this.date = params.map(v => v.weekStr.split(' ')[0]).join(',')
-      this.dateChooseVisible = false
+      this.date = this.deliverTime.map(v => v.split(' ')[0]).join(',')
+      // this.dateChooseVisible = false
       this.getProduct()
-      setTitle({ title: '查询&修改' })
     },
     viewOrderDetail(item) {
       // 区分一下当天收货

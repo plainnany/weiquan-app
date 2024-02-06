@@ -86,7 +86,7 @@ export default {
   },
   computed: {},
   onShow() {
-    const { productCode, isBatchOrder, productId, sum, shopIds } = Taro.getCurrentInstance().router.params
+    const { productCode, isBatchOrder, productId, sum, shopIds, type } = Taro.getCurrentInstance().router.params
     this.productCode = productCode
     this.isBatchOrder = isBatchOrder === 'true'
     this.restQuery = {
@@ -99,6 +99,7 @@ export default {
     this.$API
       .dateChooser({
         productCode: this.productCode,
+        type: type === 'query' ? 1 : '', //从查询修改过来的，type固定1
       })
       .then(data => {
         this.dateList = data.map(v => ({
@@ -183,6 +184,8 @@ export default {
         const deliverTime = query.map(v => v.weekStr)
         const pages = Taro.getCurrentPages()
         const prevPage = pages[pages.length - 2]
+        this.$store.commit('setDeliverTime', deliverTime)
+
         Taro.navigateBack({
           delta: 1,
           success: res => {

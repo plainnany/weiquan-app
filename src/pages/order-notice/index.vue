@@ -100,7 +100,7 @@ export default {
       const [hours, minutes] = time.split(':')
       const hour = hours > 12 ? hours - 12 : hours - 0
       const min = Number(minutes)
-      return `${'0' + hour}:${min > 9 ? min : '0' + min}`
+      return `${hour <= 9 ? '0' + hour : hour}:${min > 9 ? min : '0' + min}`
     },
     getNoticeDay(date) {
       date = date || ''
@@ -138,7 +138,11 @@ export default {
       Taro.navigateTo({ url: '/pages/order-notice/edit?type=add' })
     },
     editNotice(item) {
-      Taro.navigateTo({ url: `/pages/order-notice/edit?type=edit&data=${JSON.stringify(item)}` })
+      const data = {
+        ...item,
+        noticeTime: this.getNoticeTime(item.noticeTime),
+      }
+      Taro.navigateTo({ url: `/pages/order-notice/edit?type=edit&data=${JSON.stringify(data)}` })
     },
     handleTouchStart(e, index) {
       if (this.edit) return

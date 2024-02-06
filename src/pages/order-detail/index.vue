@@ -123,7 +123,7 @@
         <view class="order-detail-item">
           <text class="order-detail-color-grey">预计到货：{{ orderDetail.deliveryDate }}</text>
         </view>
-        <view class="to-delivery-btn">
+        <view class="to-delivery-btn" v-if="userInfo.isMap === '01'">
           <nan-button type="primary" @tap="viewLogistics">查看物流</nan-button>
         </view>
       </view>

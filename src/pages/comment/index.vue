@@ -161,7 +161,7 @@
       cancelText="取消"
       confirmText="确定"
       @cancel="() => (confirmDialog = {})"
-      @confirm="submit"
+      @confirm="() => submit(true)"
     >
       <view style="padding: 0 24rpx">{{ confirmDialog.content }}</view>
     </Modal>
@@ -209,12 +209,12 @@ export default {
       type: '',
       returnFlgRange: [
         {
-          label: '是',
-          key: '01',
-        },
-        {
           label: '否',
           key: '02',
+        },
+        {
+          label: '是',
+          key: '01',
         },
       ],
       maxlength: 200,
@@ -429,20 +429,21 @@ export default {
       this.videoUrl = ''
     },
     handleSubmit() {
-      if (this.form.dictid === '2.03') {
+      this.submit()
+    },
+    submit(flag) {
+      if (this.btnDisabled) {
+        return this.showToast({ msg: this.tip })
+      }
+      if (this.form.dictid === '2.03' && !flag) {
         this.confirmDialog = {
           title: '提示',
           content:
             '烦请留存异常产品至少三个工作日，我司会尽快联系您并与您确认问题产品寄送测样。请将异常产品标记区分良品存放。感谢您的合作!',
           visible: true,
         }
-      } else {
-        this.submit()
-      }
-    },
-    submit() {
-      if (this.btnDisabled) {
-        return this.showToast({ msg: this.tip })
+
+        return
       }
       if (this.btnLoading) return
       const { description, dictid, number, productCode } = this.form
@@ -470,11 +471,13 @@ export default {
         .submitComplain(params)
         .then(() => {
           this.showToast({ msg: '提交成功' })
+          this.confirmDialog = {}
           setTimeout(() => {
             Taro.navigateBack({ delta: 1 })
           }, 1000)
         })
         .catch(err => {
+          this.confirmDialog = {}
           this.showToast(err)
         })
         .finally(() => {

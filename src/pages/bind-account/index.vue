@@ -22,6 +22,9 @@
       <image :src="accountIcon" mode="" />
       <input v-model="customerPassword" type="password" placeholder-style="color:#a89e9e" placeholder="密码" />
     </view>
+    <!-- <view class="privacy">
+      <checkbox v-model="agree">我已阅读并同意<text @tap="jump(1)">《用户协议》</text>和<text @tap="jump(2)">《隐私政策》</text></checkbox>
+    </view> -->
     <view class="footer">
       <nan-button type="primary" @tap="bindAccount">确定</nan-button>
     </view>
@@ -68,6 +71,7 @@ export default {
       closeIcon,
       historyList: [],
       showHistory: false,
+      agree: false,
     }
   },
   computed: {
@@ -144,6 +148,7 @@ export default {
     forgetPassword() {
       Taro.navigateTo({ url: '/pages/bind-account/forget' })
     },
+    jump() {},
   },
 }
 </script>

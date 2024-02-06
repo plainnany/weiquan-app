@@ -132,7 +132,9 @@
     line-height: 30px;
     text-align: right;
     height: 140px;
-    position: relative;
+    position: absolute;
+    right: 24px;
+    top: 25px;
     view:first-child {
       margin-bottom: 38px;
       color: #fa4a2d;
@@ -153,7 +155,10 @@
 
   &-info {
     &-title {
-      width: 90%;
+      &.title2 {
+        width: 90%;
+      }
+
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -209,6 +214,7 @@
     margin-bottom: 20px;
     padding: 24px;
     background-color: #fff;
+    position: relative;
 
     &.is-batch {
       margin-top: 20px;
@@ -228,15 +234,13 @@
 
     .total {
       color: #fa4a2d;
-      position: absolute;
-      right: 160px;
-      top: 24px;
+      display: inline-block;
     }
 
     .confirm-order-btn {
-      height: 80px;
-      line-height: 80px;
-      width: 140px;
+      height: 100px;
+      line-height: 100px;
+      width: 200px;
       margin-left: 20px;
       display: inline-block;
       text-align: center;
