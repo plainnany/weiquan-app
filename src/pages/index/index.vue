@@ -90,7 +90,7 @@
     <view class="toast" v-show="showError">
       <view class="toast-content">
         <image :src="checkImg" mode="widthFix" />
-        您还没有该功能的权限</view
+        {{ errorToast }}</view
       ></view
     >
     <!-- <button @tap="test">点击</button> -->
@@ -134,7 +134,7 @@ export default {
       count: '',
       showError: false,
       checkImg,
-
+      errorToast: '',
       duration: '', // 文字滚动时间
     }
   },
@@ -192,12 +192,21 @@ export default {
         url: `/pages/product/index`,
       })
     },
+    showToast(errorToast) {
+      if (this.showError) return
+      this.showError = true
+      this.errorToast = errorToast
+      this.timer = setTimeout(() => {
+        clearTimeout(this.timer)
+        this.showError = false
+      }, 3000)
+    },
     handleNav(type) {
       const urlMap = {
         sign: '/pages/order/index?type=to-delivery',
         notice: '/pages/notice/index',
         charge: '/pages/charge/index',
-        shop: '/pages/shop/index',
+        shop: '/pages/shop/index?type=all',
       }
       if (type === 'shop') {
         Taro.switchTab({ url: urlMap[type] })
@@ -209,12 +218,7 @@ export default {
               url: urlMap[type],
             })
           } else {
-            if (this.showError) return
-            this.showError = true
-            this.timer = setTimeout(() => {
-              clearTimeout(this.timer)
-              this.showError = false
-            }, 3000)
+            this.showToast('您还没有该功能的权限')
           }
         } else {
           Taro.navigateTo({

@@ -22,9 +22,13 @@
       <image :src="accountIcon" mode="" />
       <input v-model="customerPassword" type="password" placeholder-style="color:#a89e9e" placeholder="密码" />
     </view>
-    <!-- <view class="privacy">
-      <checkbox v-model="agree">我已阅读并同意<text @tap="jump(1)">《用户协议》</text>和<text @tap="jump(2)">《隐私政策》</text></checkbox>
-    </view> -->
+    <view class="privacy">
+      <checkbox :checked="agree" @tap="() => (agree = !agree)"
+        >我已阅读并同意
+        <!-- <text @tap="jump(1)">《用户协议》</text> -->
+        <text @tap="jump(2)">《隐私政策》</text></checkbox
+      >
+    </view>
     <view class="footer">
       <nan-button type="primary" @tap="bindAccount">确定</nan-button>
     </view>
@@ -45,6 +49,7 @@ import pwdIcon from '@/images/user/pwd.png'
 import './index.less'
 import ToastMixin from '@/mixin/toast'
 import closeIcon from '@/images/delete2.png'
+import { BASE_URL } from '@/const'
 
 export default {
   name: 'user',
@@ -110,11 +115,14 @@ export default {
       this.userType = e.detail.value
     },
     bindAccount() {
-      if (!this.customerCode || !this.customerPassword) {
-        return Taro.showToast({
-          title: '请将内容填写完整',
-          icon: 'none',
-        })
+      if (!this.customerCode) {
+        return this.showToast({ msg: '账号不能为空' })
+      }
+      if (!this.customerPassword) {
+        return this.showToast({ msg: '请输入密码' })
+      }
+      if (!this.agree) {
+        return this.showToast({ msg: '请同意用户协议' })
       }
 
       const password = crypto.AES.encrypt(this.customerPassword, '30886A121CEDEFDE3ED765311F89964C').toString()
@@ -148,7 +156,9 @@ export default {
     forgetPassword() {
       Taro.navigateTo({ url: '/pages/bind-account/forget' })
     },
-    jump() {},
+    jump() {
+      Taro.navigateTo({ url: `/pages/web-view/index?url=${BASE_URL}/xcxys.html` })
+    },
   },
 }
 </script>

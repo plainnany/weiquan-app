@@ -167,9 +167,8 @@
 
       &-number {
         display: flex;
-        align-items: center;
         margin-top: 68px;
-        border: 1px solid #f0f2f5;
+        border: 2px solid #eee;
         border-radius: 4px;
 
         color: #333;
@@ -181,9 +180,9 @@
           margin: 0 8px;
           text-align: center;
           min-width: 60px;
-          max-width: 100px;
-          border-right: 1px solid #f0f2f5;
-          border-left: 1px solid #f0f2f5;
+          max-width: 80px;
+          border-right: 2px solid #eee;
+          border-left: 2px solid #eee;
           font-size: 26px;
         }
       }
@@ -243,11 +242,11 @@
   }
 
   .product-action-btn {
-    width: 44px;
-    height: 44px;
-    line-height: 40px;
-    text-align: center;
+    box-sizing: border-box;
+    padding: 0 12px;
     font-size: 30px;
+    display: flex;
+    align-items: center;
     &.disable {
       color: #ccc;
     }

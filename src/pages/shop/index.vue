@@ -158,6 +158,7 @@ export default {
 
   onShow() {
     this.checkAll = false
+    this.edit = false
     this.getProduct()
   },
   methods: {
