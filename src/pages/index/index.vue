@@ -209,7 +209,9 @@ export default {
         shop: '/pages/shop/index?type=all',
       }
       if (type === 'shop') {
-        Taro.switchTab({ url: urlMap[type] })
+        this.$API.placeOrder().then(res => {
+          Taro.switchTab({ url: urlMap[type] })
+        })
       } else {
         const canCharge = this.$store.state.userInfo.dianZhang && this.$store.state.userInfo.franchiser !== '02'
         if (type === 'charge') {

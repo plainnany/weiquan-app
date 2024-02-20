@@ -453,6 +453,12 @@ const requestAddressList = [
     url: '/api/order/countdown.ns?',
     type: 'post',
   },
+  {
+    describe: '首页一键下单-跳转到购物车时需要调用的接口',
+    method: 'placeOrder',
+    url: '/api/order/placeOrder.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}
