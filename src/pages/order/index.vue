@@ -141,15 +141,15 @@
         </scroll-view>
       </view>
       <Modal
-        :visible="cancelDialog.visible"
-        v-if="cancelDialog.visible"
-        :title="cancelDialog.title"
-        cancelText="放弃"
-        confirmText="取消订单"
-        @cancel="() => (cancelDialog = {})"
-        @confirm="cancelOrder(cancelDialog.order)"
+        :visible="modalDialog.visible"
+        v-if="modalDialog.visible"
+        :title="modalDialog.title"
+        :cancelText="modalDialog.cancelText"
+        :confirmText="modalDialog.okText"
+        @cancel="modalDialog.cancelFn"
+        @confirm="modalDialog.confirmFn"
       >
-        <view>{{ cancelDialog.content }}</view>
+        <view>{{ modalDialog.content }}</view>
       </Modal>
       <view v-if="showRefresher" class="refresher">refresher</view>
     </view>
@@ -269,11 +269,12 @@ export default {
       confirmBtnLoading: false,
       previewImg: '',
       showTipModal: false,
-      cancelDialog: {
+      modalDialog: {
         visible: false,
       },
       pulling: false,
       showRefresher: false,
+      initPayMethod: '',
     }
   },
   computed: {
@@ -285,14 +286,6 @@ export default {
         return !this.delivery.length && this.hasGetOrder
       }
       return !this.orderList.length && this.hasGetOrder
-    },
-    initPayMethod() {
-      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
-        this.payMethod = 'weixin-2'
-        return 'weixin-2'
-      }
-
-      return 'weixin-pocket'
     },
   },
   onShareAppMessage() {
@@ -323,6 +316,14 @@ export default {
     this.getOrder({ type: 'all' })
   },
   methods: {
+    initPay() {
+      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
+        this.payMethod = 'weixin-2'
+        return 'weixin-2'
+      }
+
+      return 'weixin-pocket'
+    },
     onRefresh(e) {
       this.pulling = true
       console.log('onrefresh', this.pulling)
@@ -389,11 +390,16 @@ export default {
       this.getOrder({ isLoadMore: true })
     },
     handleCancelOrder(order) {
-      this.cancelDialog = {
+      this.modalDialog = {
         title: '删除订单',
         content: '一旦取消订单，将不再显示？',
         visible: true,
-        order,
+        okText: '取消订单',
+        cancelText: '放弃',
+        cancelFn: () => {
+          this.modalDialog = {}
+        },
+        confirmFn: () => this.cancelOrder(order),
       }
     },
     cancelOrder(order) {
@@ -402,7 +408,7 @@ export default {
           mainOrderNumber: order.orderNumber,
         })
         .then(data => {
-          this.cancelDialog = {}
+          this.modalDialog = {}
           const index = this.orderList.findIndex(v => v.orderNumber === order.orderNumber)
           if (index > -1) {
             this.orderList.splice(index, 1)
@@ -465,7 +471,25 @@ export default {
           })
           .catch(err => {
             this.btnLoading = false
-            this.showToast(err)
+            this.hideModal()
+            if (err.returnCode === 333) {
+              this.modalDialog = {
+                visible: true,
+                content: '余额不足是否充值？',
+                title: '提示',
+                okText: '去充值',
+                cancelText: '取消',
+                cancelFn: () => {
+                  this.modalDialog = {}
+                },
+                confirmFn: () => {
+                  this.modalDialog = {}
+                  Taro.navigateTo({ url: '/pages/charge/index' })
+                },
+              }
+            } else {
+              this.showToast(err)
+            }
           })
       } else if (this.payMethod === 'weixin') {
         // 如果是微信支付，SurplusPage=01 跳转中间支付倒计时页面，然后拉起微信小程序支付
@@ -508,10 +532,15 @@ export default {
 
     showModal() {
       this.payDialogVisible = true
+      this.resetPayMethod()
     },
     hideModal() {
-      this.payMethod = ''
       this.payDialogVisible = false
+      this.resetPayMethod()
+    },
+    resetPayMethod() {
+      this.initPayMethod = this.initPay()
+      this.payMethod = this.initPayMethod
     },
     viewOrderDetail(orderNumber) {
       // 区分一下当天收货

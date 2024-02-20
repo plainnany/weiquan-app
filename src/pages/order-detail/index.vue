@@ -138,7 +138,7 @@
       </view>
     </view>
     <view v-if="payDialogVisible" class="order-pay-modal">
-      <view :class="['order-pay-modal-wrap']" @tap="() => (payDialogVisible = false)"></view>
+      <view :class="['order-pay-modal-wrap']" @tap="hideModal"></view>
       <view :class="['order-pay-modal-wrapper']">
         <view class="order-pay">
           <!-- 头部 -->
@@ -165,15 +165,15 @@
       <text>{{ errorToast.message }}</text></view
     >
     <Modal
-      :visible="cancelDialog.visible"
-      v-if="cancelDialog.visible"
-      :title="cancelDialog.title"
-      cancelText="放弃"
-      confirmText="取消订单"
-      @cancel="() => (cancelDialog = {})"
-      @confirm="cancelOrder()"
+      :visible="modalDialog.visible"
+      v-if="modalDialog.visible"
+      :title="modalDialog.title"
+      :cancelText="modalDialog.cancelText"
+      :confirmText="modalDialog.okText"
+      @cancel="modalDialog.cancelFn"
+      @confirm="modalDialog.confirmFn"
     >
-      <view>{{ cancelDialog.content }}</view>
+      <view>{{ modalDialog.content }}</view>
     </Modal>
   </view>
 </template>
@@ -237,9 +237,10 @@ export default {
       orderType: '',
       showError: false,
       showTipModal: false,
-      cancelDialog: {
+      modalDialog: {
         visible: false,
       },
+      initPayMethod: '',
     }
   },
   onShareAppMessage(res) {
@@ -321,14 +322,6 @@ export default {
     showPrice() {
       return this.orderDetail.state === '01' && this.$store.state.userInfo.showPrice
     },
-    initPayMethod() {
-      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
-        this.payMethod = 'weixin-2'
-        return 'weixin-2'
-      }
-
-      return 'weixin-pocket'
-    },
   },
   beforeDestroy() {
     clearTimeout(this.timer)
@@ -343,6 +336,14 @@ export default {
     this.getOrder(order)
   },
   methods: {
+    initPay() {
+      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
+        this.payMethod = 'weixin-2'
+        return 'weixin-2'
+      }
+
+      return 'weixin-pocket'
+    },
     clickTab({ key }) {
       this.activeTab = key
     },
@@ -447,10 +448,16 @@ export default {
       this.showTipModal = false
     },
     handleCancelOrder() {
-      this.cancelDialog = {
+      this.modalDialog = {
         title: '删除订单',
         content: '一旦取消订单，将不再显示？',
         visible: true,
+        okText: '取消订单',
+        cancelText: '放弃',
+        cancelFn: () => {
+          this.modalDialog = {}
+        },
+        confirmFn: () => this.cancelOrder(),
       }
     },
     handleConfirm() {
@@ -484,7 +491,25 @@ export default {
           })
           .catch(err => {
             this.btnLoading = false
-            this.showToast(err)
+            this.hideModal()
+            if (err.returnCode === 333) {
+              this.modalDialog = {
+                visible: true,
+                content: '余额不足是否充值？',
+                title: '提示',
+                okText: '去充值',
+                cancelText: '取消',
+                cancelFn: () => {
+                  this.modalDialog = {}
+                },
+                confirmFn: () => {
+                  this.modalDialog = {}
+                  Taro.navigateTo({ url: '/pages/charge/index' })
+                },
+              }
+            } else {
+              this.showToast(err)
+            }
           })
       } else if (this.payMethod === 'weixin') {
         // 如果是微信支付，SurplusPage=01 跳转中间支付倒计时页面，然后拉起微信小程序支付
@@ -525,10 +550,15 @@ export default {
 
     showModal() {
       this.payDialogVisible = true
+      this.resetPayMethod()
     },
     hideModal() {
-      this.payMethod = ''
       this.payDialogVisible = false
+      this.resetPayMethod()
+    },
+    resetPayMethod() {
+      this.initPayMethod = this.initPay()
+      this.payMethod = this.initPayMethod
     },
     contact() {
       if (!this.$store.state.userInfo.customerService) {

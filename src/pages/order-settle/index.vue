@@ -26,6 +26,17 @@
     <view class="common-toast" v-show="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
     >
+    <Modal
+      :visible="modal.visible"
+      v-if="modal.visible"
+      :title="modal.title"
+      cancelText="取消"
+      confirmText="去充值"
+      @cancel="() => (modal = {})"
+      @confirm="goCharge"
+    >
+      <view style="padding: 0 24rpx; font-size: 30rpx">{{ modal.content }}</view>
+    </Modal>
   </view>
 </template>
 
@@ -37,10 +48,11 @@ import alipayIcon from '@/images/alipay.png'
 import weipocketIcon from '@/images/wei-pocket.png'
 import Taro from '@tarojs/taro'
 import ToastMixin from '@/mixin/toast'
+import Modal from '../setting/modal.vue'
 
 export default {
-  name: 'cost',
-  components: {},
+  name: 'order-settle',
+  components: { Modal },
   mixins: [ToastMixin],
   data() {
     return {
@@ -51,6 +63,11 @@ export default {
       // payMethod: 'weixin-pocket',
       payMethod: '',
       showTipModal: false,
+      modal: {
+        visible: false,
+        content: '',
+        title: '',
+      }, // 余额不足提示
     }
   },
   computed: {
@@ -118,7 +135,15 @@ export default {
             })
           })
           .catch(err => {
-            this.showToast(err)
+            if (err.returnCode === 333) {
+              this.modal = {
+                visible: true,
+                content: '余额不足是否充值？',
+                title: '提示',
+              }
+            } else {
+              this.showToast(err)
+            }
           })
       } else if (this.payMethod === 'weixin') {
         // 如果是微信支付，SurplusPage=01 跳转中间支付倒计时页面，然后拉起微信小程序支付
@@ -156,6 +181,10 @@ export default {
             this.showToast(err)
           })
       }
+    },
+    goCharge() {
+      this.modal = {}
+      Taro.navigateTo({ url: '/pages/charge/index' })
     },
   },
 }
