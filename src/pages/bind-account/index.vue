@@ -129,6 +129,7 @@ export default {
       this.$API
         .bindShop({
           unionId: Taro.getStorageSync('unionId'),
+          openId: Taro.getStorageSync('openId'),
           customerCode: this.customerCode,
           password,
           userType: this.userType,

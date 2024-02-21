@@ -40,8 +40,9 @@ function login() {
       API.getOpenId({
         jsCode: res.code,
       }).then(data => {
-        const { unionid } = data
+        const { unionid, openid } = data
         Taro.setStorageSync('unionId', unionid)
+        Taro.setStorageSync('openId', openid)
         getBindShopList(unionid)
       })
       console.log(res.code)
