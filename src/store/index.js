@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import API from '@/service/api'
+import Taro from '@tarojs/taro'
 
 Vue.use(Vuex)
 
@@ -8,7 +9,11 @@ const state = {
   userInfo: {},
   switchCategoryTab: '',
   bindStatus: false, // 是否跳转过绑定用户页面
-  deliverTime: null, // 确认订单时间，由于页面互相跳转，页面传参困难，使用store来传递
+  /**
+   * 确认订单时间，由于页面互相跳转，页面传参困难，使用store来传递
+   * [{ id: '', date: [] }]
+   */
+  deliverTime: [],
   currentProduct: {}, // 当前选中需要配送时间的产品
 }
 
@@ -33,13 +38,17 @@ const mutations = {
 
 const actions = {
   getUserInfo({ commit }) {
-    return API.getUserInfo().then(data => {
+    return API.getUserInfo({
+      unionid: Taro.getStorageSync('unionId'),
+    }).then(data => {
       // 当前用户，是否可以显示价格
       // 现金用户&店长&priceFlag: 01
       const userInfo = {
         ...data,
         showParentPay: data.parentPayFlg === '01', // 是否显示总部余额
         showPrice: data.dianZhang && data.priceFlag === '01' && data.accountType === '01',
+        // homeFlg: '01',
+        // gzhFlg: '01',
       }
       commit('setUserInfo', userInfo)
     })

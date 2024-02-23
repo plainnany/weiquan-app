@@ -68,7 +68,10 @@
             <view>X {{ product.amount }}</view>
           </view>
         </view>
-        <view class="flex-between-center" v-if="product.donateList && product.donateList[0] && product.donateList[0].img && !isBatchOrder">
+        <view
+          class="flex-between-center pad24"
+          v-if="product.donateList && product.donateList[0] && product.donateList[0].img && !isBatchOrder"
+        >
           <view class="flex-between-center">
             <view class="donate-img">
               <image :src="product.donateList[0].img" mode="" />
@@ -139,15 +142,14 @@ export default {
     this.params = instance.router.params
     this.isBatchOrder = this.params.type === 'batch'
     await this.getDetail()
-    console.log(this.$store.state.deliverTime)
-    if (this.$store.state.deliverTime) {
+    if (this.$store.state.deliverTime.length) {
       this.productCode = this.$store.state.currentProduct.productCode
       this.deliverTime = this.$store.state.deliverTime
       this.confirmDate()
     }
   },
   beforeDestroy() {
-    this.$store.commit('setDeliverTime', null)
+    this.$store.commit('setDeliverTime', [])
     this.$store.commit('setCurrentProduct', {})
   },
   methods: {
@@ -176,27 +178,25 @@ export default {
         })
     },
     chooseDate(product) {
-      // this.productCode = product.productCode
+      this.productCode = product.productCode
       this.$store.commit('setCurrentProduct', product)
+      // 批量下单-productCode=5521023226HH&isBatchOrder=true
+      // 购物车多个下单，productCode=xxx
       const query = qs.stringify({
         productCode: product.productCode,
         isBatchOrder: this.isBatchOrder,
-        productId: this.params.productId,
-        sum: this.params.sum,
-        shopIds: this.params.shopIds,
       })
       Taro.navigateTo({
         url: `/pages/confirm-order/date-chooser?${query}`,
       })
     },
     confirmDate() {
-      // const deliverTime = params.map(v => v.weekStr.split(' ')[0]).join(',')
-      const weekStr = [...this.deliverTime]
-      // this.deliverTime = deliverTime
-      const deliverTime = this.deliverTime.map(v => v.split(' ')[0]).join(',')
+      const deliverList = this.deliverTime
       this.productList.forEach(product => {
-        if (product.productCode === this.productCode) {
-          product.deliverTime = deliverTime
+        const currentProduct = deliverList.find(v => v.productCode === product.productCode)
+        if (currentProduct) {
+          const weekStr = currentProduct.deliverTime || []
+          const deliverTime = weekStr.map(v => v.split(' ')[0]).join(',')
           this.$set(product, 'deliverTime', deliverTime)
           this.$set(product, 'weekStr', weekStr)
         }

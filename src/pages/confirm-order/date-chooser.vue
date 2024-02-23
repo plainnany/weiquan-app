@@ -86,15 +86,9 @@ export default {
   },
   computed: {},
   onShow() {
-    const { productCode, isBatchOrder, productId, sum, shopIds, type } = Taro.getCurrentInstance().router.params
+    const { productCode, isBatchOrder, type } = Taro.getCurrentInstance().router.params
     this.productCode = productCode
     this.isBatchOrder = isBatchOrder === 'true'
-    this.restQuery = {
-      sum,
-      productId,
-      shopIds,
-      productCode,
-    }
     setTitle({ title: '日期' })
     this.$API
       .dateChooser({
@@ -183,16 +177,23 @@ export default {
       if (query) {
         const deliverTime = query.map(v => v.weekStr)
         const pages = Taro.getCurrentPages()
-        const prevPage = pages[pages.length - 2]
-        this.$store.commit('setDeliverTime', deliverTime)
-
+        const prevPage = pages[pages.length - 1]
+        const deliverArr = [
+          {
+            productCode: this.productCode,
+            deliverTime,
+          },
+        ]
+        const preDeliverArr = this.$store.state.deliverTime.filter(v => v.productCode !== this.productCode)
+        const deliverList = preDeliverArr.concat(deliverArr)
+        this.$store.commit('setDeliverTime', deliverList)
         Taro.navigateBack({
           delta: 1,
           success: res => {
-            // 不知道为啥生效，扔到store中处理了
-            this.$store.commit('setDeliverTime', deliverTime)
+            // this.$store.commit('setDeliverTime', deliverList)
+            // 不知道为啥不生效，扔到store中处理了
             // prevPage.setData({
-            //   deliverTime2: deliverTime,
+            //   deliverTime2: '122',
             // })
           },
         })

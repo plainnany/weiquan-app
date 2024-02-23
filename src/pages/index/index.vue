@@ -1,6 +1,7 @@
 <template>
   <view class="home-page">
-    <!-- <official-account></official-account> -->
+    <!-- 显示官方微信公众号关注组件 -->
+    <official-account v-if="showOfficial"></official-account>
     <view class="home-info">
       <SearchBar />
       <view class="banner">
@@ -17,6 +18,13 @@
             <image :src="banner.imageUrl" />
           </swiper-item>
         </swiper>
+        <view class="follow" v-if="showGoFollow">
+          <view class="left">
+            <image v-if="userInfo.gzhUrl" :src="userInfo.gzhUrl" />
+            公众号 ·《味全饮品课堂》
+          </view>
+          <text class="go-follow" @tap="goFollow">去关注</text>
+        </view>
       </view>
       <view class="main">
         <view class="card">
@@ -93,6 +101,20 @@
         {{ errorToast }}</view
       ></view
     >
+    <view class="modal" v-if="showModal">
+      <view class="modal-mask"></view>
+      <view class="modal-container">
+        <view class="modal-close" @tap="() => (showModal = false)">
+          <image src="https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/gz/gzh_close.png" />
+        </view>
+        <view
+          class="modal-content"
+          :style="{ 'background-image': `url(https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/gz/gzh.png)` }"
+        >
+          <view class="modal-btn" @tap="handleFollow">点击关注公众号</view>
+        </view>
+      </view>
+    </view>
     <!-- <button @tap="test">点击</button> -->
   </view>
 </template>
@@ -136,6 +158,9 @@ export default {
       checkImg,
       errorToast: '',
       duration: '', // 文字滚动时间
+      showModal: false, // 是否显示关注公众号弹窗
+      showGoFollow: false, // 是否显示去关注
+      showOfficial: false, // 是否显示微信公众号官方组件
     }
   },
   onShow() {
@@ -143,16 +168,31 @@ export default {
     this.scrollLength = 100
     this.getData()
   },
+  computed: {
+    userInfo() {
+      return this.$store.state.userInfo
+    },
+  },
 
   mounted() {
     // this.getData()
     this.downloadImage()
-    this.$store.dispatch('getUserInfo')
+    this.$store.dispatch('getUserInfo').then(res => {
+      this.showGoFollow = this.userInfo.homeFlg === '01'
+      this.showModal = this.userInfo.gzhFlg === '01'
+    })
   },
   beforeDestroy() {
     clearInterval(this.intervalTimer)
   },
   methods: {
+    goFollow() {
+      this.showOfficial = true
+    },
+    handleFollow() {
+      this.showModal = false
+      this.showOfficial = true
+    },
     downloadImage() {
       Taro.downloadFile({
         url: 'https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/kd/kd.png',

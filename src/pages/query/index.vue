@@ -97,14 +97,14 @@ export default {
   },
 
   onShow() {
-    this.getProduct()
-    this.deliverTime = this.$store.state.deliverTime
-    if (this.deliverTime) {
+    this.deliverTime = this.$store.state.deliverTime.flatMap(v => v.deliverTime)
+    if (this.deliverTime.length) {
       this.confirmDate()
     }
+    this.getProduct()
   },
   beforeDestroy() {
-    this.$store.commit('setDeliverTime', null)
+    this.$store.commit('setDeliverTime', [])
   },
   methods: {
     getProduct(type) {
