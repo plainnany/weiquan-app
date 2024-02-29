@@ -1,7 +1,7 @@
 <template>
   <view class="home-page">
     <!-- 显示官方微信公众号关注组件 -->
-    <!-- <official-account></official-account> -->
+    <official-account v-if="showOfficial"></official-account>
     <view class="home-info">
       <SearchBar />
       <view class="banner">
@@ -161,12 +161,9 @@ export default {
       showModal: false, // 是否显示关注公众号弹窗
       showGoFollow: false, // 是否显示去关注
       showOfficial: false, // 是否显示微信公众号官方组件
-      scene: '',
     }
   },
   onShow() {
-    this.scene = wx.getLaunchOptionsSync().scene
-    console.log(this.scene)
     this.$store.commit('setSwitchCategoryTab', '')
     this.scrollLength = 100
     this.getData()
@@ -190,15 +187,11 @@ export default {
   },
   methods: {
     goFollow() {
-      // this.showOfficial = true
-      Taro.navigateTo({
-        url: `/pages/web-view/index?url=${encodeURIComponent('https://wsorder.weichuan.com.cn/ypkt.html')}`,
-      })
+      this.showOfficial = true
     },
     handleFollow() {
       this.showModal = false
-      this.goFollow()
-      // this.showOfficial = true
+      this.showOfficial = true
     },
     downloadImage() {
       Taro.downloadFile({
