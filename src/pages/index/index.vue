@@ -20,7 +20,7 @@
         </swiper>
         <view class="follow" v-if="showGoFollow">
           <view class="left">
-            <image v-if="userInfo.gzhUrl" :src="userInfo.gzhUrl" />
+            <image v-if="gzhUrl" :src="gzhUrl" />
             公众号 ·《味全饮品课堂》
           </view>
           <text class="go-follow" @tap="goFollow">去关注</text>
@@ -161,16 +161,13 @@ export default {
       showModal: false, // 是否显示关注公众号弹窗
       showGoFollow: false, // 是否显示去关注
       showOfficial: false, // 是否显示微信公众号官方组件
+      gzhUrl: '', // 公众号二维码
     }
   },
   onShow() {
     this.$store.commit('setSwitchCategoryTab', '')
     this.scrollLength = 100
     this.getData()
-    this.$store.dispatch('getUserInfo').then(res => {
-      this.showGoFollow = this.userInfo.homeFlg === '01'
-      this.showModal = this.userInfo.gzhFlg === '01'
-    })
   },
   computed: {
     userInfo() {
@@ -181,6 +178,10 @@ export default {
   mounted() {
     // this.getData()
     this.downloadImage()
+    this.$store.dispatch('getUserInfo').then(res => {
+      // this.showGoFollow = this.userInfo.homeFlg === '01'
+      // this.showModal = this.userInfo.gzhFlg === '01'
+    })
   },
   beforeDestroy() {
     clearInterval(this.intervalTimer)
@@ -204,27 +205,34 @@ export default {
       })
     },
     getData() {
-      this.$API.getHomeData().then(data => {
-        data = data || {}
-        this.count = data.count > 99 ? '99+' : Number(data.count)
-        this.banners = Array.isArray(data.banner) ? data.banner : [data.banner]
-        this.gif = data.gif
-        this.video = data.video
-        this.category = data.classList || []
-        this.message = data.SysMessage
-        this.inviteLink = data.community
+      this.$API
+        .getHomeData({
+          unionid: Taro.getStorageSync('unionId'),
+        })
+        .then(data => {
+          data = data || {}
+          this.count = data.count > 99 ? '99+' : Number(data.count)
+          this.banners = Array.isArray(data.banner) ? data.banner : [data.banner]
+          this.gif = data.gif
+          this.video = data.video
+          this.category = data.classList || []
+          this.message = data.SysMessage
+          this.inviteLink = data.community
+          this.showGoFollow = data.homeFlg === '01'
+          this.showModal = data.gzhFlg === '01'
+          this.gzhUrl = data.gzhUrl
 
-        setTimeout(() => {
-          const query = wx.createSelectorQuery()
-          // 选择id
-          query
-            .select('#scroll')
-            .boundingClientRect(rect => {
-              this.duration = rect.width * 0.03 // 滚动文字时间，滚动速度为0.03s/px
-            })
-            .exec()
-        }, 50)
-      })
+          setTimeout(() => {
+            const query = wx.createSelectorQuery()
+            // 选择id
+            query
+              .select('#scroll')
+              .boundingClientRect(rect => {
+                this.duration = rect.width * 0.03 // 滚动文字时间，滚动速度为0.03s/px
+              })
+              .exec()
+          }, 50)
+        })
     },
     onCategory(index) {
       this.$store.commit('setSwitchCategoryTab', index + 1)
