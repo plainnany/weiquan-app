@@ -167,6 +167,10 @@ export default {
     this.$store.commit('setSwitchCategoryTab', '')
     this.scrollLength = 100
     this.getData()
+    this.$store.dispatch('getUserInfo').then(res => {
+      this.showGoFollow = this.userInfo.homeFlg === '01'
+      this.showModal = this.userInfo.gzhFlg === '01'
+    })
   },
   computed: {
     userInfo() {
@@ -177,10 +181,6 @@ export default {
   mounted() {
     // this.getData()
     this.downloadImage()
-    this.$store.dispatch('getUserInfo').then(res => {
-      this.showGoFollow = this.userInfo.homeFlg === '01'
-      this.showModal = this.userInfo.gzhFlg === '01'
-    })
   },
   beforeDestroy() {
     clearInterval(this.intervalTimer)
