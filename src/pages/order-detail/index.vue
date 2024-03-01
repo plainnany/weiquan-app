@@ -369,6 +369,8 @@ export default {
         })
         .then(data => {
           this.orderDetail = data
+          this.orderDetail.createDate = '2024-03-01 11:13:29'
+
           this.handleCountDown()
         })
     },
@@ -378,6 +380,12 @@ export default {
       const currentTime = new Date().getTime()
       const timeDifference = endTime - currentTime
 
+      if (timeDifference <= 0) {
+        // 超过15min付款时间，直接显示00
+        this.countDown = '0:0'
+        return
+      }
+
       const minutes = Math.floor(timeDifference / (1000 * 60))
       const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000)
       this.minutes = Number(minutes)
@@ -386,9 +394,6 @@ export default {
         this.seconds -= 1
         if (this.seconds === 0) {
           this.minutes -= 1
-        }
-        if (this.minutes === 0 && this.seconds === 0) {
-          return
         }
         this.countDown = `${this.minutes}:${this.seconds <= 9 ? '0' + this.seconds : this.seconds}`
         this.setCountDown()
@@ -407,7 +412,7 @@ export default {
         }
         this.seconds -= 1
 
-        if (this.minutes === 0 && this.seconds === 0) {
+        if (this.minutes <= 0 && this.seconds <= 0) {
           clearTimeout(this.timer)
           this.countDown = ''
           Taro.redirectTo({ url: '/pages/order/index' })
