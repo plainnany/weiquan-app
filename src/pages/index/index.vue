@@ -1,6 +1,9 @@
 <template>
   <view class="home-page">
     <!-- 显示官方微信公众号关注组件 -->
+    <view class="close" v-if="showOfficial">
+      <image :src="closeIcon" mode="" class="close-icon" @tap="closeOfficial" />
+    </view>
     <official-account v-if="showOfficial"></official-account>
     <view class="home-info">
       <SearchBar />
@@ -130,7 +133,7 @@ import chargeImg from '@/images/recharge.png'
 import inviteImg from '@/images/invite.png'
 import backImg from '@/images/red-back.png'
 import Taro from '@tarojs/taro'
-import { downloadImg } from '@/utils'
+import closeIcon from '@/images/close.png'
 import checkImg from '@/images/account-check.png'
 
 export default {
@@ -162,6 +165,7 @@ export default {
       showGoFollow: false, // 是否显示去关注
       showOfficial: false, // 是否显示微信公众号官方组件
       gzhUrl: '', // 公众号二维码
+      closeIcon,
     }
   },
   onShow() {
@@ -187,6 +191,9 @@ export default {
     clearInterval(this.intervalTimer)
   },
   methods: {
+    closeOfficial() {
+      this.showOfficial = false
+    },
     goFollow() {
       this.showOfficial = true
     },
