@@ -1,8 +1,8 @@
 <template>
   <view class="home-page">
     <!-- 显示官方微信公众号关注组件 -->
-    <view class="close" v-if="showOfficial">
-      <image :src="closeIcon" mode="" class="close-icon" @tap="closeOfficial" />
+    <view class="close" v-if="showOfficial && isScene">
+      <nan-button @tap="closeOfficial">隐藏关注</nan-button>
     </view>
     <official-account v-if="showOfficial"></official-account>
     <view class="home-info">
@@ -166,16 +166,23 @@ export default {
       showOfficial: false, // 是否显示微信公众号官方组件
       gzhUrl: '', // 公众号二维码
       closeIcon,
+      scene: '',
     }
   },
   onShow() {
     this.$store.commit('setSwitchCategoryTab', '')
     this.scrollLength = 100
     this.getData()
+    this.scene = wx.getLaunchOptionsSync().scene
   },
   computed: {
     userInfo() {
       return this.$store.state.userInfo
+    },
+    // 场景值在扫码时，才显示，为了和小程序扫码显示效果一致，目前测试结果只有扫码官方组件才会显示
+    isScene() {
+      // 场景值文档：https://developers.weixin.qq.com/miniprogram/dev/component/official-account.html
+      return [1017, 1011, 1025, 1047, 1124].includes(this.scene)
     },
   },
 
