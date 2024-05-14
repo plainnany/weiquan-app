@@ -174,6 +174,8 @@ export default {
     this.scrollLength = 100
     this.getData()
     this.scene = wx.getLaunchOptionsSync().scene
+    console.log('场景对应在【1047】范围内，才显示隐藏按钮')
+    console.log('小程序对应的场景值：wx.getLaunchOptionsSync().scene：', this.scene)
   },
   computed: {
     userInfo() {
@@ -182,7 +184,7 @@ export default {
     // 场景值在扫码时，才显示，为了和小程序扫码显示效果一致，目前测试结果只有扫码官方组件才会显示
     isScene() {
       // 场景值文档：https://developers.weixin.qq.com/miniprogram/dev/component/official-account.html
-      return [1017, 1011, 1025, 1047, 1124].includes(this.scene)
+      return [1047].includes(this.scene)
     },
   },
 
