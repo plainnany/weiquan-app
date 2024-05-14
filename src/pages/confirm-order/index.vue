@@ -259,6 +259,9 @@ export default {
             amount: product.amount,
           })
           .then(data => {
+            if (data.splitFlg === '01') {
+              return this.showToast({ msg: data.message })
+            }
             this.handleResult(data)
           })
           .catch(err => {
