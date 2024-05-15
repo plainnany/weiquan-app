@@ -12,7 +12,6 @@
       </view>
       <view class="setting-modal-footer">
         <view class="cancel btn" @tap="handleCancel">{{ cancelText }}</view>
-        <view class="confirm btn" v-if="confirmText" @tap="handleConfirm">{{ confirmText }}</view>
       </view>
     </view>
   </view>
@@ -25,7 +24,6 @@ export default {
     visible: Boolean,
     title: String,
     cancelText: String,
-    confirmText: String,
     fullScreen: Boolean,
     showClose: {
       type: Boolean,

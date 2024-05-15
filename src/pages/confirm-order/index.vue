@@ -94,6 +94,15 @@
     <view class="common-toast" v-show="errorToast.visible && errorToast.message">
       <text>{{ errorToast.message }}</text></view
     >
+    <Modal
+      :visible="confirmDialog.visible"
+      v-if="confirmDialog.visible"
+      :title="confirmDialog.title"
+      cancelText="取消"
+      @cancel="() => (confirmDialog = {})"
+    >
+      <view style="padding: 0 24rpx">{{ confirmDialog.content }}</view>
+    </Modal>
   </view>
 </template>
 
@@ -105,10 +114,11 @@ import backIcon from '@/images/user/back.png'
 import Taro from '@tarojs/taro'
 // import DateChooser from './date-chooser.vue'
 import ToastMixin from '@/mixin/toast'
+import Modal from './modal.vue'
 
 export default {
   name: 'confirm-order',
-  // components: { DateChooser },
+  components: { Modal },
   mixins: [ToastMixin],
   data() {
     return {
@@ -122,6 +132,7 @@ export default {
       dateChooseVisible: false,
       isBatchOrder: false,
       totalFee: '',
+      confirmDialog: {},
     }
   },
   computed: {
@@ -260,7 +271,14 @@ export default {
           })
           .then(data => {
             if (data.splitFlg === '01') {
-              return this.showToast({ msg: data.message })
+              this.confirmDialog = {
+                title: '提示',
+                content: data.message,
+                visible: true,
+              }
+
+              return
+              // return this.showToast({ msg: data.message })
             }
             this.handleResult(data)
           })
