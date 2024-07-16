@@ -1,26 +1,29 @@
 <template>
   <view class="date-chooser">
-    <view class="header" @tap="onConfirm">完成</view>
-    <view class="weeks">
-      <view class="week-item" v-for="item in weeks" :key="item.day">{{ item.text }}</view>
-    </view>
-    <view v-for="(item, index) in dateList" :key="index" class="date-wrapper">
-      <view class="month">{{ item.monthStr }} {{ item.year }}</view>
-      <view class="date-row" v-for="round in Math.ceil(item.day.length / 7)" :key="round">
-        <view
-          class="date-col"
-          v-for="index in 7"
-          @tap="chooseDate(getDay(item.day, round, index), item)"
-          :key="index"
-          :class="{ disabled: !getDay(item.day, round, index).flg, checked: getDay(item.day, round, index).checked }"
-          >{{ getDay(item.day, round, index).day }}</view
-        >
+    <!-- <view class="header" @tap="onConfirm">完成</view> -->
+    <view class="date-chooser-scroll">
+      <view class="date-chooser-container">
+        <view class="weeks">
+          <view class="week-item" v-for="item in weeks" :key="item.day">{{ item.text }}</view>
+        </view>
+        <view v-for="(item, index) in dateList" :key="index" class="date-wrapper">
+          <view class="month">{{ item.monthStr }} {{ item.year }}</view>
+          <view class="date-row" v-for="round in Math.ceil(item.day.length / 7)" :key="round">
+            <view
+              class="date-col"
+              v-for="index in 7"
+              @tap="chooseDate(getDay(item.day, round, index), item)"
+              :key="index"
+              :class="{ disabled: !getDay(item.day, round, index).flg, checked: getDay(item.day, round, index).checked }"
+              >{{ getDay(item.day, round, index).day }}</view
+            >
+          </view>
+        </view>
       </view>
     </view>
-    <!-- <view class="footer">
-      <nan-button @tap="() => $emit('cancel')">取消</nan-button>
+    <view class="footer">
       <nan-button type="primary" @tap="onConfirm">完成</nan-button>
-    </view> -->
+    </view>
   </view>
 </template>
 
