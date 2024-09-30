@@ -115,9 +115,7 @@ export default {
       this.$API
         .passwordReset(params)
         .then(() => {
-          Taro.switchTab({
-            url: '/pages/user/index',
-          })
+          Taro.navigateTo({ url: '/pages/bind-account/index' })
         })
         .catch(err => {
           Taro.showToast({
