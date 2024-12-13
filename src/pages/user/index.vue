@@ -1,14 +1,14 @@
 <template>
   <view class="user-page">
     <view class="user-info">
-      <view class="user-info-wrapper" @tap="handleNav({ path: '/pages/account-manage/index' })">
-        <view class="setting">
+      <view class="user-info-wrapper">
+        <!-- <view class="setting">
           <image :src="settingImg" mode="" @tap.stop="handleNav({ path: '/pages/setting/index' })" />
           <view @tap.stop="handleNav({ path: '/pages/notice/index' })" style="display: inline-block;position: relative;">
             <image :src="noticeImg" class="notice" mode="" />
             <view class="dot" v-if="userInfo.total > 0">{{ userInfo.total > 99 ? '99+' : userInfo.total }}</view>
           </view>
-        </view>
+        </view> -->
         <view class="user-avatar">
           <image :src="userInfo.headPic" mode="" />
         </view>
@@ -27,9 +27,9 @@
               {{ accountTypeMap[userInfo.accountType] }}</view
             >
           </view>
-          <view class="user-detail">
+          <!-- <view class="user-detail">
             <image :src="arrowRightImg" class="back" mode="" />
-          </view>
+          </view> -->
         </view>
       </view>
     </view>
@@ -109,15 +109,17 @@ import customServiceImg from '@/images/user/custom-service.png'
 import deleverImg from '@/images/user/delever.png'
 import helpImg from '@/images/user/help.png'
 import manualImg from '@/images/user/manual.png'
-// import messageImg from '@/images/user/message.png'
+import messageImg from '@/images/user/message.png'
 import payImg from '@/images/user/pay.png'
 import settingImg from '@/images/user/setting.svg'
+import accountImg from '@/images/user/account.jpg'
+import noticeImg from '@/images/user/notice.jpg'
 import './index.less'
 import Taro from '@tarojs/taro'
 import { AES } from 'crypto-js'
 import { BASE_URL } from '@/const'
 import arrowRightImg from '@/images/user/arrow-right.png'
-import noticeImg from '@/images/user/notice.svg'
+// import noticeImg from '@/images/user/notice.svg'
 import notice2Img from '@/images/user/notice.png'
 import userImg from '@/images/center-user.png'
 import lineImg from '@/images/line.png'
@@ -215,23 +217,27 @@ export default {
           title: '操作手册/公告',
           isNotice: true,
         },
-        // {
-        //   icon: messageImg,
-        //   title: '消息中心',
-        //   path: `/pages/notice/index`,
-        // },
-
         {
           icon: helpImg,
           title: '帮助中心',
           path: `/pages/user/help`,
-          // path: `/pages/web-view/index?url=${this.$store.state.userInfo.helpLink}`,
+          path: `/pages/web-view/index?url=${this.$store.state.userInfo.helpLink}`,
         },
-        // {
-        //   icon: settingImg,
-        //   title: '设置',
-        //   path: '/pages/setting/index',
-        // },
+        {
+          icon: noticeImg,
+          title: '消息中心',
+          path: `/pages/notice/index`,
+        },
+        {
+          icon: accountImg,
+          title: '账户管理',
+          path: `/pages/account-manage/index`,
+        },
+        {
+          icon: settingImg,
+          title: '设置',
+          path: '/pages/setting/index',
+        },
       ]
     },
   },

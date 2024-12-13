@@ -1,5 +1,6 @@
 <template>
   <view class="comment-page">
+    <view class="tips">此投诉为本小程序自有投诉渠道，非微信官方投诉渠道</view>
     <view v-if="type === 'done'" class="comment-page-done">
       <view class="phone" @tap="contact">
         <image :src="phoneIcon" mode="" />

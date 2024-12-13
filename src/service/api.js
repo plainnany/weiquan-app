@@ -459,6 +459,12 @@ const requestAddressList = [
     url: '/api/order/placeOrder.ns',
     type: 'post',
   },
+  {
+    describe: '查询出货工厂',
+    method: 'getFactory',
+    url: '/api/customer/report/factory.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}

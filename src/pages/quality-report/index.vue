@@ -1,26 +1,25 @@
 <template>
   <view class="quality-page">
     <view class="quality-selection">
-      <picker mode="selector" :range="qualityTypes" @change="qualityTypeChange" range-key="label">
-        <text>{{ qualityTypes[qualityIndex].label }}</text>
-      </picker>
+      <NPicker :value="qualityType" :rangeList="qualityTypes" @update="qualityTypeChange" />
       <image class="arrow" :src="arrowIcon" />
     </view>
     <view class="quality-selection">
-      <picker mode="selector" :range="productList" @change="productChange" range-key="productName">
-        <text v-if="productList[productIndex]">{{ productList[productIndex].productName }}</text>
-        <text v-else>请选择商品</text>
-      </picker>
+      <NPicker :value="productCode" :rangeList="productList" @update="value => (productCode = value)" />
       <image class="arrow" :src="arrowIcon" />
     </view>
-    <view class="quality-search" v-if="qualityIndex === 0">
+    <view class="quality-selection" v-if="qualityType === '02'">
+      <NPicker :value="factoryCode" :rangeList="factoryList" placeholder="请选择出货工厂" @update="value => (factoryCode = value)" />
+      <image class="arrow" :src="arrowIcon" />
+    </view>
+    <view class="quality-search" v-if="qualityType === '01'">
       <view class="flex-between-center">
         <icon class="search-icon" type="search" size="16" />
         <input v-model="batchCode" placeholder="请输入商品批次号" />
       </view>
       <view class="search-btn" @tap="onSearch">查询</view>
     </view>
-    <view class="quality-search-action" v-if="qualityIndex === 1">
+    <view class="quality-search-action" v-if="qualityType === '02'">
       <nan-button type="primary" @tap="onSearch()" class="query-action">查询</nan-button>
     </view>
     <view v-if="!qualityList.length">
@@ -47,9 +46,12 @@ import { setTitle } from '@/utils'
 import arrowIcon from '@/images/arrow-down.png'
 import ToastMixin from '@/mixin/toast'
 import { BASE_URL } from '@/const'
+import NPicker from '@/components/picker'
 
 export default {
-  components: {},
+  components: {
+    NPicker,
+  },
   mixins: [ToastMixin],
   data() {
     return {
@@ -57,19 +59,22 @@ export default {
       qualityTypes: [
         {
           label: '出厂检验报告',
-          inspectionType: '01',
+          value: '01',
         },
         {
           label: '外检报告',
-          inspectionType: '02', // 外检不用批次号
+          value: '02', // 外检不用批次号
         },
       ],
+      qualityType: '01',
+
       productList: [],
-      qualityList: [],
-      qualityIndex: 0,
-      batchCode: '',
-      productIndex: '',
       productCode: '',
+
+      qualityList: [],
+      batchCode: '',
+      factoryList: [],
+      factoryCode: '',
     }
   },
   mounted() {
@@ -85,19 +90,28 @@ export default {
         return
       }
 
-      if (this.qualityIndex === 0) {
+      if (this.qualityType === '01') {
         if (!this.batchCode) {
           this.showToast({
             msg: '请输入批次号',
           })
           return
         }
+      } else if (this.qualityType === '02') {
+        if (!this.factoryCode)
+          return this.showToast({
+            msg: '请选择工厂！',
+          })
       }
       this.getQualityList()
     },
     getProductList() {
       this.$API.getComplaintProductList().then(data => {
-        this.productList = data
+        this.productList = data.map(v => ({
+          ...v,
+          label: v.productName,
+          value: v.productCode,
+        }))
         if (data.length > 0) {
           this.productIndex = 0
           this.productCode = data[0].productCode
@@ -108,8 +122,9 @@ export default {
       this.$API
         .getQualityReport({
           productCode: this.productCode, // 品项编码
-          batchCode: this.qualityIndex === 0 ? this.batchCode : '', // 批次号
-          inspectionType: this.qualityTypes[this.qualityIndex].inspectionType,
+          batchCode: this.qualityType === '01' ? this.batchCode : '', // 批次号
+          factoryCode: this.qualityType === '02' ? this.factoryCode : '', // 出货工厂
+          inspectionType: this.qualityType,
         })
         .then(data => {
           this.qualityList = (data || []).map(v => ({
@@ -121,12 +136,20 @@ export default {
           this.showToast(err)
         })
     },
-    productChange(e) {
-      this.productIndex = parseInt(e.detail.value)
-      this.productCode = this.productList[this.productIndex].productCode
+    qualityTypeChange(value) {
+      this.qualityType = value
+      if (value === '02') {
+        this.getFactoryList() // 获取工厂信息
+      }
     },
-    qualityTypeChange(e) {
-      this.qualityIndex = parseInt(e.detail.value)
+    getFactoryList() {
+      this.$API.getFactory().then(data => {
+        this.factoryList = data.map(v => ({
+          ...v,
+          label: v.factoryName,
+          value: v.factoryCode,
+        }))
+      })
     },
     onDownload(item, index) {
       if (item.downloading) return
