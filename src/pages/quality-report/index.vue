@@ -8,7 +8,7 @@
       <NPicker :value="productCode" :rangeList="productList" @update="value => (productCode = value)" />
       <image class="arrow" :src="arrowIcon" />
     </view>
-    <view class="quality-selection" v-if="qualityType === '02'">
+    <view class="quality-selection" v-if="qualityType === '01'">
       <NPicker :value="factoryCode" :rangeList="factoryList" placeholder="请选择出货工厂" @update="value => (factoryCode = value)" />
       <image class="arrow" :src="arrowIcon" />
     </view>
@@ -80,6 +80,7 @@ export default {
   mounted() {
     setTitle({ title: '检验报告单' })
     this.getProductList()
+    this.getFactoryList() // 获取工厂信息
   },
   methods: {
     onSearch() {
@@ -97,11 +98,11 @@ export default {
           })
           return
         }
-      } else if (this.qualityType === '02') {
-        if (!this.factoryCode)
+        if (!this.factoryCode) {
           return this.showToast({
             msg: '请选择工厂！',
           })
+        }
       }
       this.getQualityList()
     },
@@ -138,9 +139,6 @@ export default {
     },
     qualityTypeChange(value) {
       this.qualityType = value
-      if (value === '02') {
-        this.getFactoryList() // 获取工厂信息
-      }
     },
     getFactoryList() {
       this.$API.getFactory().then(data => {
