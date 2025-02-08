@@ -5,10 +5,10 @@
       <image class="arrow" :src="arrowIcon" />
     </view>
     <view class="quality-selection">
-      <NPicker :value="productCode" :rangeList="productList" @update="value => (productCode = value)" />
+      <NPicker :value="productCode" :rangeList="productList" @update="productCodeChange" />
       <image class="arrow" :src="arrowIcon" />
     </view>
-    <view class="quality-selection" v-if="qualityType === '01'">
+    <view class="quality-selection" v-if="showFactory">
       <NPicker :value="factoryCode" :rangeList="factoryList" placeholder="请选择出货工厂" @update="value => (factoryCode = value)" />
       <image class="arrow" :src="arrowIcon" />
     </view>
@@ -23,7 +23,7 @@
       <nan-button type="primary" @tap="onSearch()" class="query-action">查询</nan-button>
     </view>
     <view v-if="!qualityList.length">
-      <image class="quality-img" src="http://foodservice-main.oss-cn-hangzhou.aliyuncs.com/old/zjbg.png" mode=""></image>
+      <image class="quality-img" :src="qualityImage" mode=""></image>
     </view>
     <view class="quality-result">
       <view class="quality-list">
@@ -67,20 +67,28 @@ export default {
         },
       ],
       qualityType: '01',
-
       productList: [],
       productCode: '',
-
+      productType: '',
       qualityList: [],
       batchCode: '',
       factoryList: [],
       factoryCode: '',
     }
   },
+  computed: {
+    // 外检&品相为01才显示出货工厂
+    showFactory() {
+      return this.qualityType === '02' && this.productType === '01'
+    },
+    // 取接口返回
+    qualityImage() {
+      return this.$store.state.userInfo.qualityPlaceholderImg
+    },
+  },
   mounted() {
     setTitle({ title: '检验报告单' })
     this.getProductList()
-    this.getFactoryList() // 获取工厂信息
   },
   methods: {
     onSearch() {
@@ -98,11 +106,12 @@ export default {
           })
           return
         }
-        if (!this.factoryCode) {
-          return this.showToast({
-            msg: '请选择工厂！',
-          })
-        }
+      }
+
+      if (this.showFactory && !this.factoryCode) {
+        return this.showToast({
+          msg: '请选择工厂！',
+        })
       }
       this.getQualityList()
     },
@@ -116,6 +125,7 @@ export default {
         if (data.length > 0) {
           this.productIndex = 0
           this.productCode = data[0].productCode
+          this.productType = data[0].productType
         }
       })
     },
@@ -139,6 +149,13 @@ export default {
     },
     qualityTypeChange(value) {
       this.qualityType = value
+      if (this.qualityType === '02') {
+        this.getFactoryList() // 获取工厂信息
+      }
+    },
+    productCodeChange(value) {
+      this.productCode = value
+      this.productType = this.productList.find(v => v.productCode === value).productType
     },
     getFactoryList() {
       this.$API.getFactory().then(data => {

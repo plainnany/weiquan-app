@@ -63,6 +63,7 @@
       <view class="user-action-list" v-for="(item, index) in items2" :key="index" @tap="handleNav(item)">
         <view class="action-item">
           <image :src="item.icon" mode="" />
+          <view class="dot" v-if="userInfo.total > 0 && item.title === '消息中心'">{{ userInfo.total > 99 ? '99+' : userInfo.total }}</view>
           <view class="action-item-main">
             <view class="action-item-text">{{ item.title }}</view>
             <view class="action-item-link">
