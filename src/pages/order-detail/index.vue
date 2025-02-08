@@ -369,7 +369,6 @@ export default {
         })
         .then(data => {
           this.orderDetail = data
-          this.orderDetail.createDate = '2024-03-01 11:13:29'
 
           this.handleCountDown()
         })
