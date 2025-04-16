@@ -110,11 +110,11 @@
     </view>
     <view class="toast" v-if="showToast"> <text>加入成功</text></view>
     <Modal :visible="visible" title="提示" cancelText="拨打" confirmText="确定" @cancel="contact" @confirm="() => (visible = false)">
-      <view style="font-size: 12px; padding: 0 24rpx;"
-        >该商品暂不可订,如有需要可联系负责业务或致电服务电话咨询
-        <text class="contact-phone" @tap="contact">{{ $store.state.userInfo?.customerService || '' }}</text>
-        ,感谢!</view
-      >
+      <view style="font-size: 12px; padding: 0 24rpx;">
+        <text v-html="modalInfo.content"></text>
+        <text class="contact-phone" @tap="contact">{{ modalInfo.tel }}</text>
+        <text>{{ modalInfo.tips }}</text>
+      </view>
     </Modal>
   </view>
 </template>
@@ -152,6 +152,7 @@ export default {
       donateIcon,
       footerBottom: 0,
       pageScrollTop: 0, // 页面滚动距离
+      modalInfo: {}, // 不可订弹窗提示
     }
   },
   computed: {
@@ -190,6 +191,22 @@ export default {
     },
     getProduct() {
       const params = this.$instance.router.params
+      let content, tel
+      const tips = ',感谢!'
+      // 从新品推荐过来，不可订提示使用新品推荐的文案
+      // 从新品推荐过来的参数处理
+      if (params.tel) {
+        content = '<text style="color: rgb(255, 95, 70)">新品上市,</text> 如有需要可联系业务经理或致电服务电话咨询'
+        tel = params.tel
+      } else {
+        content = '该商品暂不可订,如有需要可联系负责业务或致电服务电话咨询'
+        tel = this.$store.state.userInfo?.customerService
+      }
+      this.modalInfo = {
+        content,
+        tel,
+        tips,
+      }
       this.$API
         .getProductDetail({
           productId: params.id,
@@ -213,11 +230,9 @@ export default {
     checkAddShop() {
       if (!this.product.sell) {
         this.visible = true
-
-        return false
       }
 
-      return true
+      return this.product.sell
     },
     addShop() {
       if (!this.checkAddShop()) return

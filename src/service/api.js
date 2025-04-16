@@ -465,6 +465,12 @@ const requestAddressList = [
     url: '/api/customer/report/factory.ns',
     type: 'post',
   },
+  {
+    describe: '查询新品推荐',
+    method: 'newArrival',
+    url: '/api/service/newArrival.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}

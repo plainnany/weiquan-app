@@ -107,7 +107,7 @@
     <view class="modal" v-if="showModal">
       <view class="modal-mask"></view>
       <view class="modal-container">
-        <view class="modal-close" @tap="() => (showModal = false)">
+        <view class="modal-close" @tap="closeModal">
           <image src="https://foodservice-main.oss-cn-hangzhou.aliyuncs.com/gz/gzh_close.png" />
         </view>
         <view
@@ -118,6 +118,7 @@
         </view>
       </view>
     </view>
+    <countdown-modal :visible.sync="showNewProductModal" :info="newProduct" />
     <!-- <button @tap="test">点击</button> -->
   </view>
 </template>
@@ -135,10 +136,12 @@ import backImg from '@/images/red-back.png'
 import Taro from '@tarojs/taro'
 import closeIcon from '@/images/close.png'
 import checkImg from '@/images/account-check.png'
+import CountdownModal from '@/components/countdown-modal/index.vue'
 
 export default {
   components: {
     SearchBar,
+    CountdownModal,
   },
   data() {
     return {
@@ -167,9 +170,14 @@ export default {
       gzhUrl: '', // 公众号二维码
       closeIcon,
       scene: '',
+      showNewProductModal: false, // 是否显示新品推荐的modal
+      newProduct: {
+        img: '', // 图片
+        times: '', // 倒计时
+      }, // 新品推荐数据
     }
   },
-  onShow() {
+  async onShow() {
     this.$store.commit('setSwitchCategoryTab', '')
     this.scrollLength = 100
     this.getData()
@@ -189,8 +197,8 @@ export default {
   },
 
   mounted() {
-    // this.getData()
     this.downloadImage()
+    this.getNewArrival()
     this.$store.dispatch('getUserInfo').then(res => {
       // this.showGoFollow = this.userInfo.homeFlg === '01'
       // this.showModal = this.userInfo.gzhFlg === '01'
@@ -220,8 +228,13 @@ export default {
         },
       })
     },
+    getNewArrival() {
+      return this.$API.newArrival().then(data => {
+        this.newProduct = data
+      })
+    },
     getData() {
-      this.$API
+      return this.$API
         .getHomeData({
           unionid: Taro.getStorageSync('unionId'),
         })
@@ -236,6 +249,7 @@ export default {
           this.inviteLink = data.community
           this.showGoFollow = data.homeFlg === '01'
           this.showModal = data.gzhFlg === '01'
+          this.showNewProductModal = !this.showModal
           this.gzhUrl = data.gzhUrl
 
           setTimeout(() => {
@@ -302,6 +316,10 @@ export default {
         })
       }
       Taro.navigateTo({ url: `/pages/web-view/index?url=${encodeURIComponent(link)}` })
+    },
+    closeModal() {
+      this.showModal = false
+      this.showNewProductModal = true
     },
   },
 }
