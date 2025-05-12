@@ -93,31 +93,38 @@
           <text class="order-detail-total">¥ {{ total }}</text>
         </view>
       </view>
+      <template v-if="!isTodayDelivery">
+        <!-- 普通订单详情 -->
+        <view class="common-card">
+          <view class="order-detail-item">
+            <text class="order-detail-color-grey">订单编号：</text>
+            <text class="order-detail-color-grey">{{ orderDetail.customerOrderCode }}</text>
+          </view>
+          <view class="order-detail-item">
+            <text class="order-detail-color-grey">下单时间：</text>
+            <text class="order-detail-color-grey">{{ orderDetail.createDate }}</text>
+          </view>
+          <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && /02|09|04/.test(orderDetail.state)">
+            <text class="order-detail-color-grey">付款时间：</text>
+            <text class="order-detail-color-grey">{{ orderDetail.payDate }}</text>
+          </view>
+        </view>
+        <view class="common-card">
+          <view class="order-detail-delivery">
+            <view class="order-detail-delivery-title">
+              <text>交货规则</text>
+              <view class="line"></view>
+            </view>
+            <view class="order-detail-delivery-rule">
+              <view v-for="(rule, idx) in deliveryRules" :key="idx" class="delivery-rule-item">
+                <view>{{ rule.productName }}</view>
+                <view>规则：{{ rule.ruleName }}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </template>
 
-      <!-- 普通订单详情 -->
-      <view class="common-card" v-if="!isTodayDelivery">
-        <view class="order-detail-item">
-          <text class="order-detail-color-grey">订单编号：</text>
-          <text class="order-detail-color-grey">{{ orderDetail.customerOrderCode }}</text>
-        </view>
-        <view class="order-detail-item">
-          <text class="order-detail-color-grey">下单时间：</text>
-          <!-- <text class="order-detail-color-grey" v-if="userInfo.accountType === '02'">{{ orderDetail.createDate?.split(' ')[0] }}</text> -->
-          <text class="order-detail-color-grey">{{ orderDetail.createDate }}</text>
-        </view>
-        <view class="order-detail-item" v-if="orderDetail.payDate && userInfo.accountType === '01' && /02|09|04/.test(orderDetail.state)">
-          <text class="order-detail-color-grey">付款时间：</text>
-          <text class="order-detail-color-grey">{{ orderDetail.payDate }}</text>
-        </view>
-        <!-- <view class="flex-between-center order-detail-item">
-          <text class="order-detail-color-grey">付款方式</text>
-          <text>支付宝</text>
-        </view> -->
-        <!-- <view class="flex-between-center order-detail-item">
-          <text class="order-detail-color-grey">交易流水号</text>
-          <text>183772889499495885993884</text>
-        </view> -->
-      </view>
       <!-- 当天收货详情 -->
       <view class="to-delivery" v-else>
         <view class="order-detail-item">
@@ -128,9 +135,11 @@
         </view>
       </view>
     </view>
+
     <view class="order-detail-footer flex-between-center">
       <view></view>
       <view class="flex-between-center">
+        <nan-button type="plain" @tap="handleQuery" v-if="showQueryBtn">查询&修改</nan-button>
         <nan-button type="plain" @tap="buyAgain" v-if="!isTodayDelivery">再下一单</nan-button>
         <nan-button type="plain" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="handleCancelOrder">取消订单</nan-button>
         <nan-button type="primary" v-if="orderDetail.state === STATE_TYPE.toPay" @tap="handlePay">立即支付</nan-button>
@@ -241,6 +250,7 @@ export default {
         visible: false,
       },
       initPayMethod: '',
+      deliveryRules: [], // 交货规则
     }
   },
   onShareAppMessage(res) {
@@ -262,6 +272,9 @@ export default {
     },
     isTodayDelivery() {
       return this.orderType === 'to-delivery'
+    },
+    showQueryBtn() {
+      return !!this.orderDetail.queryFlg
     },
     STATE_TYPE_TEXT() {
       if (this.isTodayDelivery) {
@@ -334,6 +347,7 @@ export default {
     const { order, type } = Taro.getCurrentInstance().router.params
     this.orderType = type // to-delivery: 当天收货
     this.getOrder(order)
+    this.getProductRule(order)
   },
   methods: {
     initPay() {
@@ -371,6 +385,15 @@ export default {
           this.orderDetail = data
 
           this.handleCountDown()
+        })
+    },
+    getProductRule(orderNumber) {
+      this.$API
+        .getProductRule({
+          customOrderCode: orderNumber,
+        })
+        .then(data => {
+          this.deliveryRules = data || []
         })
     },
     handleCountDown() {
@@ -623,6 +646,9 @@ export default {
     addQuestion(order) {
       const { productName } = order.list[0] || {}
       Taro.navigateTo({ url: `/pages/comment/index?type=add&productName=${productName}&customerOrderCode=${order.orderNumber}` })
+    },
+    handleQuery() {
+      Taro.navigateTo({ url: `/pages/query/index` })
     },
   },
 }

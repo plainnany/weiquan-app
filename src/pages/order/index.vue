@@ -1,10 +1,14 @@
 <template>
   <view>
     <view class="order-page" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend">
-      <view class="order-tabs">
-        <view class="order-tab" :class="{ active: activeTab === tab.key }" v-for="tab in tabs" :key="tab.key" @tap="clickTab(tab)">{{
-          tab.title
-        }}</view>
+      <view class="order-tabs-wrapper">
+        <scroll-view :scroll-x="true">
+          <view class="order-tabs">
+            <view class="order-tab" :class="{ active: activeTab === tab.key }" v-for="tab in tabs" :key="tab.key" @tap="clickTab(tab)">{{
+              tab.title
+            }}</view>
+          </view>
+        </scroll-view>
       </view>
       <view class="order-result">
         <view class="order-result-empty" v-if="showEmpty">
@@ -13,7 +17,7 @@
           </view>
         </view>
         <scroll-view
-          v-else
+          v-else-if="activeTab !== 'query'"
           :scroll-y="true"
           :refresher-triggered="pulling"
           :refresher-enabled="false"
@@ -125,6 +129,7 @@
                   </view> -->
                   <!--  -->
                   <view class="flex-between-center">
+                    <view class="btn-plain" @tap.stop="handleQuery(order, '01')" v-if="order.queryFlg">查询&修改</view>
                     <view class="btn-plain" @tap.stop="handleDelivery(order, '01')" v-if="order.deliveryFlg === '01'">收货单</view>
                     <view class="btn-plain" @tap.stop="handleDelivery(order, '02')" v-if="order.returnFlg === '01'">退货单</view>
                     <view class="btn-plain" @tap.stop="buyAgain(order)">再下一单</view>
@@ -139,6 +144,8 @@
             </view>
           </view>
         </scroll-view>
+        <!-- 查询修改的tab，页面同查询修改 -->
+        <query-content v-else :from="'order'" />
       </view>
       <Modal
         :visible="modalDialog.visible"
@@ -182,21 +189,20 @@
 
 <script>
 import './index.less'
-import { setTitle } from '@/utils'
 import orderEmptyIcon from '@/images/order-empty.png'
 import carIcon from '@/images/car.png'
 import backIcon from '@/images/user/back.png'
 import Taro from '@tarojs/taro'
-import wechatIcon from '@/images/wechat.png'
-import weipocketIcon from '@/images/wei-pocket.png'
 import closeIcon from '@/images/close.png'
 import phoneCallIcon from '@/images/phone-call.png'
-import Modal from '../setting/modal.vue'
+import Modal from '@/pages/setting/modal.vue'
 import ToastMixin from '@/mixin/toast'
+import QueryContent from '@/components/query-content'
 
 export default {
   components: {
     Modal,
+    QueryContent,
   },
   mixins: [ToastMixin],
   data() {
@@ -217,6 +223,11 @@ export default {
           title: '待发货',
           key: 'to-receive',
           method: 'getWaitDelivery',
+        },
+        {
+          title: '查询&修改',
+          key: 'query',
+          method: 'getAlreadyCompleted',
         },
         {
           title: '当天收货',
@@ -350,7 +361,9 @@ export default {
       this.activeTab = key
       this.pageNo = 1
       this.complete = false
-      wx.redirectTo({ url: `/pages/order/index?type=${key}` })
+      if (key !== 'query') {
+        wx.redirectTo({ url: `/pages/order/index?type=${key}` })
+      }
       // this.getOrder()
     },
     getOrder({ isLoadMore }) {
@@ -601,6 +614,9 @@ export default {
           this.previewImg = data.imgUr
           Taro.navigateTo({ url: `/pages/image-preview/index?imageUrl=${encodeURIComponent(data.imgUrl)}&type=${type}` })
         })
+    },
+    handleQuery() {
+      Taro.navigateTo({ url: `/pages/query/index` })
     },
   },
 }

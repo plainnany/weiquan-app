@@ -471,6 +471,18 @@ const requestAddressList = [
     url: '/api/service/newArrival.ns',
     type: 'post',
   },
+  {
+    describe: '获取订单详情的交货规则',
+    method: 'getProductRule',
+    url: '/api/order/getProductRule.ns',
+    type: 'post',
+  },
+  {
+    describe: '更新交货日期',
+    method: 'updateDeliveryDate',
+    url: '/api/order/updateDeliveryDate.ns',
+    type: 'post',
+  },
 ]
 
 const API = {}

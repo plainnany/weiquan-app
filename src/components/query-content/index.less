@@ -1,0 +1,154 @@
+.query-page {
+  position: relative;
+  background: #f0efef;
+  height: 100%;
+  font-size: 28px;
+
+  .query-action {
+    padding: 12px;
+    text-align: right;
+
+    image {
+      width: 24px;
+      height: 16px;
+    }
+  }
+
+  .empty {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 32px;
+  }
+
+  .order-wrapper {
+    position: relative;
+    margin-bottom: 45px;
+    height: calc(100vh - 220px);
+    overflow-y: auto;
+  }
+
+  &-tip {
+    padding: 24px 12px;
+    background-color: #fef5da;
+    color: #e7a59d;
+  }
+
+  .order-item-footer {
+    position: fixed;
+    bottom: 0;
+    padding: 24px 0;
+    text-align: center;
+    width: 100%;
+    background-color: #f64728;
+    color: #fff;
+    font-size: 32px;
+  }
+
+  .common-card {
+    padding: 24px 0 32px 0;
+  }
+
+  .order-item {
+    background-color: #fff;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .order-item-date {
+    padding: 24px;
+    border-bottom: 2px solid #eee;
+
+    &-action {
+      font-size: 24px;
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background-color: #f64728;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+  }
+
+  .product-item {
+    padding: 24px 24px 24px 0;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+    &:last-child {
+      border-bottom: none;
+    }
+    image {
+      width: 200px;
+      height: 200px;
+    }
+
+    &-title {
+      font-size: 26px;
+      color: #333333;
+      line-height: 36px;
+      margin-bottom: 12px;
+    }
+
+    &-info {
+      font-size: 22px;
+      color: #999999;
+      line-height: 30px;
+    }
+
+    &-content {
+      flex: 1;
+    }
+
+    &-date {
+      color: #ec8f61;
+      margin-top: 30px;
+      font-size: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .product-detail {
+    &-number {
+      display: flex;
+      align-items: center;
+      width: 200px;
+      border: 1px solid #f0f2f5;
+      border-radius: 4px;
+      color: #333;
+      > text {
+        padding: 0 24px;
+      }
+
+      input {
+        margin: 0 8px;
+        text-align: center;
+        width: 100px;
+        border-right: 1px solid #f0f2f5;
+        border-left: 1px solid #f0f2f5;
+        font-size: 26px;
+      }
+    }
+  }
+
+  .product-action-btn {
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+    text-align: center;
+    font-size: 30px;
+    &.disable {
+      color: #ccc;
+    }
+  }
+
+  .setting-modal-footer {
+    border-bottom: 1px solid #f0f2f5;
+  }
+}
