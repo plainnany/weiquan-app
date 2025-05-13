@@ -1,6 +1,6 @@
 <template>
   <view class="query-page" :class="{ empty: orderList.length === 0 }">
-    <view class="query-action" @tap="chooseDate"
+    <view class="query-action" v-if="!isFromOrder" @tap="chooseDate"
       >{{ date || '全部' }}
       <image :src="arrow" />
     </view>
@@ -66,6 +66,9 @@ import DateChooser from './date-chooser.vue'
 
 export default {
   mixins: [ToastMixin],
+  props: {
+    from: String,
+  },
   data() {
     return {
       productList: [],
@@ -76,7 +79,6 @@ export default {
       arrow,
       tipVisible: false,
       currentProduct: null,
-      isFromOrder: false, // 是否来自订单页面
       changeDateVisible: false,
       currentOrder: null,
     }
@@ -86,15 +88,6 @@ export default {
     DateChooser,
   },
   mounted() {
-    // 获取页面来源
-    const pages = Taro.getCurrentPages()
-    const currentPage = pages[pages.length - 1]
-    const { from } = currentPage.$page?.options || {}
-    this.isFromOrder = from === 'order'
-    // this.deliverTime = this.$store.state.deliverTime.flatMap(v => v.deliverTime)
-    // if (this.deliverTime.length) {
-    //   this.confirmDate()
-    // }
     this.getProduct()
   },
   watch: {
@@ -103,6 +96,9 @@ export default {
     },
   },
   computed: {
+    isFromOrder() {
+      return this.from === 'order'
+    },
     // 是否是现金用户
     isCashUser() {
       return this.$store.state.userInfo.accountType === '01'

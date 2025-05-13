@@ -20,6 +20,18 @@
           </view>
         </view>
       </view>
+      <view class="order-detail-delivery">
+        <view class="order-detail-delivery-title">
+          <text>交货规则</text>
+          <view class="line"></view>
+        </view>
+        <view class="order-detail-delivery-rule">
+          <view v-for="(rule, idx) in deliveryRules" :key="idx" class="delivery-rule-item">
+            <view>{{ rule.productName }}</view>
+            <view>规则：{{ rule.ruleName }}</view>
+          </view>
+        </view>
+      </view>
     </view>
 
     <view class="footer">
@@ -87,6 +99,7 @@ export default {
         周日: 7,
       },
       isBatchOrder: '',
+      deliveryRules: [],
     }
   },
   computed: {},
@@ -103,8 +116,18 @@ export default {
           day: this.formatDate(v.day),
         }))
       })
+    this.getProductRule(this.order?.orderViews[0]?.customerOrderCode)
   },
   methods: {
+    getProductRule(orderNumber) {
+      this.$API
+        .getProductRule({
+          customOrderCode: orderNumber,
+        })
+        .then(data => {
+          this.deliveryRules = data || []
+        })
+    },
     chooseDate(date, itemData) {
       // 如果是批量下单，日期可以多选
       if (!date.flg) return

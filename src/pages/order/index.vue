@@ -227,7 +227,7 @@ export default {
         {
           title: '查询&修改',
           key: 'query',
-          method: 'getAlreadyCompleted',
+          method: '',
         },
         {
           title: '当天收货',
@@ -286,6 +286,7 @@ export default {
       pulling: false,
       showRefresher: false,
       initPayMethod: '',
+      tabKey: 0,
     }
   },
   computed: {
@@ -361,10 +362,7 @@ export default {
       this.activeTab = key
       this.pageNo = 1
       this.complete = false
-      if (key !== 'query') {
-        wx.redirectTo({ url: `/pages/order/index?type=${key}` })
-      }
-      // this.getOrder()
+      wx.redirectTo({ url: `/pages/order/index?type=${key}` })
     },
     getOrder({ isLoadMore }) {
       const method = this.tabs.find(tab => tab.key === this.activeTab).method
