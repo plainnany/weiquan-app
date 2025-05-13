@@ -79,6 +79,7 @@ export default {
       arrow,
       tipVisible: false,
       currentProduct: null,
+      // isFromOrder: false, // 是否来自订单页面
       changeDateVisible: false,
       currentOrder: null,
     }
@@ -96,6 +97,9 @@ export default {
     },
   },
   computed: {
+    // 是否来自订单页面,有两个入口，
+    // 1. 订单列表tab页面加载
+    // 2. 查询修改单独页面
     isFromOrder() {
       return this.from === 'order'
     },
@@ -143,7 +147,7 @@ export default {
     chooseDate() {
       setTitle({ title: '选择日期' })
       Taro.navigateTo({
-        url: `/pages/confirm-order/date-chooser?type=query&from=${this.isFromOrder ? 'order' : 'query'}`,
+        url: `/pages/confirm-order/date-chooser?type=query`,
       })
     },
     changeDate(order) {
@@ -157,7 +161,7 @@ export default {
     viewOrderDetail(item) {
       // 区分一下当天收货
       Taro.navigateTo({
-        url: `/pages/order-detail/index?order=${item.customerOrderCode}&from=${this.isFromOrder ? 'order' : 'query'}`,
+        url: `/pages/order-detail/index?order=${item.customerOrderCode}`,
       })
     },
     addProduct(product) {
