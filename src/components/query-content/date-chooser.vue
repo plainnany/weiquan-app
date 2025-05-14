@@ -27,7 +27,7 @@
         </view>
         <view class="order-detail-delivery-rule">
           <view v-for="(rule, idx) in deliveryRules" :key="idx" class="delivery-rule-item">
-            <view>{{ rule.productName }}</view>
+            <view>截止日期：{{ rule.endTime }}</view>
             <view>规则：{{ rule.ruleName }}</view>
           </view>
         </view>
@@ -108,6 +108,7 @@ export default {
     this.$API
       .dateChooser({
         productCode: this.order?.orderViews[0]?.productCode,
+        deliveryDate: this.order.deliveryDate,
         type: '',
       })
       .then(data => {
