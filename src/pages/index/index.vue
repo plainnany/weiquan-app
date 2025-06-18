@@ -118,7 +118,7 @@
         </view>
       </view>
     </view>
-    <countdown-modal :visible.sync="showNewProductModal" :info="newProduct" />
+    <countdown-modal v-if="newProduct.productImg" :visible.sync="showNewProductModal" :info="newProduct" />
     <!-- <button @tap="test">点击</button> -->
   </view>
 </template>
@@ -172,7 +172,7 @@ export default {
       scene: '',
       showNewProductModal: false, // 是否显示新品推荐的modal
       newProduct: {
-        img: '', // 图片
+        productImg: '', // 图片
         times: '', // 倒计时
       }, // 新品推荐数据
     }
@@ -230,7 +230,7 @@ export default {
     },
     getNewArrival() {
       return this.$API.newArrival().then(data => {
-        this.newProduct = data
+        this.newProduct = data || {}
       })
     },
     getData() {

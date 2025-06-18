@@ -136,7 +136,9 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 80%;
-    height: 80vh;
+    /* 根据8:10比例计算高度，80% * 10/8 = 100% */
+    height: calc(80vw * 10 / 8);
+    max-height: 80vh;
     background: #fff;
     border-radius: 20rpx;
     overflow: hidden;
@@ -166,6 +168,7 @@ export default {
   .modal-image {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 }
 </style>
