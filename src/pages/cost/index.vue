@@ -11,6 +11,17 @@
         </view>
       </view>
     </view>
+    <!-- 活动余额展示 -->
+    <view class="remain-info" v-if="userInfo.activityFlg === '01'">
+      <view class="remain-title">
+        活动余额(元)
+      </view>
+      <view class="remain-money">
+        <view class="remain-num">
+          <text>{{ userInfo.activityBalance || 0 }}</text>
+        </view>
+      </view>
+    </view>
     <view class="remain-item" @tap="handleCharge" v-if="userInfo.accountType !== '02'">
       <image :src="icon2" class="icon" mode="" />
       <view>

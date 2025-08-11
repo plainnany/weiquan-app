@@ -120,10 +120,11 @@ export default {
       }
     },
     confirmPay() {
-      if (this.payMethod === 'weixin-pocket' || this.payMethod === 'company-pocket') {
+      if (this.payMethod === 'weixin-pocket' || this.payMethod === 'company-pocket' || this.payMethod === 'activity-pocket') {
         const method = {
           'weixin-pocket': 'balancePayment',
           'company-pocket': 'balanceParentPayment',
+          'activity-pocket': 'activityBalancePayment',
         }[this.payMethod]
         this.$API[method]({
           out_trade_no: this.tradeNumber,

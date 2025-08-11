@@ -16,6 +16,7 @@
             <view>
               {{ payItem.name }}
               <text v-if="payItem.method === 'weixin-pocket'"> ({{ userInfo.accoutBalance }}) </text>
+              <text v-if="payItem.method === 'activity-pocket'"> ({{ userInfo.activityBalance }}) </text>
             </view>
           </view>
           <view>
@@ -91,6 +92,15 @@ export default {
           name: '余额支付',
           icon: weipocketIcon,
         },
+        ...(this.userInfo.activityFlg === '01'
+          ? [
+              {
+                method: 'activity-pocket',
+                name: '活动余额支付',
+                icon: weipocketIcon,
+              },
+            ]
+          : []),
         ...(this.userInfo.showParentPay
           ? [
               {

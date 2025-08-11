@@ -243,6 +243,12 @@ const requestAddressList = [
     type: 'post',
   },
   {
+    describe: '活动余额支付',
+    method: 'activityBalancePayment',
+    url: '/api/order/activityBalancePayment.ns',
+    type: 'post',
+  },
+  {
     describe: '支付订单',
     method: 'orderPay',
     url: '/api/order/orderPay.ns',
