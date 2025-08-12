@@ -15,7 +15,13 @@
     </view>
     <view class="order-settle-pay">
       <view class="order-settle-pay-title">支付选择</view>
-      <pay-method :showTipModal="showTipModal" @change="onPayMethodChange" @cancel="cancelModal" @confirm="confirmPay" />
+      <pay-method
+        :showTipModal="showTipModal"
+        :initPayMethod="initPayMethod"
+        @change="onPayMethodChange"
+        @cancel="cancelModal"
+        @confirm="confirmPay"
+      />
       <view class="tips"
         >注:选择好友代付后，请于15分钟内支付。若支付不成功或超时支付，请前往‘账户余额及充值’查询退款记录，或联系客服查询。感谢!</view
       >
@@ -62,6 +68,7 @@ export default {
       wechatIcon,
       // payMethod: 'weixin-pocket',
       payMethod: '',
+      initPayMethod: '',
       showTipModal: false,
       modal: {
         visible: false,
@@ -85,6 +92,8 @@ export default {
   },
   mounted() {
     setTitle({ title: '订单结算' })
+    this.initPayMethod = this.initPay()
+    this.payMethod = this.initPayMethod
   },
   onShareAppMessage(res) {
     // 调用此方法时，会重新触发onShow，以及。app.js中的onShow,暂时只处理当前页面中的onShow方法
@@ -106,6 +115,16 @@ export default {
     this.tradeNumber = params.trade
   },
   methods: {
+    initPay() {
+      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
+        return 'weixin-2'
+      }
+      // 存在活动金额时优先选中活动余额，否则选择余额支付
+      if (this.userInfo.activityFlg === '01') {
+        return 'activity-pocket'
+      }
+      return 'weixin-pocket'
+    },
     onPayMethodChange(e) {
       this.payMethod = e.detail.value
     },

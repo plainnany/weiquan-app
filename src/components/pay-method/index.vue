@@ -35,6 +35,7 @@
 import './index.less'
 import wechatIcon from '@/images/wechat.png'
 import weipocketIcon from '@/images/wei-pocket.png'
+import couponIcon from '@/images/coupon.svg'
 import Modal from '@/pages/setting/modal.vue'
 
 export default {
@@ -96,8 +97,8 @@ export default {
           ? [
               {
                 method: 'activity-pocket',
-                name: '活动余额支付',
-                icon: weipocketIcon,
+                name: '活动金额',
+                icon: couponIcon,
               },
             ]
           : []),
@@ -124,7 +125,18 @@ export default {
     },
   },
   created() {},
-  mounted() {},
+  mounted() {
+    // 若未传入 initPayMethod，则在组件挂载时设置默认支付方式
+    if (!this.payMethod) {
+      if (this.userInfo.accountType === '02' || !this.userInfo.dianZhang) {
+        this.payMethod = 'weixin-2'
+      } else if (this.userInfo.activityFlg === '01') {
+        this.payMethod = 'activity-pocket'
+      } else {
+        this.payMethod = 'weixin-pocket'
+      }
+    }
+  },
   methods: {
     onCancel() {
       this.visible = false

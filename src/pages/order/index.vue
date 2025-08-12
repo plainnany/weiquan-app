@@ -334,6 +334,12 @@ export default {
         return 'weixin-2'
       }
 
+      // 存在活动金额时优先选中活动余额，否则选择余额支付
+      if (this.userInfo.activityFlg === '01') {
+        this.payMethod = 'activity-pocket'
+        return 'activity-pocket'
+      }
+      this.payMethod = 'weixin-pocket'
       return 'weixin-pocket'
     },
     onRefresh(e) {
