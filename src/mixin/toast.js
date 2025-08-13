@@ -16,7 +16,7 @@ export default {
           visible: false,
           message: '',
         }
-      }, 2000)
+      }, 3000)
     },
   },
 }

@@ -10,12 +10,12 @@
       <view class="charge-list">
         <view class="charge-list-item" v-for="(item, index) in chargeList" :key="index" @tap="viewOrderDetail(item)">
           <view class="charge-list-item-title">
-            <text>{{ active === 'charge' ? (item.state === '04' ? '返还' : '充值') : '消费' }}</text>
+            <text>{{ chargeTitle(item) }}</text>
             <text class="charge-list-item-date">{{ item.billDate }}</text>
           </view>
           <view class="charge-list-item-content">
             <view>
-              <view class="charge-list-item-remain">余额: {{ item.accountBalance }}</view>
+              <view class="charge-list-item-remain">{{ item.activityFlg === '01' ? '活动金额' : '余额' }}: {{ item.accountBalance }}</view>
             </view>
             <view class="charge-list-item-number"
               ><text>{{ active === 'charge' ? '+' : '-' }}</text
@@ -63,6 +63,15 @@ export default {
     this.getChargeList()
   },
   methods: {
+    chargeTitle(item) {
+      if (this.active === 'charge') {
+        if (item.state === '04') {
+          return '返还'
+        }
+        return '充值'
+      }
+      return '消费'
+    },
     clickTab({ key }) {
       this.active = key
       this.complete = false
