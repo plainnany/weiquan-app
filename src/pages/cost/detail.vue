@@ -15,7 +15,7 @@
           </view>
           <view class="charge-list-item-content">
             <view>
-              <view class="charge-list-item-remain">{{ item.activityFlg === '01' ? '活动金额' : '余额' }}: {{ item.accountBalance }}</view>
+              <view class="charge-list-item-remain">{{ isActivity(item) ? '活动金额' : '余额' }}: {{ item.accountBalance }}</view>
             </view>
             <view class="charge-list-item-number"
               ><text>{{ active === 'charge' ? '+' : '-' }}</text
@@ -63,14 +63,17 @@ export default {
     this.getChargeList()
   },
   methods: {
+    isActivity(item) {
+      return item.activityFlg === '01'
+    },
     chargeTitle(item) {
       if (this.active === 'charge') {
         if (item.state === '04') {
-          return '返还'
+          return this.isActivity(item) ? '返还活动金额' : '返还'
         }
-        return '充值'
+        return this.isActivity(item) ? '充值活动金额' : '充值'
       }
-      return '消费'
+      return this.isActivity(item) ? '消费活动金额' : '消费'
     },
     clickTab({ key }) {
       this.active = key
